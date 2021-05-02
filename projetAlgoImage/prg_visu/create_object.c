@@ -31,7 +31,6 @@ void createCoordinates() {
 	triangle_index = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number);
 	
 	// CONSTRUIRE LES TABLEAUX
-
 srand(5);
 
 float hauteur[h][w];	
@@ -41,19 +40,30 @@ for (int i=0;i<h;i++){
 	}
 }
 
-hauteur[0][0]=0.05;
-hauteur[1][0]=0.05;
-hauteur[0][3]=0.05;
-hauteur[7][0]=0.05;
+hauteur[0][0]=0.5;
+hauteur[1][0]=0.5;
+hauteur[0][3]=0.5;
+hauteur[7][0]=0.5;
+hauteur[10][10]=0.5;
+hauteur[15][10]=0.5;
+hauteur[5][10]=0.1;
 
 int p=0;
-for (int i=0;i<h;i++){
-	for(int j=0;j<w;j++){
+int ligne=0;
+int colonne=0;
+for (float i=-h/2;i<h/2;i++){
+	for(float j=-w/2;j<w/2;j++){
 		vertex_coord[p]=i*l;
-		vertex_coord[1+p]=hauteur[i][j];
+		vertex_coord[1+p]=hauteur[ligne][colonne];
 		vertex_coord[2+p]=j*l;
+		normal_coord[p]=i*l;
+		normal_coord[1+p]=hauteur[ligne][colonne];
+		normal_coord[2+p]=j*l;
 		p+=3;
+		colonne++;
 	}
+	ligne++;
+	colonne=0;
 }
 
 int k=0;

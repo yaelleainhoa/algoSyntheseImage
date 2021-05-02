@@ -16,12 +16,29 @@
 #include "create_object.h"
 
 
+
 /* variables globales pour la gestion de la caméra */
 float profondeur = 3;
 float latitude = 0.0;
 float longitude = M_PI/2.;
+float xLum=0.0;
+float yLum=0.0;
+float zLum=0.0;
+float xLight1=1.;
+float yLight1=0.;
+int i=0;
+float largeur_plan=1.;
 
 float obj_rot = 0.0;
+
+
+void moveLight(void){
+	i++;
+    xLight1=largeur_plan*cos(3.14/180*i);
+	yLight1=largeur_plan*sin(3.14/180*i);
+    GLfloat light0Position[] = {xLight1, yLight1, 0.0, 1.0};
+    glLightfv(GL_LIGHT1, GL_POSITION, light0Position);
+}
 
 /*********************************************************/
 /* fonction de dessin de la scène à l'écran              */
@@ -44,20 +61,44 @@ static void drawFunc(void) {
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
 
-	float position[4] = {5.0,5.0,5.0,1.0};
-	float black[3] = {0.0,0.0,0.0};
-	float intensite[3] = {1000.0,1000.0,1000.0};
+	// float position[4] = {xLum,yLum,zLum,0.};
+	// float black[3] = {0.0,0.0,0.0};
+	// float intensite[3] = {1000.0,1000.0,1000.0};
+	// glEnable(GL_LIGHTING);
+	// glEnable(GL_LIGHT0);
+	// glLightfv(GL_LIGHT0,GL_POSITION,position);
+	// glLightfv(GL_LIGHT0,GL_DIFFUSE,intensite);
+	// glLightfv(GL_LIGHT0,GL_SPECULAR,black);
+
+	float position[4] = {0.,5.,0.,1.};
+	float black[4] = {0.9,0.9, 0.9, 1.0};
+	float intensite[4] = {0.9, 0.9, 0.9, 1.0};
+	GLfloat ambient[]={0.2, 0.2, 0.2, 1.0};
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glLightfv(GL_LIGHT0,GL_POSITION,position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 	glLightfv(GL_LIGHT0,GL_DIFFUSE,intensite);
 	glLightfv(GL_LIGHT0,GL_SPECULAR,black);
+
+		// GLfloat light0Position[] = {xLight1, yLight1, 0.0, 1.0}; // Position
+		// glLightfv(GL_LIGHT1, GL_POSITION, light0Position);
+		// GLfloat ambient0[]={0.2, 0.2, 0.2, 1.0}; // Farbdefinitionen
+		// GLfloat diffuse0[]={0.9, 0.9, 0.9, 1.0};
+		// GLfloat specular0[]={1.0,1.0, 1.0, 1.0};
+		// glLightfv(GL_LIGHT1, GL_AMBIENT, ambient0);
+		// glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse0);
+		// glLightfv(GL_LIGHT1, GL_SPECULAR, specular0);
+		// glEnable(GL_LIGHTING);
+		// glEnable(GL_LIGHT1);
+
+
 	//glLightf(GL_LIGHT0,GL_,black);
 	//glLightf(GL_LIGHT0,GL_SPECULAR,black);
 
 	glPushMatrix();
 	glRotatef(obj_rot,0.0,1.0,0.0);
-	glColor3f(1.0,1.0,1.0);
+	glColor3f(1.0,0.,0.);
 	glDrawObject();
 
 	glDisable(GL_LIGHTING);
@@ -114,6 +155,13 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			break;
 		case 'S' : case 's' : glutIdleFunc(NULL);
 			break;
+		case 'X' : case 'x' : xLum+=0.001;
+		printf("x = %f",xLum);
+			break;
+		case 'Y' : case 'y' : yLum+=0.001;
+			break;
+		case 'Z' : case 'z' : zLum+=0.001;
+			break;
 		default:
 			printf("Appui sur la touche %c\n",c);
 	}
@@ -147,6 +195,9 @@ static void kbdSpFunc(int c, int x, int y) {
 		case GLUT_KEY_PAGE_DOWN :
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
 			break;
+		// case GLUT_KEY_F1 :
+		// 	moveLight();
+		// 	break;
 		default:
 			printf("Appui sur une touche spéciale\n");
 	}
@@ -201,6 +252,7 @@ void idle(void) {
 }
 
 int main(int argc, char** argv) {
+	//defineHeight(heightMap);
 	/* traitement des paramètres du programme propres à GL */
 	glutInit(&argc, argv);
 	/* initialisation du mode d'affichage :                */
