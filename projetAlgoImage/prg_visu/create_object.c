@@ -12,7 +12,8 @@ float* normal_coord;
 unsigned int triangle_number;
 unsigned int* triangle_index;
 
-void createCoordinates() {
+
+void createCoordinates(HeightMap heightMap) {
 	// Vous devez fixer :
 	// - le nombre de sommets (vertex_number)
 	// - le tableau des coordonnees des sommets (vertex_coord)
@@ -20,33 +21,17 @@ void createCoordinates() {
 	// - le nombre de triangles (triangle_number)
 	// - le tableau des indices des sommets constituant les triangles (triangle_index)
 	// CUBE
-	int w=20;
-	int h=20;
 	float l=0.1;
-	vertex_number =(w*h)*3; // A CHANGER
-	triangle_number = (w-1)*(h-1)*2*3; // A CHANGER
+	int w =heightMap.w;
+	int h=heightMap.h;
+	vertex_number =(w*h)*3; 
+	triangle_number = (w-1)*(h-1)*2;
 	
 	vertex_coord = (float*) calloc(sizeof(float),3*vertex_number);
 	normal_coord = (float*) calloc(sizeof(float),3*vertex_number);
 	triangle_index = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number);
 	
 	// CONSTRUIRE LES TABLEAUX
-srand(5);
-
-float hauteur[h][w];	
-for (int i=0;i<h;i++){
-	for(int j=0;j<w;j++){
-		hauteur[i][j]=0;
-	}
-}
-
-hauteur[0][0]=0.5;
-hauteur[1][0]=0.5;
-hauteur[0][3]=0.5;
-hauteur[7][0]=0.5;
-hauteur[10][10]=0.5;
-hauteur[15][10]=0.5;
-hauteur[5][10]=0.1;
 
 int p=0;
 int ligne=0;
@@ -54,10 +39,10 @@ int colonne=0;
 for (float i=-h/2;i<h/2;i++){
 	for(float j=-w/2;j<w/2;j++){
 		vertex_coord[p]=i*l;
-		vertex_coord[1+p]=hauteur[ligne][colonne];
+		vertex_coord[1+p]=heightMap.valeursDeGris[ligne][colonne]/(255.);
 		vertex_coord[2+p]=j*l;
 		normal_coord[p]=i*l;
-		normal_coord[1+p]=hauteur[ligne][colonne];
+		normal_coord[1+p]=heightMap.valeursDeGris[ligne][colonne]/(255.);
 		normal_coord[2+p]=j*l;
 		p+=3;
 		colonne++;
@@ -78,4 +63,6 @@ for (int i=0;i<h-1;i++){
 		k+=6;
 	}
 }
+
 }
+

@@ -4,13 +4,15 @@
 
 void glDrawRepere(float length) {
 	// dessin du repère
-	glBegin(GL_LINES);
+		//Red - x
 		glColor3f(1.,0.,0.);
 		glVertex3f(0.,0.,0.);
 		glVertex3f(length,0.,0.);
+		//Green - y
 		glColor3f(0.,1.,0.);
 		glVertex3i(0.,0.,0.);
 		glVertex3i(0.,length,0.);
+		//Blue - z
 		glColor3f(0.,0.,1.);
 		glVertex3i(0.,0.,0.);
 		glVertex3i(0.,0.,length);

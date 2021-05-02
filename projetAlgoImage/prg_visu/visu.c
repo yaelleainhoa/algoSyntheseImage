@@ -14,16 +14,13 @@
 #include "visu.h"
 #include "gldrawing.h"
 #include "create_object.h"
-
+#include "valDeGris.h"
 
 
 /* variables globales pour la gestion de la caméra */
 float profondeur = 3;
 float latitude = 0.0;
 float longitude = M_PI/2.;
-float xLum=0.0;
-float yLum=0.0;
-float zLum=0.0;
 float xLight1=1.;
 float yLight1=0.;
 int i=0;
@@ -61,7 +58,8 @@ static void drawFunc(void) {
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
 
-	// float position[4] = {xLum,yLum,zLum,0.};
+	//trucs du prof
+	// float position[4] = {5.,5.,5.,0.};
 	// float black[3] = {0.0,0.0,0.0};
 	// float intensite[3] = {1000.0,1000.0,1000.0};
 	// glEnable(GL_LIGHTING);
@@ -81,6 +79,7 @@ static void drawFunc(void) {
 	glLightfv(GL_LIGHT0,GL_DIFFUSE,intensite);
 	glLightfv(GL_LIGHT0,GL_SPECULAR,black);
 
+		//GL_LIGHT1 sera la lumière qui bouge, avec la fonction moveLight, là GL_LIGHT1 n'est pas initiée
 		// GLfloat light0Position[] = {xLight1, yLight1, 0.0, 1.0}; // Position
 		// glLightfv(GL_LIGHT1, GL_POSITION, light0Position);
 		// GLfloat ambient0[]={0.2, 0.2, 0.2, 1.0}; // Farbdefinitionen
@@ -98,7 +97,7 @@ static void drawFunc(void) {
 
 	glPushMatrix();
 	glRotatef(obj_rot,0.0,1.0,0.0);
-	glColor3f(1.0,0.,0.);
+	glColor3f(1.0,1.,1.);
 	glDrawObject();
 
 	glDisable(GL_LIGHTING);
@@ -154,13 +153,6 @@ static void kbdFunc(unsigned char c, int x, int y) {
 		case 'R' : case 'r' : glutIdleFunc(idle);
 			break;
 		case 'S' : case 's' : glutIdleFunc(NULL);
-			break;
-		case 'X' : case 'x' : xLum+=0.001;
-		printf("x = %f",xLum);
-			break;
-		case 'Y' : case 'y' : yLum+=0.001;
-			break;
-		case 'Z' : case 'z' : zLum+=0.001;
 			break;
 		default:
 			printf("Appui sur la touche %c\n",c);
@@ -226,7 +218,7 @@ static void motionFunc(int x, int y) {
 /*********************************************************/
 /* fonction d'initialisation des paramètres de rendu et  */
 /* des objets de la scènes.                              */
-static void init() {
+static void init(HeightMap heightMap) {
 	profondeur = 3;
 	latitude = M_PI/2.0;
 	longitude = 0.0;
@@ -243,7 +235,7 @@ static void init() {
 	glShadeModel(GL_SMOOTH);
 
 	/* INITIALISATION DE LA SCENE */
-	createCoordinates();
+	createCoordinates(heightMap);
 }
 
 void idle(void) {
@@ -252,7 +244,8 @@ void idle(void) {
 }
 
 int main(int argc, char** argv) {
-	//defineHeight(heightMap);
+	HeightMap heightMap;
+	defineHeight(&heightMap);
 	/* traitement des paramètres du programme propres à GL */
 	glutInit(&argc, argv);
 	/* initialisation du mode d'affichage :                */
@@ -262,11 +255,11 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(500, 500);
 	/* ouverture de la fenêtre */
-	if (glutCreateWindow("VIZU PRG") == GL_FALSE) {
+	if (glutCreateWindow("visuTerImac") == GL_FALSE) {
 		return 1;
 	}
 
-	init();
+	init(heightMap);
 
 	/* association de la fonction callback de redimensionnement */
 	glutReshapeFunc(reshapeFunc);

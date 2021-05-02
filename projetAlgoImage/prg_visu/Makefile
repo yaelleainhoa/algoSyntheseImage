@@ -5,13 +5,13 @@ FLAGS = -Wall -O3
 # INCLUDES
 INC = -I./
 # INCLUDES
-LIBS = -lglut -lGLU -lGL -lm
+LIBS = -lglut -lGLU -lGL -lm -lstdc++ -Wall
 # INCLUDES
 LIBDIR =
 # Compilateur
 GCC = gcc
 # $(OBJECTS) sont les objets qui seront générés après la compilation
-OBJECTS = gldrawing.o visu.o create_object.o
+OBJECTS = gldrawing.o visu.o create_object.o valDeGris.o
 
 default: $(BIN)
 
@@ -20,6 +20,7 @@ all: $(OBJECT)
 $(BIN): $(OBJECTS)
 	@echo "**** PHASE DE LIEN ****"
 	$(GCC) $(OBJECTS) $(FLAGS) -o $(BIN) $(LIBDIR) $(LIBS) 
+
 
 visu.o: visu.c visu.h
 	@echo "**** td1_maze.c ****"
@@ -32,6 +33,12 @@ gl_drawing.o: gl_drawing.c gl_drawing.h
 create_object.o: create_object.c create_object.h
 	@echo "**** $@ ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
+
+	
+valDeGris.o: valDeGris.cpp valDeGris.h
+	@echo "**** $@ ****"
+	$(GCC) $(INC) $(FLAGS) -c $< -o $@
+
 
 clean:
 	rm -f *.o $(BIN)
