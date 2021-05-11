@@ -39,10 +39,10 @@ int colonne=0;
 for (float i=-h/2;i<h/2;i++){
 	for(float j=-w/2;j<w/2;j++){
 		vertex_coord[p]=i*l;
-		vertex_coord[1+p]=heightMap.valeursDeGris[ligne][colonne]/(255.);
+		vertex_coord[1+p]=heightMap.valeursDeGris[ligne][colonne]/255.;
 		vertex_coord[2+p]=j*l;
 		normal_coord[p]=i*l;
-		normal_coord[1+p]=heightMap.valeursDeGris[ligne][colonne]/(255.);
+		normal_coord[1+p]=heightMap.valeursDeGris[ligne][colonne]/255.;
 		normal_coord[2+p]=j*l;
 		p+=3;
 		colonne++;

@@ -1,7 +1,3 @@
-/* *******************************************************/
-/* Exemple de programme OpenGL / GLUT           (C) 2010 */
-/* Venceslas Biri   Université Paris Est Marne La Vallée */
-/* *******************************************************/
 
 #include <stdlib.h>
 #include <math.h>
@@ -10,11 +6,14 @@
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 
 #include "visu.h"
 #include "gldrawing.h"
 #include "create_object.h"
 #include "valDeGris.h"
+#include "lodepng.h"
 
 
 /* variables globales pour la gestion de la caméra */
@@ -27,6 +26,13 @@ int i=0;
 float largeur_plan=1.;
 
 float obj_rot = 0.0;
+GLuint texture[2];
+float largeur_skybox=12.;
+
+float xCam=0;
+float yCam=0;
+float zCam=0;
+
 
 
 void moveLight(void){
@@ -35,6 +41,61 @@ void moveLight(void){
 	yLight1=largeur_plan*sin(3.14/180*i);
     GLfloat light0Position[] = {xLight1, yLight1, 0.0, 1.0};
     glLightfv(GL_LIGHT1, GL_POSITION, light0Position);
+}
+
+void skyBoxZ(float x, float y, float z, GLuint texture){
+	glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        //glScalef(largeur_skybox,largeur_skybox,1.);
+		glScalef(1.,1.,1.);
+        glBegin(GL_QUADS);
+            glTexCoord2f(0.,0.);
+            glVertex3f(x,y,z);
+            glTexCoord2f(1.,0.);
+            glVertex3f(x+largeur_skybox,y,z);
+            glTexCoord2f(1.,1.);
+            glVertex3f(x+largeur_skybox,y-largeur_skybox,z);
+            glTexCoord2f(0.,1.);
+            glVertex3f(x,y-largeur_skybox,z);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
+void skyBoxX(float x, float y, float z, GLuint texture){
+	glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glScalef(1.,1.,1.);
+        glBegin(GL_QUADS);
+            glTexCoord2f(0.,0.);
+            glVertex3f(x,y,z);
+            glTexCoord2f(1.,0.);
+            glVertex3f(x,y,z-largeur_skybox);
+            glTexCoord2f(1.,1.);
+            glVertex3f(x,y-largeur_skybox,z-largeur_skybox);
+            glTexCoord2f(0.,1.);
+            glVertex3f(x,y-largeur_skybox,z);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
+void skyBoxY(float x, float y, float z, GLuint texture){
+	glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glScalef(1.,1.,1.);
+        glBegin(GL_QUADS);
+            glTexCoord2f(0.,0.);
+            glVertex3f(x,y,z);
+            glTexCoord2f(1.,0.);
+            glVertex3f(x+largeur_skybox,y,z);
+            glTexCoord2f(1.,1.);
+            glVertex3f(x+largeur_skybox,y,z+largeur_skybox);
+            glTexCoord2f(0.,1.);
+            glVertex3f(x,y,z+largeur_skybox);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
 }
 
 /*********************************************************/
@@ -58,7 +119,17 @@ static void drawFunc(void) {
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
 
-	//trucs du prof
+	glColor3f(1.0,1.0,1.0);
+	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam-largeur_skybox/4.,texture[1]);
+	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam+largeur_skybox/4.,texture[1]);
+	skyBoxX(largeur_skybox/2.+xCam-largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
+	skyBoxX(-largeur_skybox/2.+xCam+largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
+	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam+largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
+	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam-largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
+
+
+
+	//trucs du prof/2.
 	// float position[4] = {5.,5.,5.,0.};
 	// float black[3] = {0.0,0.0,0.0};
 	// float intensite[3] = {1000.0,1000.0,1000.0};
@@ -130,6 +201,7 @@ static void reshapeFunc(int width,int height) {
 
 	/* Retour a la pile de matrice Modelview
 			et effacement de celle-ci */
+	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -181,13 +253,19 @@ static void kbdSpFunc(int c, int x, int y) {
 		case GLUT_KEY_RIGHT :
 			longitude += STEP_ANGLE;
 			break;
-		case GLUT_KEY_PAGE_UP :
+		case GLUT_KEY_F2 :
 			profondeur += STEP_PROF;
+			xCam=profondeur*sin(longitude)*sin(latitude);
+			yCam=profondeur*cos(latitude);
+			zCam=profondeur*cos(longitude)*sin(latitude);
 			break;
-		case GLUT_KEY_PAGE_DOWN :
+		case GLUT_KEY_F1 :
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
+			xCam=profondeur*sin(longitude)*sin(latitude);
+			yCam=profondeur*cos(latitude);
+			zCam=profondeur*cos(longitude)*sin(latitude);
 			break;
-		// case GLUT_KEY_F1 :
+		// case GLUT_KEY_F3 :
 		// 	moveLight();
 		// 	break;
 		default:
@@ -219,9 +297,13 @@ static void motionFunc(int x, int y) {
 /* fonction d'initialisation des paramètres de rendu et  */
 /* des objets de la scènes.                              */
 static void init(HeightMap heightMap) {
-	profondeur = 3;
+	profondeur = 1;
 	latitude = M_PI/2.0;
 	longitude = 0.0;
+
+	xCam=profondeur*sin(longitude)*sin(latitude);
+	yCam=profondeur*cos(latitude);
+	zCam=profondeur*cos(longitude)*sin(latitude);
 
 	obj_rot = 0.0;
 
@@ -236,6 +318,17 @@ static void init(HeightMap heightMap) {
 
 	/* INITIALISATION DE LA SCENE */
 	createCoordinates(heightMap);
+
+	char * sources[2]={"images/doggy.jpg","images/sky.jpg"};
+    for(int i=0; i<2; i++){
+		glEnable(GL_TEXTURE_2D);
+        SDL_Surface* image=IMG_Load(sources[i]);
+        glGenTextures(1, &texture[i]);
+        glBindTexture(GL_TEXTURE_2D, texture[i]);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }
 
 void idle(void) {
@@ -244,6 +337,7 @@ void idle(void) {
 }
 
 int main(int argc, char** argv) {
+
 	HeightMap heightMap;
 	defineHeight(&heightMap);
 	/* traitement des paramètres du programme propres à GL */
@@ -260,6 +354,7 @@ int main(int argc, char** argv) {
 	}
 
 	init(heightMap);
+	
 
 	/* association de la fonction callback de redimensionnement */
 	glutReshapeFunc(reshapeFunc);

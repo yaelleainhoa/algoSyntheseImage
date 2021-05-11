@@ -5,7 +5,7 @@ FLAGS = -Wall -O3
 # INCLUDES
 INC = -I./
 # INCLUDES
-LIBS = -lglut -lGLU -lGL -lm -lstdc++ -Wall
+LIBS = -lglut -lGLU -lGL -lm -lstdc++ -Wall -lSDL -lSDL_image
 # INCLUDES
 LIBDIR =
 # Compilateur
