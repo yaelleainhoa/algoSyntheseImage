@@ -21,7 +21,7 @@ void createCoordinates(HeightMap heightMap) {
 	// - le nombre de triangles (triangle_number)
 	// - le tableau des indices des sommets constituant les triangles (triangle_index)
 	// CUBE
-	float l=0.1;
+	float l=.1;
 	int w =heightMap.w;
 	int h=heightMap.h;
 	vertex_number =(w*h)*3; 
@@ -34,21 +34,17 @@ void createCoordinates(HeightMap heightMap) {
 	// CONSTRUIRE LES TABLEAUX
 
 int p=0;
-int ligne=0;
-int colonne=0;
-for (float i=-h/2;i<h/2;i++){
-	for(float j=-w/2;j<w/2;j++){
-		vertex_coord[p]=i*l;
-		vertex_coord[1+p]=heightMap.valeursDeGris[ligne][colonne]/(255.);
-		vertex_coord[2+p]=j*l;
-		normal_coord[p]=i*l;
-		normal_coord[1+p]=heightMap.valeursDeGris[ligne][colonne]/(255.);
-		normal_coord[2+p]=j*l;
+   
+for (int i=0;i<h;i++){
+	for(int j=0;j<w;j++){
+		vertex_coord[p]=(i-h/2)*l ;
+		vertex_coord[1+p]=heightMap.valeursDeGris[i][j]/(100.);
+		vertex_coord[2+p]=(j-w/2)*l;
+		normal_coord[p]=(i-h/2)*l ;
+		normal_coord[1+p]=heightMap.valeursDeGris[i][j]/(100.);
+		normal_coord[2+p]=(j-w/2)*l ;
 		p+=3;
-		colonne++;
 	}
-	ligne++;
-	colonne=0;
 }
 
 int k=0;
