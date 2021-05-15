@@ -120,12 +120,12 @@ static void drawFunc(void) {
 	glDrawRepere(2.0);
 
 	glColor3f(1.0,1.0,1.0);
-	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam-largeur_skybox/4.,texture[1]);
-	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam+largeur_skybox/4.,texture[1]);
-	skyBoxX(largeur_skybox/2.+xCam-largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
-	skyBoxX(-largeur_skybox/2.+xCam+largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
-	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam+largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
-	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam-largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
+	// skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam-largeur_skybox/4.,texture[1]);
+	// skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam+largeur_skybox/4.,texture[1]);
+	// skyBoxX(largeur_skybox/2.+xCam-largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
+	// skyBoxX(-largeur_skybox/2.+xCam+largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
+	// skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam+largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
+	// skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam-largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
 
 
 

@@ -6,6 +6,7 @@
 extern unsigned int vertex_number;
 extern float* vertex_coord;
 extern float* normal_coord;
+extern float* textures_coord;
 extern unsigned int triangle_number;
 extern unsigned int* triangle_index;
 
