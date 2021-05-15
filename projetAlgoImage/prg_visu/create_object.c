@@ -35,27 +35,27 @@ void createCoordinates(HeightMap heightMap) {
 
 int p=0;
    
-for (int i=0;i<h;i++){
-	for(int j=0;j<w;j++){
-		vertex_coord[p]=(i-h/2)*l ;
+for (int i=0;i<w;i++){
+	for(int j=0;j<h;j++){
+		vertex_coord[p]=(i-w/2)*l ;
 		vertex_coord[1+p]=heightMap.valeursDeGris[i][j]/(100.);
-		vertex_coord[2+p]=(j-w/2)*l;
-		normal_coord[p]=(i-h/2)*l ;
+		vertex_coord[2+p]=(j-h/2)*l;
+		normal_coord[p]=(i-w/2)*l ;
 		normal_coord[1+p]=heightMap.valeursDeGris[i][j]/(100.);
-		normal_coord[2+p]=(j-w/2)*l ;
+		normal_coord[2+p]=(j-h/2)*l ;
 		p+=3;
 	}
 }
 
 int k=0;
-for (int i=0;i<h-1;i++){
-	for(int j=0;j<w-1;j++){
-		triangle_index[k]=w*i+j;
-		triangle_index[k+1]=w*i+j+1;
-		triangle_index[k+2]=w*(i+1)+j;
-		triangle_index[k+3]=w*i+j+1;
-		triangle_index[k+4]=w*(i+1)+j;
-		triangle_index[k+5]=w*(i+1)+j+1;
+for (int i=0;i<w-1;i++){
+	for(int j=0;j<h-1;j++){
+		triangle_index[k]=h*i+j;
+		triangle_index[k+1]=h*i+j+1;
+		triangle_index[k+2]=h*(i+1)+j;
+		triangle_index[k+3]=h*i+j+1;
+		triangle_index[k+4]=h*(i+1)+j;
+		triangle_index[k+5]=h*(i+1)+j+1;
 		k+=6;
 	}
 }

@@ -129,6 +129,45 @@ static void drawFunc(void) {
 
 
 
+// 	int h = heightMap.h;
+// 	int w=heightMap.w;
+// 	for (int i=0;i<h-1;i++){
+// 	for(int j=0;j<w-1;j++){
+// 		glEnable(GL_TEXTURE_2D);
+//         glBindTexture(GL_TEXTURE_2D, texture[0]);
+// 		glScalef(1.,1.,1.);
+//         glBegin(GL_QUADS);
+//             glTexCoord2f(0.,0.);
+//             glVertex3f(vertex_coord[3*(h*i+j)],vertex_coord[3*(h*i+j)+1],vertex_coord[3*(h*i+j)+2]);
+//             glTexCoord2f(1.,0.);
+//             glVertex3f(vertex_coord[3*(h*i+j+1)],vertex_coord[3*(h*i+j+1)+1],vertex_coord[3*(h*i+j+1)+2]);
+//             glTexCoord2f(1.,1.);
+//             glVertex3f(vertex_coord[3*(h*(i+1)+j)],vertex_coord[3*(h*(i+1)+j)+1],vertex_coord[3*(h*(i+1)+j)+2]);
+//             glTexCoord2f(0.,1.);
+//             glVertex3f(vertex_coord[3*(h*(i+1)+j)],vertex_coord[3*(h*(i+1)+j)+1],vertex_coord[3*(h*(i+1)+j)+2]);
+//         glEnd();
+//         glBindTexture(GL_TEXTURE_2D, 0);
+//     glDisable(GL_TEXTURE_2D);
+
+// 		glEnable(GL_TEXTURE_2D);
+//         glBindTexture(GL_TEXTURE_2D, texture[0]);
+// 		glScalef(1.,1.,1.);
+//         glBegin(GL_QUADS);
+//             glTexCoord2f(0.,0.);
+//             glVertex3f(vertex_coord[3*(h*i+j+1)],vertex_coord[3*(h*i+j+1)+1],vertex_coord[3*(h*i+j+1)+2]);
+//             glTexCoord2f(1.,0.);
+//             glVertex3f(vertex_coord[3*(h*(i+1)+j)],vertex_coord[3*(h*(i+1)+j)+1],vertex_coord[3*(h*(i+1)+j)+2]);
+//             glTexCoord2f(1.,1.);
+//             glVertex3f(vertex_coord[3*(h*(i+1)+j+1)],vertex_coord[3*(h*(i+1)+j+1)+1],vertex_coord[3*(h*(i+1)+j+1)+2]);
+//             glTexCoord2f(0.,1.);
+//             glVertex3f(vertex_coord[3*(h*(i+1)+j+1)],vertex_coord[3*(h*(i+1)+j+1)+1],vertex_coord[3*(h*(i+1)+j+1)+2]);
+//         glEnd();
+//         glBindTexture(GL_TEXTURE_2D, 0);
+//     glDisable(GL_TEXTURE_2D);
+
+// 	}
+// }
+
 	//trucs du prof/2.
 	// float position[4] = {5.,5.,5.,0.};
 	// float black[3] = {0.0,0.0,0.0};
