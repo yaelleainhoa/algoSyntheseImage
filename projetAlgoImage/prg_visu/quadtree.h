@@ -1,6 +1,7 @@
 #ifndef __QUADTREE_H
 #define __QUADTREE_H
 
+extern int loop;
 
 typedef struct 
 {

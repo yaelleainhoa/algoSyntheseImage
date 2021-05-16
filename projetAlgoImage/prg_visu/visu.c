@@ -398,7 +398,8 @@ int main(int argc, char** argv) {
 
 	Node node=createNode(0,3,3*heightMap.w,3*heightMap.w+3);
 	Quadtree quadtree= createQuadtree(&node);
-	buildQuadtree(&quadtree, vertex_coord,heightMap.w,2);
+	buildQuadtree(&quadtree, vertex_coord,heightMap.w,3);
+	printf("build fini");
 	Node* tab_node[10];
 	inorderTravel(&quadtree, tab_node,0);
 	for(int i=0; i<10 ; i++)

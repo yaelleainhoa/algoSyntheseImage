@@ -9,6 +9,8 @@
 
 #define TAILLE_PIXELS 1
 
+int loop=0;
+
 Node createNode(int pointNO,int pointNE, int pointSO,int pointSE)
 {
     Node newNode;
@@ -42,19 +44,17 @@ void addChildQuadtree(Quadtree *quadtree, Quadtree * enfantNO,Quadtree * enfantN
     quadtree->enfantSO=enfantSO;
     quadtree->enfantSE=enfantSE;
 }
-int loop=0;
+
 void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l)
 {
     int NO=quadtree->ptsExt->pointNO;
     int NE=quadtree->ptsExt->pointNE;
     int SO=quadtree->ptsExt->pointSO;
     int SE=quadtree->ptsExt->pointSE;
-
 printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
     if((abs(NO-NE)==1) || (abs(NO-SO)==w))
     {
-        
-
+        printf("fin\n");
         return;
     }
     else
@@ -63,24 +63,24 @@ printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
 
         Node nodeNO= createNode(NO,
                                 (int)((NO+NE)/2),
-                                (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w,
-                                (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w +(int)l/2);
+                                (int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w),
+                                (int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w) +(int)l/2);
         Quadtree quadNO = createQuadtree(&nodeNO);
 
         Node nodeNE=createNode((int)((NO+NE)/2),
                                 NE,
-                                (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w+(int)l/2,
-                                 (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w +l);       
+                                (int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w)+(int)l/2,
+                                 (int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w) +l);       
         Quadtree quadNE = createQuadtree(&nodeNE);
 
-        Node nodeSO=createNode( (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w ,
-                                (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w +(int)l/2,
+        Node nodeSO=createNode( (int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w) ,
+                                (int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w) +(int)l/2,
                                 SO,
                                 SO+(int)(l/2));
         Quadtree quadSO = createQuadtree(&nodeSO);
 
-        Node nodeSE =createNode( (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w +(int)l/2,
-                                (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w +l,
+        Node nodeSE =createNode( (int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w) +(int)l/2,
+                                (int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w) +l,
                                 SO+(int)(l/2),
                                 SE);
         Quadtree quadSE = createQuadtree(&nodeSE);
@@ -113,10 +113,11 @@ printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
         printf("NE\n");  
         buildQuadtree(quadtree->enfantNE, vertex_coord,w, l-(int)(l/2));
         printf("SO\n");
-        buildQuadtree(quadtree->enfantSO, vertex_coord,w,l);
+        buildQuadtree(quadtree->enfantSO, vertex_coord,w,(int)(l/2));
         printf("SE\n");
         buildQuadtree(quadtree->enfantSE, vertex_coord,w,l-(int)(l/2));
     }
+
 }
 
 
