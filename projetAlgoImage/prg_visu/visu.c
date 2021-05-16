@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
@@ -14,7 +13,7 @@
 #include "create_object.h"
 #include "valDeGris.h"
 #include "lodepng.h"
-
+#include "quadtree.h"
 
 /* variables globales pour la gestion de la caméra */
 float profondeur = 3;
@@ -392,8 +391,25 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
+	
 	init(heightMap);
 	
+	//test 
+
+	Node node=createNode(0,3,3*heightMap.w,3*heightMap.w+3);
+	Quadtree quadtree= createQuadtree(&node);
+	buildQuadtree(&quadtree, vertex_coord,heightMap.w,2);
+	Node* tab_node[10];
+	inorderTravel(&quadtree, tab_node,0);
+	for(int i=0; i<10 ; i++)
+	{
+		printf("NO: %d ,NE:%d, SO:%d,SE:%d, \n" ,
+		tab_node[i]->pointNO,
+		tab_node[i]->pointNE,
+		tab_node[i]->pointSO,
+		tab_node[i]->pointSE);
+	}
+
 
 	/* association de la fonction callback de redimensionnement */
 	glutReshapeFunc(reshapeFunc);

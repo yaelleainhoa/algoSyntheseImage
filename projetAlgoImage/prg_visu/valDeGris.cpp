@@ -9,7 +9,7 @@ using namespace std;
 extern "C"{
 
 void defineHeight(HeightMap * heightMap) {
-	ifstream lireTexte("../prg_visu/test.txt");
+	ifstream lireTexte("../prg_visu/valDeGris.txt");
 		if(lireTexte){
 			lireTexte >> heightMap->w>> heightMap->h;
 			for (int i = 0; i < heightMap->w; i++){

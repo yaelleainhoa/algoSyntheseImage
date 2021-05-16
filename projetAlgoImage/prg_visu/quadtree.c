@@ -5,16 +5,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TAILLE_PIXELS 1;
 
-Quadtree createQuadtree(int pointNO, int pointNE, int pointSO,int pointSE)
+
+#define TAILLE_PIXELS 1
+
+Node createNode(int pointNO,int pointNE, int pointSO,int pointSE)
+{
+    Node newNode;
+
+    newNode.pointNO=pointNO;
+    newNode.pointNE=pointNE;
+    newNode.pointSO=pointSO;
+    newNode.pointSE=pointSE;
+
+    return newNode;
+}
+
+Quadtree createQuadtree(Node* ptsExt)
 {
     Quadtree newQuadtree;
 
-    newQuadtree.pointNO=pointNO;
-    newQuadtree.pointNE=pointNE;
-    newQuadtree.pointSO=pointSO;
-    newQuadtree.pointSE=pointSE;
+    newQuadtree.ptsExt=ptsExt;
 
     newQuadtree.enfantNO=NULL;
     newQuadtree.enfantNE=NULL;
@@ -24,48 +35,109 @@ Quadtree createQuadtree(int pointNO, int pointNE, int pointSO,int pointSE)
     return newQuadtree;
 }
 
-void addNodeQuadtree(Quadtree quadtree, Quadtree * enfantNO,Quadtree * enfantNE,Quadtree * enfantSO,Quadtree * enfantSE)
+void addChildQuadtree(Quadtree *quadtree, Quadtree * enfantNO,Quadtree * enfantNE,Quadtree * enfantSO,Quadtree * enfantSE)
 {
-    quadtree.enfantNO=enfantNO;
-    quadtree.enfantNE=enfantNE;
-    quadtree.enfantSO=enfantSO;
-    quadtree.enfantSE=enfantSE;
+    quadtree->enfantNO=enfantNO;
+    quadtree->enfantNE=enfantNE;
+    quadtree->enfantSO=enfantSO;
+    quadtree->enfantSE=enfantSE;
+}
+int loop=0;
+void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l)
+{
+    int NO=quadtree->ptsExt->pointNO;
+    int NE=quadtree->ptsExt->pointNE;
+    int SO=quadtree->ptsExt->pointSO;
+    int SE=quadtree->ptsExt->pointSE;
+
+printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
+    if((abs(NO-NE)==1) || (abs(NO-SO)==w))
+    {
+        
+
+        return;
+    }
+    else
+    {
+        //création des enfants
+
+        Node nodeNO= createNode(NO,
+                                (int)((NO+NE)/2),
+                                (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w,
+                                (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w +(int)l/2);
+        Quadtree quadNO = createQuadtree(&nodeNO);
+
+        Node nodeNE=createNode((int)((NO+NE)/2),
+                                NE,
+                                (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w+(int)l/2,
+                                 (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w +l);       
+        Quadtree quadNE = createQuadtree(&nodeNE);
+
+        Node nodeSO=createNode( (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w ,
+                                (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w +(int)l/2,
+                                SO,
+                                SO+(int)(l/2));
+        Quadtree quadSO = createQuadtree(&nodeSO);
+
+        Node nodeSE =createNode( (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w +(int)l/2,
+                                (int)(((int)(NO/w)+(int)(SO/w))/2)+((int)(NO+NE)/2)*w +l,
+                                SO+(int)(l/2),
+                                SE);
+        Quadtree quadSE = createQuadtree(&nodeSE);
+
+        printf("nodeNE.NO: %d\n", nodeNE.pointNO);
+        printf("nodeNE.NE: %d\n", nodeNE.pointNE);
+        printf("nodeNE.SE: %d\n", nodeNE.pointSE);
+        printf("nodeNE.SO: %d\n", nodeNE.pointSO);
+
+        printf("nodeNO.NO: %d\n", nodeNO.pointNO);
+        printf("nodeNO.NE: %d\n", nodeNO.pointNE);
+        printf("nodeNO.SE: %d\n", nodeNO.pointSE);
+        printf("nodeNO.SO: %d\n", nodeNO.pointSO);
+
+        printf("nodeSE.NO: %d\n", nodeSE.pointNO);
+        printf("nodeSE.NE: %d\n", nodeSE.pointNE);
+        printf("nodeSE.SE: %d\n", nodeSE.pointSE);
+        printf("nodeSE.SO: %d\n", nodeSE.pointSO);
+
+        printf("nodeSO.NO: %d\n", nodeSO.pointNO);
+        printf("nodeSO.NE: %d\n", nodeSO.pointNE);
+        printf("nodeSO.SE: %d\n", nodeSO.pointSE);
+        printf("nodeSO.SO: %d\n", nodeSO.pointSO);
+
+        //ajout des enfants au quadtree
+        addChildQuadtree(quadtree,&quadNO,&quadNE,&quadSO,&quadSE);
+        //Récursion
+        printf("NO\n");
+        buildQuadtree(quadtree->enfantNO, vertex_coord,w, (int)(l/2));  
+        printf("NE\n");  
+        buildQuadtree(quadtree->enfantNE, vertex_coord,w, l-(int)(l/2));
+        printf("SO\n");
+        buildQuadtree(quadtree->enfantSO, vertex_coord,w,l);
+        printf("SE\n");
+        buildQuadtree(quadtree->enfantSE, vertex_coord,w,l-(int)(l/2));
+    }
 }
 
 
-void buildQuadtree(Quadtree * quadtree,float vertex_coord[])
-{
-    if(vertex_coord[quadtree->pointNO]-vertex_coord[quadtree->pointNE] /*difference des x*/==TAILLE_PIXELS 
-        || vertex_coord[pointNO+1]-vertex_coord[pointSO+1]==TAILLE_PIXELS)
+void inorderTravel(Quadtree * quadtree, Node* nodes[], int nodesCount) {
+    // fill nodes array with all nodes with inorder travel
+    nodes[nodesCount]=quadtree->ptsExt;
+    nodesCount++;
+    if(quadtree->enfantNE)
     {
-        return;
+        inorderTravel(quadtree->enfantNE,nodes,nodesCount);
     }
-    else()
+    if(quadtree->enfantNO)
     {
-        //création des enfants
-        Quadtree *NO = createQuadtree(quadtree.pointNO,
-                                    (int)((quadtree.pointNO+quadtree.pointNE)/2),
-                                    int)((quadtree.pointNO+quadtree.poinSO)/2),
-                                    (int)(quadtree.pointNO+quadtree.pointNE+quadtree.pointSE+quadtree.pointSO)/4));
-        Quadtree *NE = createQuadtree((int)((quadtree.pointNO+quadtree.pointNE)/2),
-                                    quadtree.pointNE, 
-                                    (int)((quadtree.pointNO+quadtree.pointNE+quadtree.pointSE+quadtree.pointSO)/4),
-                                    (int)((quadtree.pointNE+quadtree.poinSE)/2));
-        Quadtree *SO = createQuadtree((int)((quadtree.pointNO+quadtree.pointSO)/2),
-                                    (int)((quadtree.pointNO+quadtree.pointNE+quadtree.pointSE+quadtree.pointSO)/4),
-                                    quadtree.pointSO,
-                                    (int)((quadtree.pointSO+quadtree.poinSE)/2));
-        Quadtree *SE = createQuadtree((int)((quadtree.pointNO+quadtree.pointNE+quadtree.pointSE+quadtree.pointSO)/4),
-                                    (int)((quadtree.pointNE+quadtree.pointSE)/2),
-                                    (int)((quadtree.pointSO+poinSE)/2),
-                                    quadtree.pointSE);
-
-        //ajout des enfants au quadtree
-        addNodeQuadtree(quadtree,NO,NE,SO,SE);
-        //Récursion
-        buildQuadtree(quadtree->enfantNO, vertex_coord);
-        buildQuadtree(quadtree->enfantNE, vertex_coord);
-        buildQuadtree(quadtree->enfantSO, vertex_coord);
-        buildQuadtree(quadtree->enfantSE, vertex_coord);
+        inorderTravel(quadtree->enfantNO,nodes,nodesCount);
+    }
+        if(quadtree->enfantSE)
+    {
+        inorderTravel(quadtree->enfantSE,nodes,nodesCount);
+    }
+        if(quadtree->enfantSO)
+    {
+        inorderTravel(quadtree->enfantSO,nodes,nodesCount);
     }
 }
