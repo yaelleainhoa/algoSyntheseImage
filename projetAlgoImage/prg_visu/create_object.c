@@ -51,6 +51,7 @@ for (int i=0;i<h;i++){
 }
 
 int k=0;
+int text=0;
 for (int i=0;i<h-1;i++){
 	for(int j=0;j<w-1;j++){
 		triangle_index[k]=w*i+j;
@@ -60,28 +61,44 @@ for (int i=0;i<h-1;i++){
 		triangle_index[k+4]=w*(i+1)+j;
 		triangle_index[k+5]=w*(i+1)+j+1;
 		k+=6;
+
+		// textures_coord[text]=0.0;
+		// textures_coord[text+1]=1.0;
+
+		// textures_coord[text+2]=1.0;
+		// textures_coord[text+3]=1.0;
+
+		// textures_coord[text+4]=1.0;
+		// textures_coord[text+5]=0.0;
+
+		// textures_coord[text+6]=0.0;
+		// textures_coord[text+7]=0.0;
+		// text+=8;
 	}
 }
 
 
-for(int c=0; c<vertex_number; c+=6){
-		textures_coord[c]=0.0;
-		textures_coord[c+1]=1.0;
+// for(int c=0; c<2*vertex_number; c+=8){
+// 		textures_coord[c]=0.0;
+// 		textures_coord[c+1]=1.0;
 
-		textures_coord[c+2]=1.0;
-		textures_coord[c+3]=1.0;
+// 		textures_coord[c+2]=1.0;
+// 		textures_coord[c+3]=1.0;
 
-		textures_coord[c+4]=0.0;
-		textures_coord[c+5]=0.0;
-}
+// 		textures_coord[c+4]=1.0;
+// 		textures_coord[c+5]=0.0;
+
+// 		textures_coord[c+6]=0.0;
+// 		textures_coord[c+7]=0.0;
+// }
 
 
 //Permet de retrouver la hauteur en fonction de x et y (bcp de tests pour vérifier, tout n'est pas utile)
 // float x=2.;
 // float y=3.2;
 // printf("on rentre x=%f et y=%f \n", x,y);
-// int newi=(int)(x/l+h/2);
-// int newj=(int)(y/l+w/2);
+// int newi=(int)(x/l+h/2); ///ICI on a i en fonction de x
+// int newj=(int)(y/l+w/2); ///ICI on a j en fonction de y
 // printf("ces x et y correspondent à i=%d, et j=%d \n", newi,newj);
 // int coord = 3*(w*(int)(x/l+h/2)+(int)(y/l+w/2));
 // float newx=vertex_coord[coord];
