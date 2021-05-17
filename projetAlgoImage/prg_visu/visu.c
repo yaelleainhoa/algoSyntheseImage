@@ -301,6 +301,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			profondeur += STEP_PROF;
 			xCam+=STEP_PROF*sin(longitude);
 			yCam+=STEP_PROF*cos(longitude);
+			hauteur(xCam, yCam, heightMap, &zCam);
 			// xCam=profondeur*sin(longitude)*sin(latitude);
 			// yCam=profondeur*cos(latitude);
 			// zCam=profondeur*cos(longitude)*sin(latitude);
@@ -309,6 +310,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
 			xCam-=STEP_PROF*sin(longitude);
 			yCam-=STEP_PROF*cos(longitude);
+			hauteur(xCam, yCam, heightMap, &zCam);
 			// xCam=profondeur*sin(longitude)*sin(latitude);
 			// yCam=profondeur*cos(latitude);
 			// zCam=profondeur*cos(longitude)*sin(latitude);

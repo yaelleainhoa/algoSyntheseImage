@@ -75,4 +75,26 @@ for(int c=0; c<vertex_number; c+=6){
 		textures_coord[c+5]=0.0;
 }
 
+
+//Permet de retrouver la hauteur en fonction de x et y (bcp de tests pour vérifier, tout n'est pas utile)
+// float x=2.;
+// float y=3.2;
+// printf("on rentre x=%f et y=%f \n", x,y);
+// int newi=(int)(x/l+h/2);
+// int newj=(int)(y/l+w/2);
+// printf("ces x et y correspondent à i=%d, et j=%d \n", newi,newj);
+// int coord = 3*(w*(int)(x/l+h/2)+(int)(y/l+w/2));
+// float newx=vertex_coord[coord];
+// float newy=vertex_coord[coord+1];
+// printf("on retombe bien sur x=%f et y=%f\n", newx, newy);
+// float zvalue=vertex_coord[coord+2];
+// printf("ce qui donne z = %f", zvalue);
+
+}
+
+void hauteur(float x, float y, HeightMap heightMap, float *zCam){
+	int h=heightMap.h;
+	int w=heightMap.w;
+	int coord=3*(w*(int)(x/l+h/2)+(int)(y/l+w/2));
+	*zCam=vertex_coord[coord+2];
 }
