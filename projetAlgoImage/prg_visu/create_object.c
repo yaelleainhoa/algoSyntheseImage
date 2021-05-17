@@ -23,7 +23,7 @@ void createCoordinates(HeightMap heightMap) {
 	// - le nombre de triangles (triangle_number)
 	// - le tableau des indices des sommets constituant les triangles (triangle_index)
 	// CUBE
-	l=.5;
+	l=.1;
 	int w =heightMap.w;
 	int h=heightMap.h;
 	vertex_number =(w*h)*3; 
@@ -45,7 +45,7 @@ for (int i=0;i<h;i++){
 		vertex_coord[1+p]=(j-w/2)*l;
 		normal_coord[p]=(i-h/2)*l ;
 		normal_coord[2+p]=-2+heightMap.valeursDeGris[i][j]/(255.);
-		normal_coord[1+p]=(-w/2)*l ;
+		normal_coord[1+p]=(j-w/2)*l ;
 		p+=3;
 	}
 }
@@ -75,19 +75,4 @@ for(int c=0; c<vertex_number; c+=6){
 		textures_coord[c+5]=0.0;
 }
 
-}
-
-void posToVertex(float xPos, float yPos, HeightMap heightMap, float *zCam){
-	int x=(int)xPos;
-	int y=(int)yPos;
-	printf(" x : %d, y : %d\n", x, y);
-	int i=x/l + heightMap.h/2;
-	int j=y+l + heightMap.w/2;
-	float z = *zCam;
-	printf("zCam : %f\n", *zCam);
-	*zCam=vertex_coord[i*heightMap.w+j+2];
-	printf("zVertex : %f\n", vertex_coord[i*heightMap.w+j+2]);
-	if (*zCam!=z){
-		printf("zCam : %f\n", vertex_coord[i*heightMap.w+j]);
-	}
 }

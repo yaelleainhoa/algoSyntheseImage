@@ -12,7 +12,5 @@ extern unsigned int* triangle_index;
 extern float l;
 
 void createCoordinates(HeightMap heightMap);
-void posToVertex(float xPos, float yPos, HeightMap heightMap, float *zCam);
-
 
 #endif

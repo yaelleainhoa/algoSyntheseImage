@@ -28,7 +28,7 @@ float obj_rot = 0.0;
 GLuint texture[2];
 float largeur_skybox=12.;
 
-const float hauteur_regard=0.2;
+const float hauteur_regard=0.5;
 float xCam=0;
 float yCam=0;
 float zCam=0.;
@@ -121,8 +121,6 @@ static void drawFunc(void) {
 
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
-
-	//posToVertex(xCam, yCam, heightMap, &zCam);
 
 	glColor3f(1.0,1.0,1.0);
 	// skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam-largeur_skybox/4.,texture[1]);
@@ -303,7 +301,6 @@ static void kbdSpFunc(int c, int x, int y) {
 			profondeur += STEP_PROF;
 			xCam+=STEP_PROF*sin(longitude);
 			yCam+=STEP_PROF*cos(longitude);
-			//posToVertex(xCam, yCam, heightMap, &zCam);
 			// xCam=profondeur*sin(longitude)*sin(latitude);
 			// yCam=profondeur*cos(latitude);
 			// zCam=profondeur*cos(longitude)*sin(latitude);
@@ -312,7 +309,6 @@ static void kbdSpFunc(int c, int x, int y) {
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
 			xCam-=STEP_PROF*sin(longitude);
 			yCam-=STEP_PROF*cos(longitude);
-			//posToVertex(xCam, yCam, heightMap, &zCam);
 			// xCam=profondeur*sin(longitude)*sin(latitude);
 			// yCam=profondeur*cos(latitude);
 			// zCam=profondeur*cos(longitude)*sin(latitude);
