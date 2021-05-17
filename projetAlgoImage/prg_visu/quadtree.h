@@ -28,6 +28,6 @@ Node createNode(int pointNO,int pointNE, int pointSO,int pointSE);
 Quadtree createQuadtree(Node *ptsExt);
 void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l);
 void addChildQuadtree(Quadtree *quadtree, Quadtree * enfantNO,Quadtree * enfantNE,Quadtree * enfantSO,Quadtree * enfantSE);
-void inorderTravel(Quadtree * quadtree, Node* nodes[], int nodesCount);
+void inorderTravel(Quadtree * quadtree, Node nodes[], int *nodesCount);
 
 #endif

@@ -12,6 +12,7 @@ float* normal_coord;
 float* textures_coord;
 unsigned int triangle_number;
 unsigned int* triangle_index;
+float l;
 
 
 void createCoordinates(HeightMap heightMap) {
@@ -22,7 +23,7 @@ void createCoordinates(HeightMap heightMap) {
 	// - le nombre de triangles (triangle_number)
 	// - le tableau des indices des sommets constituant les triangles (triangle_index)
 	// CUBE
-	float l=.5;
+	l=.5;
 	int w =heightMap.w;
 	int h=heightMap.h;
 	vertex_number =(w*h)*3; 
@@ -37,27 +38,27 @@ void createCoordinates(HeightMap heightMap) {
 
 int p=0;
    
-for (int i=0;i<w;i++){
-	for(int j=0;j<h;j++){
-		vertex_coord[p]=(i-w/2)*l ;
-		vertex_coord[1+p]=-2+heightMap.valeursDeGris[i][j]/(255.);
-		vertex_coord[2+p]=(j-h/2)*l;
-		normal_coord[p]=(i-w/2)*l ;
-		normal_coord[1+p]=-2+heightMap.valeursDeGris[i][j]/(255.);
-		normal_coord[2+p]=(j-h/2)*l ;
+for (int i=0;i<h;i++){
+	for(int j=0;j<w;j++){
+		vertex_coord[p]=(i-h/2)*l ;
+		vertex_coord[2+p]=-2+heightMap.valeursDeGris[i][j]/(255.);
+		vertex_coord[1+p]=(j-w/2)*l;
+		normal_coord[p]=(i-h/2)*l ;
+		normal_coord[2+p]=-2+heightMap.valeursDeGris[i][j]/(255.);
+		normal_coord[1+p]=(-w/2)*l ;
 		p+=3;
 	}
 }
 
 int k=0;
-for (int i=0;i<w-1;i++){
-	for(int j=0;j<h-1;j++){
-		triangle_index[k]=h*i+j;
-		triangle_index[k+1]=h*i+j+1;
-		triangle_index[k+2]=h*(i+1)+j;
-		triangle_index[k+3]=h*i+j+1;
-		triangle_index[k+4]=h*(i+1)+j;
-		triangle_index[k+5]=h*(i+1)+j+1;
+for (int i=0;i<h-1;i++){
+	for(int j=0;j<w-1;j++){
+		triangle_index[k]=w*i+j;
+		triangle_index[k+1]=w*i+j+1;
+		triangle_index[k+2]=w*(i+1)+j;
+		triangle_index[k+3]=w*i+j+1;
+		triangle_index[k+4]=w*(i+1)+j;
+		triangle_index[k+5]=w*(i+1)+j+1;
 		k+=6;
 	}
 }
@@ -76,3 +77,17 @@ for(int c=0; c<vertex_number; c+=6){
 
 }
 
+void posToVertex(float xPos, float yPos, HeightMap heightMap, float *zCam){
+	int x=(int)xPos;
+	int y=(int)yPos;
+	printf(" x : %d, y : %d\n", x, y);
+	int i=x/l + heightMap.h/2;
+	int j=y+l + heightMap.w/2;
+	float z = *zCam;
+	printf("zCam : %f\n", *zCam);
+	*zCam=vertex_coord[i*heightMap.w+j+2];
+	printf("zVertex : %f\n", vertex_coord[i*heightMap.w+j+2]);
+	if (*zCam!=z){
+		printf("zCam : %f\n", vertex_coord[i*heightMap.w+j]);
+	}
+}

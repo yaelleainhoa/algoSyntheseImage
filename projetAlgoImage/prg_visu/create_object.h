@@ -9,8 +9,10 @@ extern float* normal_coord;
 extern float* textures_coord;
 extern unsigned int triangle_number;
 extern unsigned int* triangle_index;
+extern float l;
 
 void createCoordinates(HeightMap heightMap);
+void posToVertex(float xPos, float yPos, HeightMap heightMap, float *zCam);
 
 
 #endif

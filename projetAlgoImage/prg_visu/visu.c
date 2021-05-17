@@ -28,9 +28,12 @@ float obj_rot = 0.0;
 GLuint texture[2];
 float largeur_skybox=12.;
 
+const float hauteur_regard=0.2;
 float xCam=0;
 float yCam=0;
-float zCam=0;
+float zCam=0.;
+HeightMap heightMap;
+
 
 
 
@@ -100,6 +103,7 @@ void skyBoxY(float x, float y, float z, GLuint texture){
 /*********************************************************/
 /* fonction de dessin de la scène à l'écran              */
 static void drawFunc(void) { 
+
 	/* reinitialisation des buffers : couleur et ZBuffer */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -111,12 +115,14 @@ static void drawFunc(void) {
 	glPushMatrix();
 	
 	/* placement de la caméra */
-	gluLookAt(profondeur*sin(longitude)*sin(latitude),profondeur*cos(latitude),profondeur*cos(longitude)*sin(latitude),
-              0.0,0.0,0.0,
-              0.0,1.0,0.0);
+	gluLookAt( xCam, yCam, zCam+hauteur_regard,
+			sin(longitude)*sin(latitude)+xCam,cos(longitude)*sin(latitude)+yCam,cos(latitude)+zCam+hauteur_regard,
+            0.0,0.0,1.0);
 
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
+
+	//posToVertex(xCam, yCam, heightMap, &zCam);
 
 	glColor3f(1.0,1.0,1.0);
 	// skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam-largeur_skybox/4.,texture[1]);
@@ -264,6 +270,8 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			break;
 		case 'S' : case 's' : glutIdleFunc(NULL);
 			break;
+		case 'A' : case 'a' : printf("xpos : %f, ypos : %f \n", xCam, yCam);
+			break;
 		default:
 			printf("Appui sur la touche %c\n",c);
 	}
@@ -293,15 +301,21 @@ static void kbdSpFunc(int c, int x, int y) {
 			break;
 		case GLUT_KEY_F2 :
 			profondeur += STEP_PROF;
-			xCam=profondeur*sin(longitude)*sin(latitude);
-			yCam=profondeur*cos(latitude);
-			zCam=profondeur*cos(longitude)*sin(latitude);
+			xCam+=STEP_PROF*sin(longitude);
+			yCam+=STEP_PROF*cos(longitude);
+			//posToVertex(xCam, yCam, heightMap, &zCam);
+			// xCam=profondeur*sin(longitude)*sin(latitude);
+			// yCam=profondeur*cos(latitude);
+			// zCam=profondeur*cos(longitude)*sin(latitude);
 			break;
 		case GLUT_KEY_F1 :
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
-			xCam=profondeur*sin(longitude)*sin(latitude);
-			yCam=profondeur*cos(latitude);
-			zCam=profondeur*cos(longitude)*sin(latitude);
+			xCam-=STEP_PROF*sin(longitude);
+			yCam-=STEP_PROF*cos(longitude);
+			//posToVertex(xCam, yCam, heightMap, &zCam);
+			// xCam=profondeur*sin(longitude)*sin(latitude);
+			// yCam=profondeur*cos(latitude);
+			// zCam=profondeur*cos(longitude)*sin(latitude);
 			break;
 		// case GLUT_KEY_F3 :
 		// 	moveLight();
@@ -336,8 +350,8 @@ static void motionFunc(int x, int y) {
 /* des objets de la scènes.                              */
 static void init(HeightMap heightMap) {
 	profondeur = 1;
-	latitude = M_PI/2.0;
-	longitude = 0.0;
+	latitude = M_PI/2.;
+	longitude = -M_PI;
 
 	xCam=profondeur*sin(longitude)*sin(latitude);
 	yCam=profondeur*cos(latitude);
@@ -376,7 +390,6 @@ void idle(void) {
 
 int main(int argc, char** argv) {
 
-	HeightMap heightMap;
 	defineHeight(&heightMap);
 	/* traitement des paramètres du programme propres à GL */
 	glutInit(&argc, argv);
@@ -399,17 +412,19 @@ int main(int argc, char** argv) {
 	Node node=createNode(0,3,3*heightMap.w,3*heightMap.w+3);
 	Quadtree quadtree= createQuadtree(&node);
 	buildQuadtree(&quadtree, vertex_coord,heightMap.w,3);
-	printf("build fini");
-	Node* tab_node[10];
-	inorderTravel(&quadtree, tab_node,0);
-	for(int i=0; i<10 ; i++)
-	{
-		printf("NO: %d ,NE:%d, SO:%d,SE:%d, \n" ,
-		tab_node[i]->pointNO,
-		tab_node[i]->pointNE,
-		tab_node[i]->pointSO,
-		tab_node[i]->pointSE);
-	}
+
+	Node tab_node[50];
+	int count;
+	count=0;
+	//inorderTravel(&quadtree, tab_node,&count);
+	// for(int i=0; i<10 ; i++)
+	// {
+	// 	printf("NO: %d ,NE:%d, SO:%d,SE:%d, \n" ,
+	// 	tab_node[i]->pointNO,
+	// 	tab_node[i]->pointNE,
+	// 	tab_node[i]->pointSO,
+	// 	tab_node[i]->pointSE);
+	// }
 
 
 	/* association de la fonction callback de redimensionnement */
@@ -425,7 +440,7 @@ int main(int argc, char** argv) {
 	/* association de la fonction callback de DRAG de la souris */
 	glutMotionFunc(motionFunc);
 
-	glutIdleFunc(idle);
+	glutIdleFunc(NULL);
 
 	/* boucle principale de gestion des événements */
 	glutMainLoop();

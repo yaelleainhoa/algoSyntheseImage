@@ -121,24 +121,36 @@ printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
 }
 
 
-void inorderTravel(Quadtree * quadtree, Node* nodes[], int nodesCount) {
+void inorderTravel(Quadtree * quadtree, Node nodes[], int * nodesCount) {
     // fill nodes array with all nodes with inorder travel
-    nodes[nodesCount]=quadtree->ptsExt;
-    nodesCount++;
+    printf("count : %d \n",*nodesCount);
+    printf("test %d\n", quadtree->enfantNE->ptsExt->pointSO);
+    nodes[*nodesCount]=*(quadtree->ptsExt);
+        printf("TRAVEL : NO: %d ,NE:%d, SO:%d,SE:%d, count :%d\n" ,
+		nodes[*nodesCount].pointNO,
+		nodes[*nodesCount].pointNE,
+		nodes[*nodesCount].pointSO,
+		nodes[*nodesCount].pointSE,
+        *nodesCount);
+    (*nodesCount)++;
     if(quadtree->enfantNE)
     {
+        printf("NE\n");
         inorderTravel(quadtree->enfantNE,nodes,nodesCount);
     }
     if(quadtree->enfantNO)
     {
+        printf("N0\n");
         inorderTravel(quadtree->enfantNO,nodes,nodesCount);
     }
         if(quadtree->enfantSE)
     {
+        printf("SE\n");
         inorderTravel(quadtree->enfantSE,nodes,nodesCount);
     }
         if(quadtree->enfantSO)
     {
+        printf("S0\n");
         inorderTravel(quadtree->enfantSO,nodes,nodesCount);
     }
 }
