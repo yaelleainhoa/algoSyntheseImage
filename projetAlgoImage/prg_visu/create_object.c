@@ -62,18 +62,18 @@ for (int i=0;i<h-1;i++){
 		triangle_index[k+5]=w*(i+1)+j+1;
 		k+=6;
 
-		// textures_coord[text]=0.0;
-		// textures_coord[text+1]=1.0;
+// 		textures_coord[text]=0.0;
+// 		textures_coord[text+1]=1.0;
 
-		// textures_coord[text+2]=1.0;
-		// textures_coord[text+3]=1.0;
+// 		textures_coord[text+2]=1.0;
+// 		textures_coord[text+3]=1.0;
 
-		// textures_coord[text+4]=1.0;
-		// textures_coord[text+5]=0.0;
+// 		textures_coord[text+4]=1.0;
+// 		textures_coord[text+5]=0.0;
 
-		// textures_coord[text+6]=0.0;
-		// textures_coord[text+7]=0.0;
-		// text+=8;
+// 		textures_coord[text+6]=0.0;
+// 		textures_coord[text+7]=0.0;
+// 		text+=8;
 	}
 }
 
@@ -108,6 +108,49 @@ for (int i=0;i<h-1;i++){
 // printf("ce qui donne z = %f", zvalue);
 
 }
+
+void tracerTriangles(int (*coordonnees_quadtree)[], int taille){
+		int k=0;
+		int text=0;
+		triangle_index = (unsigned int*) realloc(triangle_index, sizeof(unsigned int)*3*2*taille);
+		textures_coord = (float*) realloc(textures_coord,sizeof(float)*2*taille);
+		for(int i=0; i<taille;i+=4){
+			triangle_index[k]=(*coordonnees_quadtree)[i];
+			triangle_index[k+1]=(*coordonnees_quadtree)[i+1];
+			triangle_index[k+2]=(*coordonnees_quadtree)[i+2];
+			triangle_index[k+3]=(*coordonnees_quadtree)[i+1];
+			triangle_index[k+4]=(*coordonnees_quadtree)[i+2];
+			triangle_index[k+5]=(*coordonnees_quadtree)[i+3];
+			k+=6;
+
+			//marche pas, demander au prof
+			// textures_coord[text]=0.0;
+			// textures_coord[text+1]=0.0;
+
+			// textures_coord[text+2]=1.0;
+			// textures_coord[text+3]=0.0;
+
+			// textures_coord[text+4]=1.0;
+			// textures_coord[text+5]=1.0;
+
+			// textures_coord[text+6]=0.0;
+			// textures_coord[text+7]=1.0;
+			// text+=8;
+		}
+
+		//SI jamais on fait plutôt un tableau de node, on aurait plutôt
+		// for(int i=0; i<taille;i++){
+		// 	triangle_index[k]=(*coordonnees_quadtree)[i].pointNO;
+		// 	triangle_index[k+1]=(*coordonnees_quadtree)[i].pointNE;
+		// 	triangle_index[k+2]=(*coordonnees_quadtree)[i].pointSO;
+		// 	triangle_index[k+3]=(*coordonnees_quadtree)[i].pointNE;
+		// 	triangle_index[k+4]=(*coordonnees_quadtree)[i].pointSE;
+		// 	triangle_index[k+5]=(*coordonnees_quadtree)[i].pointSO;
+		// 	k+=6;
+		// }
+
+}
+
 
 void hauteur(float x, float y, HeightMap heightMap, float *zCam){
 	int h=heightMap.h;
