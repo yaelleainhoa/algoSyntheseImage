@@ -46,6 +46,7 @@ void glDrawObject() {
 
 	glVertexPointer(3,GL_FLOAT,0,vertex_coord);
 	glNormalPointer(GL_FLOAT,0,normal_coord);
+    //glTexCoordPointer(3, GL_FLOAT, 0, textures_coord);
 	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     //glTexCoordPointer(3, GL_FLOAT, 0, textures_coord);
 	glDrawElements(GL_TRIANGLES,3*triangle_number,GL_UNSIGNED_INT,triangle_index);

@@ -8,6 +8,13 @@ extern float profondeur;
 extern float latitude;
 extern float longitude;
 
+extern float xCam;
+extern float yCam;
+extern float zCam;
+
+extern int fov;
+extern float zfar;
+
 /* variables globales pour la gestion de l'objet */
 extern float obj_rot;
 

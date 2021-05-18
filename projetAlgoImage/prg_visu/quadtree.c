@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <geometry.h>
+#include <visu.h>
 
 
 
@@ -121,6 +123,40 @@ printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
 }
 
 
+
+//pas fini
+
+/*
+void camIntersectQuad(Quadtree *quadtree)
+{
+    //points exterieurs triangle caméra
+    float xRegard = sin(longitude)*sin(latitude)+xCam;
+    float yRegard = cos(longitude)*sin(latitude)+yCam;
+    Point3D cam= createPoint(xCam,yCam,0.);
+    Point3D direction_regard = createPoint(xRegard,yRegard,0.);
+    Vector3D direction=normalize(createVectorFromPoints(cam,direction_regard));
+    Vector3D R= createVector(cos((M_PI/180)*longitude-M_PI/2),sin((M_PI/180)*longitude-M_PI/2),0.);
+    Vector3D AB = addVectors(multVector(direction,zfar),multVector(R,tan((M_PI/180)*fov/2.)*zfar));
+    Vector3D BC=multVector(multVector(R,tan((M_PI/180)*fov/2.)*zfar),-2.);
+    Vector3D CA = addVectors(multVector(direction,-zfar),multVector(R,tan((M_PI/180)*fov/2.)*zfar));
+
+    Point3D B=createPoint(AB.x+cam.x, AB.y+cam.y, 0.);
+    Point3D C=createPoint(BC.x+B.x, BC.y+B.y, 0.);
+
+    //test  
+    if(intersection(xCam,yCam,B.x,B.y,))
+			sin(longitude)*sin(latitude)+xCam,cos(longitude)*sin(latitude)+yCam)
+}
+
+void travelQuadtree(int ptsVisibles[], Quadtree* quadtree )
+{
+    if(intersection())
+}
+
+*/
+
+
+//stand by
 void inorderTravel(Quadtree * quadtree, Node nodes[], int * nodesCount) {
     // fill nodes array with all nodes with inorder travel
     printf("count : %d \n",*nodesCount);
