@@ -12,6 +12,6 @@ extern unsigned int* triangle_index;
 extern float l;
 
 void createCoordinates(HeightMap heightMap);
-void hauteur(float x, float y, HeightMap heightMap, float *zCam)
+void hauteur(float x, float y, HeightMap heightMap, float *zCam);
 
 #endif

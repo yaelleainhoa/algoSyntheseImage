@@ -116,7 +116,7 @@ static void drawFunc(void) {
 	glPushMatrix();
 	
 	/* placement de la caméra */
-	gluLookAt( xCam, yCam, zCam+hauteur_regard,
+	gluLookAt(xCam, yCam, zCam+hauteur_regard,
 			sin(longitude)*sin(latitude)+xCam,cos(longitude)*sin(latitude)+yCam,cos(latitude)+zCam+hauteur_regard,
             0.0,0.0,1.0);
 
@@ -403,6 +403,8 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
+
+	printf("Les segments AB et CD se croisent ? : %d\n",intersection(-4, 2,-2, -2.1, -2,-2.1, -1.6, 2.5));
 	//printf("tan(45) = %f\n", tan((M_PI/180)*45));
 	//printf(" le point apparitent ou pas : %d \n",pointAppartientTriangle(-1, 1.5, 0., 0., -0.6, 0.8, 8.5, 2.2, 2*16.5));
 	//int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float teta, float zFar, float fov);

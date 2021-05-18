@@ -41,6 +41,6 @@ void printPoint3D(Point3D p);
 void printVector3D(Vector3D v);
 
 int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float teta, float zFar, float fov);
-int intersection(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD,);
+int intersection(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD);
 
 #endif

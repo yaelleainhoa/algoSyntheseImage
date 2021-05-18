@@ -115,3 +115,37 @@ int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xReg
     return 1;
 
 }
+
+int intersection(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD){
+    Point3D A = createPoint(xA,yA,0.);
+    Point3D B = createPoint(xB,yB,0.);
+    Point3D C = createPoint(xC,yC,0.);
+    Point3D D = createPoint(xD,yD,0.);
+
+    Vector3D AB=createVectorFromPoints(A,B);
+    Vector3D CD=createVectorFromPoints(C,D);
+
+    //On vérifie que A et B sont de part et d'autre de [CD]
+    Vector3D CA=createVectorFromPoints(C,A);
+    Vector3D CB=createVectorFromPoints(C,B);
+
+    float det1=CD.x*CA.y-CD.y*CA.x;
+    float det2=CD.x*CB.y-CD.y*CB.x;
+
+    if(det1*det2>0){ //Si le produit est supérieur, les déterminants sont de même signe et donc les points sont du même côté
+        return 0;
+    }
+
+    //On vérifie que C et D sont de part et d'autre de [AB]
+    Vector3D AC=createVectorFromPoints(A,C);
+    Vector3D AD=createVectorFromPoints(A,D);
+    det1=AB.x*AC.y-AB.y*AC.x;
+    det2=AB.x*AD.y-AB.y*AD.x;
+
+    if(det1*det2>0){
+        return 0;
+    }
+
+    return 1;
+
+}
