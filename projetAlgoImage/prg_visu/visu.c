@@ -403,15 +403,16 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-
-	
+	//printf("tan(45) = %f\n", tan((M_PI/180)*45));
+	//printf(" le point apparitent ou pas : %d \n",pointAppartientTriangle(-1, 1.5, 0., 0., -0.6, 0.8, 8.5, 2.2, 2*16.5));
+	//int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float teta, float zFar, float fov);
 	init(heightMap);
 	
 	//test 
 
 	Node node=createNode(0,3,3*heightMap.w,3*heightMap.w+3);
 	Quadtree quadtree= createQuadtree(&node);
-	buildQuadtree(&quadtree, vertex_coord,heightMap.w,3);
+	//buildQuadtree(&quadtree, vertex_coord,heightMap.w,3);
 
 	Node tab_node[50];
 	int count;
