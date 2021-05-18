@@ -14,6 +14,7 @@
 #include "valDeGris.h"
 #include "lodepng.h"
 #include "quadtree.h"
+#include "geometry.h"
 
 /* variables globales pour la gestion de la caméra */
 float profondeur = 3;
@@ -401,6 +402,7 @@ int main(int argc, char** argv) {
 	if (glutCreateWindow("visuTerImac") == GL_FALSE) {
 		return 1;
 	}
+
 
 	
 	init(heightMap);
