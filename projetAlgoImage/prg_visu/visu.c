@@ -404,9 +404,10 @@ int main(int argc, char** argv) {
 	}
 
 
-	printf("Les segments AB et CD se croisent ? : %d\n",intersection(-4, 2,-2, -2.1, -2,-2.1, -1.6, 2.5));
+	//printf("Les segments AB et CD se croisent ? : %d\n",intersection(-4, 2,-2, -2.1, -2,-2.1, -1.6, 2.5));
 	//printf("tan(45) = %f\n", tan((M_PI/180)*45));
-	//printf(" le point apparitent ou pas : %d \n",pointAppartientTriangle(-1, 1.5, 0., 0., -0.6, 0.8, 8.5, 2.2, 2*16.5));
+	printf("B(%f,%f)\n", cos(-19.4+13.3)*2.4/cos(19.4)+2.1,sin(-19.4+13.3)*2.4/cos(19.4)-3.1);
+	printf(" le point apparitent ou pas : %d \n",pointAppartientTriangle(2.93, -0.7, 2.1, -3.1, 2.84, -2.43, 13.3, 2.4, 2*19.4));
 	//int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float teta, float zFar, float fov);
 	init(heightMap);
 	

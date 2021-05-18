@@ -80,25 +80,27 @@ void printVector3D(Vector3D p){
     printf("Vecteur : (%f,%f,%f)\n", p.x, p.y, p.z);
 }
 
-int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float teta, float zFar, float fov){
+int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov){
     Point3D A=createPoint(xCam,yCam,0.);
     Point3D P=createPoint(x,y,0.);
     Vector3D AP=createVectorFromPoints(A,P);
     Point3D direction_regard=createPoint(xRegard, yRegard,0.);
     Vector3D direction = createVectorFromPoints(A, direction_regard);
     direction = normalize(direction);
-    Vector3D L=createVector(cos((M_PI/180)*teta+M_PI/2), sin((M_PI/180)*teta+M_PI/2),0.);
-    Vector3D R=createVector(cos((M_PI/180)*teta-M_PI/2), sin((M_PI/180)*teta-M_PI/2),0.);
+    Vector3D L=createVector(cos(longitude+M_PI/2), sin(longitude+M_PI/2),0.);
+    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.);
 
-    Vector3D AB=addVectors(multVector(direction, zFar), multVector(R, tan((M_PI/180)*fov/2.)*zFar));
-    Vector3D BC=multVector(multVector(R, tan((M_PI/180)*fov/2.)*zFar), -2.);
-    Vector3D CA=addVectors(multVector(direction, -zFar), multVector(R, tan((M_PI/180)*fov/2.)*zFar));
+    Vector3D AB=addVectors(multVector(direction, zFar), multVector(R, tan(fov/2.)*zFar));
+    Vector3D BC=multVector(multVector(R, tan(fov/2.)*zFar), -2.);
+    Vector3D CA=addVectors(multVector(direction, -zFar), multVector(R, tan(fov/2.)*zFar));
 
     Point3D B = createPoint(AB.x+A.x, AB.y +A.y,0.);
     Point3D C=createPoint(BC.x+B.x, BC.y+B.y,0);
 
     Vector3D BP=createVectorFromPoints(B,P);
     Vector3D CP=createVectorFromPoints(C,P);
+
+    printf("les coord sont : A(%f,%f), B(%f,%f), C(%f,%f)\n", A.x,A.y,B.x,B.y,C.x,C.y);
 
     Vector3D vecteurs[3]={AB, BC, CA};
     Vector3D vecteursP[3]={AP,BP,CP};
