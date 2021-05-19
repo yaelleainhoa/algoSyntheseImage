@@ -124,7 +124,7 @@ static void drawFunc(void) {
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
 
-	tracerTriangles(&coordonnees_quadtree, 12);
+	//tracerTriangles(&coordonnees_quadtree, 12);
 
 	glColor3f(1.0,1.0,1.0);
 	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam-largeur_skybox/4.,texture[1]);
@@ -408,7 +408,7 @@ int main(int argc, char** argv) {
 	}
 
 
-	//printf("Les segments AB et CD se croisent ? : %d\n",intersection(-4, 2,-2, -2.1, -2,-2.1, -1.6, 2.5));
+	//printf("Les segments AB et CD se croisent ? : %d\n",intersectionDeuxSegments(-4, 2,-2, -2.1, -2,-2.1, -1.6, 2.5));
 	//printf("tan(45) = %f\n", tan((M_PI/180)*45));
 	//printf("B(%f,%f)\n", cos(-19.4+13.3)*2.4/cos(19.4)+2.1,sin(-19.4+13.3)*2.4/cos(19.4)-3.1);
 	//printf(" le point apparitent ou pas : %d \n",pointAppartientTriangle(2.93, -0.7, 2.1, -3.1, 2.84, -2.43, 13.3, 2.4, 2*19.4));
@@ -417,9 +417,13 @@ int main(int argc, char** argv) {
 	
 	//test 
 
-	Node node=createNode(0,3,3*heightMap.w,3*heightMap.w+3);
+	Point3D NO=createPointFromCoord(0,vertex_coord);
+	Point3D NE=createPointFromCoord(3,vertex_coord);
+	Point3D SO=createPointFromCoord(3*heightMap.w,vertex_coord);
+	Point3D SE=createPointFromCoord(3*heightMap.w+3,vertex_coord);
+	Node node=createNode(NO,NE,SO,SE);
 	Quadtree quadtree= createQuadtree(&node);
-	//buildQuadtree(&quadtree, vertex_coord,heightMap.w,3);
+	buildQuadtree(&quadtree, vertex_coord,heightMap.w,3);
 
 	Node tab_node[50];
 	int count;

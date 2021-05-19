@@ -87,21 +87,21 @@ void printVector3D(Vector3D p){
 //regarde si un point est à l'interieur du triangle formé par la caméra
 int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov){
 //normalement zfar longitude et fov sont en variables globales on devrait pouvoir ne pas les mettre en parametres
-    Point3D A=createPoint(xCam,yCam,0.,NULL);//j'ai mis des NULL pour les coordonnées dans vertex_coord à voir si ça marche ou si on doit revoir la struct
-    Point3D P=createPoint(x,y,0.,NULL);
+    Point3D A=createPoint(xCam,yCam,0.,0);//j'ai mis des NULL pour les coordonnées dans vertex_coord à voir si ça marche ou si on doit revoir la struct
+    Point3D P=createPoint(x,y,0.,0);
     Vector3D AP=createVectorFromPoints(A,P);
-    Point3D direction_regard=createPoint(xRegard, yRegard,0.,NULL);
+    Point3D direction_regard=createPoint(xRegard, yRegard,0.,0);
     Vector3D direction = createVectorFromPoints(A, direction_regard);
     direction = normalize(direction);
-    Vector3D L=createVector(cos(longitude+M_PI/2), sin(longitude+M_PI/2),0.,NULL);
-    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.,NULL);
+    //Vector3D L=createVector(cos(longitude+M_PI/2), sin(longitude+M_PI/2),0.,0);
+    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.,0);
 
     Vector3D AB=addVectors(multVector(direction, zFar), multVector(R, tan(fov/2.)*zFar));
     Vector3D BC=multVector(multVector(R, tan(fov/2.)*zFar), -2.);
     Vector3D CA=addVectors(multVector(direction, -zFar), multVector(R, tan(fov/2.)*zFar));
 
-    Point3D B = createPoint(AB.x+A.x, AB.y +A.y,0.,NULL);
-    Point3D C=createPoint(BC.x+B.x, BC.y+B.y,0,NULL);
+    Point3D B = createPoint(AB.x+A.x, AB.y +A.y,0.,0);
+    Point3D C=createPoint(BC.x+B.x, BC.y+B.y,0,0);
 
     Vector3D BP=createVectorFromPoints(B,P);
     Vector3D CP=createVectorFromPoints(C,P);
@@ -128,10 +128,10 @@ int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xReg
 
 //regarde si deux segments se croisent : renvoie 1 si oui 0, si non
 int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD){
-    Point3D A = createPoint(xA,yA,0.,NULL);
-    Point3D B = createPoint(xB,yB,0.,NULL);
-    Point3D C = createPoint(xC,yC,0.,NULL);
-    Point3D D = createPoint(xD,yD,0.,NULL);
+    Point3D A = createPoint(xA,yA,0.,0);
+    Point3D B = createPoint(xB,yB,0.,0);
+    Point3D C = createPoint(xC,yC,0.,0);
+    Point3D D = createPoint(xD,yD,0.,0);
 
     Vector3D AB=createVectorFromPoints(A,B);
     Vector3D CD=createVectorFromPoints(C,D);
