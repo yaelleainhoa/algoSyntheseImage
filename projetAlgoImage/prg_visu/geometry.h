@@ -5,13 +5,15 @@ typedef struct Vec3f{
     float x;
     float y;
     float z;
+
+    int coord;//coordonné de x dans vertex_coord
 }Point3D, Vector3D;
 
 // Construit le point (x, y, z)
-Point3D createPoint(float x, float y, float z);
+Point3D createPoint(float x, float y, float z, int coord);
 
 // Construit le vecteur (x, y, z)
-Vector3D createVector(float x, float y, float z);
+Vector3D createVector(float x, float y, float z, int coord);
 
 // Construit le vecteur reliant les points P1 et P2
 Vector3D createVectorFromPoints(Point3D p1, Point3D p2);
@@ -41,6 +43,6 @@ void printPoint3D(Point3D p);
 void printVector3D(Vector3D v);
 
 int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov);
-int intersection(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD);
+int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD);
 
 #endif

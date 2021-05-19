@@ -1,20 +1,24 @@
 #include <math.h>
 #include "geometry.h"
+#include "quadtree.h"
+#include "visu.h"
 #include <stdio.h>
 
-Point3D createPoint(float x, float y, float z){
+Point3D createPoint(float x, float y, float z, int coord){
     Point3D newPoint;
     newPoint.x=x;
     newPoint.y=y;
     newPoint.z=z;
+    newPoint.coord=coord;
     return newPoint;
 }
 
-Vector3D createVector(float x, float y, float z){
+Vector3D createVector(float x, float y, float z, int coord){
     Vector3D newVect;
     newVect.x=x;
     newVect.y=y;
     newVect.z=z;
+    newVect.coord=coord;
     return newVect;
 }
 
@@ -80,22 +84,24 @@ void printVector3D(Vector3D p){
     printf("Vecteur : (%f,%f,%f)\n", p.x, p.y, p.z);
 }
 
+//regarde si un point est à l'interieur du triangle formé par la caméra
 int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov){
-    Point3D A=createPoint(xCam,yCam,0.);
-    Point3D P=createPoint(x,y,0.);
+//normalement zfar longitude et fov sont en variables globales on devrait pouvoir ne pas les mettre en parametres
+    Point3D A=createPoint(xCam,yCam,0.,NULL);//j'ai mis des NULL pour les coordonnées dans vertex_coord à voir si ça marche ou si on doit revoir la struct
+    Point3D P=createPoint(x,y,0.,NULL);
     Vector3D AP=createVectorFromPoints(A,P);
-    Point3D direction_regard=createPoint(xRegard, yRegard,0.);
+    Point3D direction_regard=createPoint(xRegard, yRegard,0.,NULL);
     Vector3D direction = createVectorFromPoints(A, direction_regard);
     direction = normalize(direction);
-    Vector3D L=createVector(cos(longitude+M_PI/2), sin(longitude+M_PI/2),0.);
-    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.);
+    Vector3D L=createVector(cos(longitude+M_PI/2), sin(longitude+M_PI/2),0.,NULL);
+    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.,NULL);
 
     Vector3D AB=addVectors(multVector(direction, zFar), multVector(R, tan(fov/2.)*zFar));
     Vector3D BC=multVector(multVector(R, tan(fov/2.)*zFar), -2.);
     Vector3D CA=addVectors(multVector(direction, -zFar), multVector(R, tan(fov/2.)*zFar));
 
-    Point3D B = createPoint(AB.x+A.x, AB.y +A.y,0.);
-    Point3D C=createPoint(BC.x+B.x, BC.y+B.y,0);
+    Point3D B = createPoint(AB.x+A.x, AB.y +A.y,0.,NULL);
+    Point3D C=createPoint(BC.x+B.x, BC.y+B.y,0,NULL);
 
     Vector3D BP=createVectorFromPoints(B,P);
     Vector3D CP=createVectorFromPoints(C,P);
@@ -118,11 +124,14 @@ int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xReg
 
 }
 
-int intersection(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD){
-    Point3D A = createPoint(xA,yA,0.);
-    Point3D B = createPoint(xB,yB,0.);
-    Point3D C = createPoint(xC,yC,0.);
-    Point3D D = createPoint(xD,yD,0.);
+
+
+//regarde si deux segments se croisent : renvoie 1 si oui 0, si non
+int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD){
+    Point3D A = createPoint(xA,yA,0.,NULL);
+    Point3D B = createPoint(xB,yB,0.,NULL);
+    Point3D C = createPoint(xC,yC,0.,NULL);
+    Point3D D = createPoint(xD,yD,0.,NULL);
 
     Vector3D AB=createVectorFromPoints(A,B);
     Vector3D CD=createVectorFromPoints(C,D);

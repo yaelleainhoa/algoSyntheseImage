@@ -5,10 +5,10 @@ extern int loop;
 
 typedef struct 
 {
-    int pointNO;//indice de la coordonnée x du point
-    int pointNE;
-    int pointSO;
-    int pointSE;
+    Point3D pointNO;
+    Point3D pointNE;
+    Point3D pointSO;
+    Point3D pointSE;
 }Node;
 
 typedef struct Quadtree Quadtree;
@@ -24,10 +24,12 @@ struct Quadtree
 
 
 
-Node createNode(int pointNO,int pointNE, int pointSO,int pointSE);
+Node createNode(Point3D pointNO,Point3D pointNE, Point3D pointSO,Point3D pointSE);
 Quadtree createQuadtree(Node *ptsExt);
 void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l);
 void addChildQuadtree(Quadtree *quadtree, Quadtree * enfantNO,Quadtree * enfantNE,Quadtree * enfantSO,Quadtree * enfantSE);
 void inorderTravel(Quadtree * quadtree, Node nodes[], int *nodesCount);
+void quadAppartientTriangle(Quadtree* quadtree, float xCam, float yCam, float xRegard, float yRegard );
+void camIntersectQuad(Quadtree *quadtree);
 
 #endif
