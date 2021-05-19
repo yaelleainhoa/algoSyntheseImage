@@ -27,7 +27,7 @@ float largeur_plan=1.;
 
 float obj_rot = 0.0;
 GLuint texture[2];
-float largeur_skybox=12.;
+float largeur_skybox=25.;
 
 const float hauteur_regard=0.5;
 float xCam=0;
@@ -35,7 +35,8 @@ float yCam=0;
 float zCam=0.;
 HeightMap heightMap;
 
-
+//pour tester la fonction tracerTriangles
+//int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
 
 
 void moveLight(void){
@@ -123,13 +124,15 @@ static void drawFunc(void) {
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
 
+	tracerTriangles(&coordonnees_quadtree, 12);
+
 	glColor3f(1.0,1.0,1.0);
-	// skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam-largeur_skybox/4.,texture[1]);
-	// skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam+largeur_skybox/4.,texture[1]);
-	// skyBoxX(largeur_skybox/2.+xCam-largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
-	// skyBoxX(-largeur_skybox/2.+xCam+largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
-	// skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam+largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
-	// skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam-largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
+	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam-largeur_skybox/4.,texture[1]);
+	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam+largeur_skybox/4.,texture[1]);
+	skyBoxX(largeur_skybox/2.+xCam-largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
+	skyBoxX(-largeur_skybox/2.+xCam+largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
+	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam+largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
+	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam-largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
 
 
 
@@ -370,6 +373,7 @@ static void init(HeightMap heightMap) {
 	/* INITIALISATION DE LA SCENE */
 	createCoordinates(heightMap);
 
+
 	char * sources[2]={"images/doggy.jpg","images/sky.jpg"};
     for(int i=0; i<2; i++){
 		glEnable(GL_TEXTURE_2D);
@@ -404,9 +408,10 @@ int main(int argc, char** argv) {
 	}
 
 
-	printf("Les segments AB et CD se croisent ? : %d\n",intersection(-4, 2,-2, -2.1, -2,-2.1, -1.6, 2.5));
+	//printf("Les segments AB et CD se croisent ? : %d\n",intersection(-4, 2,-2, -2.1, -2,-2.1, -1.6, 2.5));
 	//printf("tan(45) = %f\n", tan((M_PI/180)*45));
-	//printf(" le point apparitent ou pas : %d \n",pointAppartientTriangle(-1, 1.5, 0., 0., -0.6, 0.8, 8.5, 2.2, 2*16.5));
+	//printf("B(%f,%f)\n", cos(-19.4+13.3)*2.4/cos(19.4)+2.1,sin(-19.4+13.3)*2.4/cos(19.4)-3.1);
+	//printf(" le point apparitent ou pas : %d \n",pointAppartientTriangle(2.93, -0.7, 2.1, -3.1, 2.84, -2.43, 13.3, 2.4, 2*19.4));
 	//int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float teta, float zFar, float fov);
 	init(heightMap);
 	
