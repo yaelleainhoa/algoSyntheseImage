@@ -27,7 +27,7 @@ float largeur_plan=1.;
 
 float obj_rot = 0.0;
 GLuint texture[2];
-float largeur_skybox=25.;
+float largeur_skybox=10.;
 
 const float hauteur_regard=0.5;
 float xCam=0;
@@ -127,13 +127,16 @@ static void drawFunc(void) {
 	//tracerTriangles(&coordonnees_quadtree, 12);
 
 	glColor3f(1.0,1.0,1.0);
-	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam-largeur_skybox/4.,texture[1]);
-	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam+largeur_skybox/4.,texture[1]);
-	skyBoxX(largeur_skybox/2.+xCam-largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
-	skyBoxX(-largeur_skybox/2.+xCam+largeur_skybox/4.,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
-	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam+largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
-	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam-largeur_skybox/4.,-largeur_skybox/2.+zCam,texture[1]);
-
+	glDisable(GL_DEPTH_TEST); 
+	glDepthMask(GL_FALSE);
+	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam,texture[1]);
+	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1]);
+	skyBoxX(largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
+	skyBoxX(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
+	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1]);
+	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1]);
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
 
 
 // 	int h = heightMap.h;
@@ -365,7 +368,9 @@ static void init(HeightMap heightMap) {
 	/* couleur du fond (gris sombre) */
 	glClearColor(0.3,0.3,0.3,0.0);
 	/* activation du ZBuffer */
+	glClearDepth(1.0f);
 	glEnable( GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 
 	/* lissage des couleurs sur les facettes */
 	glShadeModel(GL_SMOOTH);
