@@ -30,6 +30,6 @@ void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l);
 void addChildQuadtree(Quadtree *quadtree, Quadtree * enfantNO,Quadtree * enfantNE,Quadtree * enfantSO,Quadtree * enfantSE);
 void inorderTravel(Quadtree * quadtree, Node nodes[], int *nodesCount);
 void quadAppartientTriangle(Quadtree* quadtree, float xCam, float yCam, float xRegard, float yRegard );
-void camIntersectQuad(Quadtree *quadtree);
+int camIntersectQuad(Quadtree *quadtree);
 
 #endif
