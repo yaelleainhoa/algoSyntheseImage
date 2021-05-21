@@ -274,6 +274,53 @@ int camIntersectQuad(Quadtree *quadtree)
 
 
 //fonction qui effectue les differents test tout au long de l'arbre
+//renvoie la liste des coordonnées des points qui sont visibles
+
+void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount )
+{
+    if(quadtree->enfantNO)
+    {
+        if(quadAppartientTriangle(quadtree->enfantNO) || camIntersectQuad(quadtree->enfantNO) || triangleAppartientQuadtree(quadtree->enfantNO))
+        {
+            travelQuadtree(ptsVisibles, quadtree->enfantNO,ptCount);
+        }
+    }
+
+    if(quadtree->enfantNE)
+    {
+        if(quadAppartientTriangle(quadtree->enfantNE) || camIntersectQuad(quadtree->enfantNE) || triangleAppartientQuadtree(quadtree->enfantNE))
+        {
+            travelQuadtree(ptsVisibles, quadtree->enfantNE,ptCount);
+        }
+    }
+
+    if(quadtree->enfantSO)
+    {
+        if(quadAppartientTriangle(quadtree->enfantSO) || camIntersectQuad(quadtree->enfantSO)||  triangleAppartientQuadtree(quadtree->enfantSO))
+        {
+            travelQuadtree(ptsVisibles, quadtree->enfantSO,ptCount);
+        }
+    }
+
+    if(quadtree->enfantSE)
+    {
+        if(quadAppartientTriangle(quadtree->enfantSE) || camIntersectQuad(quadtree->enfantSE)/* || triangleAppartientQuadtree(quadtree->enfantSE)*/)
+        {
+            travelQuadtree(ptsVisibles, quadtree->enfantSE,ptCount);
+        }
+    }
+
+    else //si on rentre la c'est que le quadtree est une feuille
+    {
+        ptsVisibles[ptCount]=quadtree->ptsExt;
+        ptCount++;
+    }
+}
+
+
+
+
+//fonction qui effectue les differents test tout au long de l'arbre
 //renvoie la liste des coordonnées des points qui sont visibles (moins lourds que les poins entiers mais à voir ce qui est mieux)
 
 // void travelQuadtree(int ptsVisibles[], Quadtree* quadtree )
