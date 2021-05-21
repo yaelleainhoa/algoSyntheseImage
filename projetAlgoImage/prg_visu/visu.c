@@ -39,6 +39,9 @@ int fov=45;
 float xRegard2D=sin(-M_PI/2.);
 float yRegard2D=cos(-M_PI/2.);
 
+Node ptsVisibles[1500];
+int ptCount=0;
+
 //pour tester la fonction tracerTriangles
 //int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
 
@@ -147,6 +150,7 @@ static void drawFunc(void) {
 
 	//tracerTriangles(&coordonnees_quadtree, 12);
 
+
 	glColor3f(1.0,1.0,1.0);
 	glDisable(GL_DEPTH_TEST); 
 	glDepthMask(GL_FALSE);
@@ -161,6 +165,7 @@ static void drawFunc(void) {
 
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
+	tracerTriangles(&ptsVisibles, ptsVisibles);
 
 	arbre(0.5,0.5,-1.1,longitude,texture[0]);
 
@@ -458,6 +463,8 @@ int main(int argc, char** argv) {
 	Node node=createNode(NO,NE,SO,SE);
 	Quadtree quadtree= createQuadtree(&node);
 	buildQuadtree(&quadtree, vertex_coord,heightMap.w,heightMap.w);
+	travelQuadtree(ptsVisibles, &quadtree, &ptCount, heightMap);
+
 
 	//printf("heightMap.h*heightMap.w : %d, heightMap.h*heightMap.w+heightMap.h-1.h : %d \n", heightMap.h*heightMap.w, heightMap.h*heightMap.w+heightMap.h-1);
 	//printf("triangle appartient au quadtree : %d \n", triangleAppartientQuadtree(&quadtree, xCam, yCam));

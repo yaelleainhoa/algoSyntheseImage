@@ -2,6 +2,7 @@
 #define __QUADTREE_H
 
 #include "geometry.h"
+#include "valDeGris.h"
 
 extern int loop;
 

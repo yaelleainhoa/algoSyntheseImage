@@ -170,7 +170,7 @@ float distance(Point3D pt)
 }
 
 
-float minimum(float d1, float d2)
+float min(float d1, float d2)
 {   if(d1<d2)
         {return d1;}
     else

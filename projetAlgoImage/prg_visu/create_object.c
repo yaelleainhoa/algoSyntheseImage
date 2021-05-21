@@ -74,6 +74,7 @@ for (int i=0;i<h;i++){
 
 	}
 }
+}
 
 // int k=0;
 // for (int i=0;i<h-1;i++){
@@ -84,43 +85,10 @@ for (int i=0;i<h;i++){
 // 		triangle_index[k+3]=w*i+j+1;
 // 		triangle_index[k+4]=w*(i+1)+j;
 // 		triangle_index[k+5]=w*(i+1)+j+1;
-// 		k+=6;
-
-// 		textures_coord[text]=0.0;
-// 		textures_coord[text+1]=0.0;
-
-// 		textures_coord[text+2]=1.0;
-// 		textures_coord[text+3]=0.0;
-
-// 		textures_coord[text+4]=0.0;
-// 		textures_coord[text+5]=1.0;
-
-// 		textures_coord[text+6]=1.0;
-// 		textures_coord[text+7]=0.0;
-
-// textures_coord[text+8]=0.0;
-// 		textures_coord[text+9]=1.0;
-
-// textures_coord[text+10]=1.0;
-// 		textures_coord[text+11]=1.0;
-// 		text+=12;
-	}
-}
-
-
-// for(int c=0; c<2*vertex_number; c+=8){
-// 		textures_coord[c]=0.0;
-// 		textures_coord[c+1]=1.0;
-
-// 		textures_coord[c+2]=1.0;
-// 		textures_coord[c+3]=1.0;
-
-// 		textures_coord[c+4]=1.0;
-// 		textures_coord[c+5]=0.0;
-
-// 		textures_coord[c+6]=0.0;
-// 		textures_coord[c+7]=0.0;
+// // 		k+=6;
 // }
+// }
+
 
 
 //Permet de retrouver la hauteur en fonction de x et y (bcp de tests pour vérifier, tout n'est pas utile)
@@ -137,7 +105,7 @@ for (int i=0;i<h;i++){
 // float zvalue=vertex_coord[coord+2];
 // printf("ce qui donne z = %f", zvalue);
 
-}
+
 
 // void tracerTriangles(Node (*coordonnees_quadtree)[], int taille){
 // 		int k=0;
