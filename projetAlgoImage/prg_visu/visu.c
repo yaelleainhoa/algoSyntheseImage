@@ -29,7 +29,7 @@ float obj_rot = 0.0;
 GLuint texture[2];
 float largeur_skybox=10.;
 
-const float hauteur_regard=0.5;
+const float hauteur_regard=2.;
 float xCam=0;
 float yCam=0;
 float zCam=0.;
@@ -102,6 +102,26 @@ void skyBoxY(float x, float y, float z, GLuint texture){
     glDisable(GL_TEXTURE_2D);
 }
 
+
+void arbre(float x, float y, float z, float* teta, GLuint texture){
+	glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glScalef(1.,1.,1.);
+		glRotatef(*teta,0.,0.,1.);
+        glBegin(GL_QUADS);
+            glTexCoord2f(0.,0.);
+            glVertex3f(x,y+1/2.,z);
+            glTexCoord2f(1.,0.);
+            glVertex3f(x,y+1/2.,z+1);
+            glTexCoord2f(1.,1.);
+            glVertex3f(x,y-1/2.,z+1);
+            glTexCoord2f(0.,1.);
+            glVertex3f(x,y-1/2.,z);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
+}
+
 /*********************************************************/
 /* fonction de dessin de la scène à l'écran              */
 static void drawFunc(void) { 
@@ -121,8 +141,6 @@ static void drawFunc(void) {
 			sin(longitude)*sin(latitude)+xCam,cos(longitude)*sin(latitude)+yCam,cos(latitude)+zCam+hauteur_regard,
             0.0,0.0,1.0);
 
-	glColor3f(1.0,0.0,0.0);
-	glDrawRepere(2.0);
 
 	//tracerTriangles(&coordonnees_quadtree, 12);
 
@@ -137,6 +155,11 @@ static void drawFunc(void) {
 	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1]);
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
+
+	glColor3f(1.0,0.0,0.0);
+	glDrawRepere(2.0);
+
+	arbre(0.5,0.5,-1.1,&longitude,texture[0]);
 
 
 // 	int h = heightMap.h;
@@ -354,13 +377,8 @@ static void motionFunc(int x, int y) {
 /* fonction d'initialisation des paramètres de rendu et  */
 /* des objets de la scènes.                              */
 static void init(HeightMap heightMap) {
-	profondeur = 1;
 	latitude = M_PI/2.;
 	longitude = -M_PI;
-
-	xCam=profondeur*sin(longitude)*sin(latitude);
-	yCam=profondeur*cos(latitude);
-	zCam=profondeur*cos(longitude)*sin(latitude);
 
 	obj_rot = 0.0;
 

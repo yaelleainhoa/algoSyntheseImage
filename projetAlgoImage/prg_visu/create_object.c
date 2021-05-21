@@ -28,6 +28,8 @@ void createCoordinates(HeightMap heightMap) {
 	int h=heightMap.h;
 	vertex_number =(w*h)*3; 
 	triangle_number = (w-1)*(h-1)*2;
+	int zmin=-3;
+	int zmax=-1;
 	
 	vertex_coord = (float*) calloc(sizeof(float),3*vertex_number);
 	normal_coord = (float*) calloc(sizeof(float),3*vertex_number);
@@ -41,10 +43,10 @@ int p=0;
 for (int i=0;i<h;i++){
 	for(int j=0;j<w;j++){
 		vertex_coord[p]=(i-h/2)*l ;
-		vertex_coord[2+p]=-2+heightMap.valeursDeGris[i][j]/(255.);
+		vertex_coord[2+p]=zmin+heightMap.valeursDeGris[i][j]/(255.)*abs(zmax-zmin);
 		vertex_coord[1+p]=(j-w/2)*l;
 		normal_coord[p]=(i-h/2)*l ;
-		normal_coord[2+p]=-2+heightMap.valeursDeGris[i][j]/(255.);
+		normal_coord[2+p]=zmin+heightMap.valeursDeGris[i][j]/(255.)*abs(zmax-zmin);
 		normal_coord[1+p]=(j-w/2)*l ;
 		p+=3;
 	}
