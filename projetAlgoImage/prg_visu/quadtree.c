@@ -6,13 +6,14 @@
 #include <string.h>
 #include "geometry.h"
 #include "visu.h"
+#include "create_object.h"
 
 
 #define TAILLE_PIXELS 1
 
 int loop=0;
 
-Point3D createPointFromCoord(int coord, float vertex_coord[]){
+Point3D createPointFromCoord(int coord){
     Point3D newPoint;
     newPoint.x=vertex_coord[coord];
     newPoint.y=vertex_coord[coord+1];
@@ -72,15 +73,15 @@ printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
     {
         //création des enfants
 
-        Point3D NO_NO=createPointFromCoord(NO, vertex_coord);
-        Point3D NO_NE=createPointFromCoord((int)((NO+NE)/2),vertex_coord);
-        Point3D NO_SO=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w),vertex_coord);
-        Point3D NO_SE=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w) +(int)l/2, vertex_coord);
-        Point3D NE_NE=createPointFromCoord(NE, vertex_coord);
-        Point3D NE_SE=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w) +l,vertex_coord);
-        Point3D SO_SO=createPointFromCoord(SO,vertex_coord);
-        Point3D SO_SE=createPointFromCoord(SO+(int)(l/2),vertex_coord);
-        Point3D SE_SE=createPointFromCoord(SE,vertex_coord);
+        Point3D NO_NO=createPointFromCoord(NO);
+        Point3D NO_NE=createPointFromCoord((int)((NO+NE)/2));
+        Point3D NO_SO=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w));
+        Point3D NO_SE=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w) +(int)l/2);
+        Point3D NE_NE=createPointFromCoord(NE);
+        Point3D NE_SE=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w) +l);
+        Point3D SO_SO=createPointFromCoord(SO);
+        Point3D SO_SE=createPointFromCoord(SO+(int)(l/2));
+        Point3D SE_SE=createPointFromCoord(SE);
 
         Node nodeNO= createNode(NO_NO,
                                 NO_NE,
@@ -152,7 +153,7 @@ int quadAppartientTriangle(Quadtree* quadtree/*, float xCam, float yCam, float x
     if(pointAppartientTriangle(NO.x, NO.y/*,xCam, yCam,xRegard,yRegard,longitude, zfar, fov*/)
     ||pointAppartientTriangle(NE.x, NE.y/*,xCam, yCam,xRegard,yRegard,longitude, zfar, fov*/)
     ||pointAppartientTriangle(SO.x, SO.y/*,xCam, yCam,xRegard,yRegard,longitude, zfar, fov*/)
-    ||pointAppartientTriangle(SE.x, SE.y/*,xCam, yCam,xRegard,yRegard,longitude, zfar, fov)*/)
+    ||pointAppartientTriangle(SE.x, SE.y/*,xCam, yCam,xRegard,yRegard,longitude, zfar, fov)*/))
     {
         return 1;
     }
@@ -171,61 +172,61 @@ int camIntersectQuad(Quadtree *quadtree)
     Point3D SE=quadtree->ptsExt->pointSE;
 
     //points exterieurs triangle caméra
-    float xRegard = sin(longitude)+xCam;
-    float yRegard = cos(longitude)+yCam;
+    float xRegard2D = sin(longitude)+xCam;
+    float yRegard2D = cos(longitude)+yCam;
     Point3D cam= createPoint(xCam,yCam,0.,0);
-    Point3D direction_regard = createPoint(xRegard,yRegard,0.,0);
+    Point3D direction_regard = createPoint(xRegard2D,yRegard2D,0.,0);
 
     Vector3D direction=normalize(createVectorFromPoints(cam,direction_regard));
-    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.);
+    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.,0);
 
-    Vector3D AB=addVectors(multVector(direction, zFar), multVector(R, tan(fov/2.)*zFar));
-    Vector3D BC=multVector(multVector(R, tan(fov/2.)*zFar), -2.);
-    Vector3D CA=addVectors(multVector(direction, -zFar), multVector(R, tan(fov/2.)*zFar));
+    Vector3D AB=addVectors(multVector(direction, zfar), multVector(R, tan(fov/2.)*zfar));
+    Vector3D BC=multVector(multVector(R, tan(fov/2.)*zfar), -2.);
+    //Vector3D CA=addVectors(multVector(direction, -zfar), multVector(R, tan(fov/2.)*zfar));
 
     Point3D B=createPoint(AB.x+cam.x, AB.y+cam.y, 0.,0);
     Point3D C=createPoint(BC.x+B.x, BC.y+B.y, 0.,0);
 
     //test  
         // vecteur AB  du triangle intersection avec le quadtree ?
-    if(intersection(xCam,yCam,B.x, B.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
+    if(intersectionDeuxSegments(xCam,yCam,B.x, B.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
         return 1; 
     }
-    if(intersection(xCam,yCam,B.x, B.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
+    if(intersectionDeuxSegments(xCam,yCam,B.x, B.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
         return 1;
     }
-    if(intersection(xCam,yCam,B.x, B.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
+    if(intersectionDeuxSegments(xCam,yCam,B.x, B.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
         return 1;
     }
-    if(intersection(xCam,yCam,B.x, B.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
+    if(intersectionDeuxSegments(xCam,yCam,B.x, B.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
         return 1;
     }
 
         // vecteur BC du triangle intersection avec le quadtree ?
-    if(intersection(B.x, B.y, C.x, C.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
+    if(intersectionDeuxSegments(B.x, B.y, C.x, C.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
         return 1;
     }
-    if(intersection(B.x, B.y, C.x, C.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
+    if(intersectionDeuxSegments(B.x, B.y, C.x, C.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
         return 1;
     }
-    if(intersection(B.x, B.y, C.x, C.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
+    if(intersectionDeuxSegments(B.x, B.y, C.x, C.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
         return 1;
     }
-    if(intersection(B.x, B.y, C.x, C.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
+    if(intersectionDeuxSegments(B.x, B.y, C.x, C.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
         return 1;
     }
 
         // vecteur AC du triangle intersection avec le quadtree ?
-    if(intersection(xCam,yCam,C.x, C.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
+    if(intersectionDeuxSegments(xCam,yCam,C.x, C.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
         return 1;
     }
-    if(intersection(xCam,yCam,C.x, C.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
+    if(intersectionDeuxSegments(xCam,yCam,C.x, C.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
         return 1;
     }
-    if(intersection(xCam,yCam,C.x, C.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
+    if(intersectionDeuxSegments(xCam,yCam,C.x, C.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
         return 1;
     }
-    if(intersection(xCam,yCam,C.x, C.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
+    if(intersectionDeuxSegments(xCam,yCam,C.x, C.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
         return 1;
     }
 
@@ -236,10 +237,10 @@ int camIntersectQuad(Quadtree *quadtree)
 //fonction qui effectue les differents test tout au long de l'arbre
 //renvoie la liste des coordonnées des points qui sont visibles (moins lourds que les poins entiers mais à voir ce qui est mieux)
 
-void travelQuadtree(int ptsVisibles[], Quadtree* quadtree )
-{
-    if()
-}
+// void travelQuadtree(int ptsVisibles[], Quadtree* quadtree )
+// {
+//     if()
+// }
 
 
 //archives

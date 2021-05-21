@@ -25,13 +25,13 @@ struct Quadtree
 };
 
 
-Point3D createPointFromCoord(int coord,float vertex_coord[]);
+Point3D createPointFromCoord(int coord);
 Node createNode(Point3D pointNO,Point3D pointNE, Point3D pointSO,Point3D pointSE);
 Quadtree createQuadtree(Node *ptsExt);
 void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l);
 void addChildQuadtree(Quadtree *quadtree, Quadtree * enfantNO,Quadtree * enfantNE,Quadtree * enfantSO,Quadtree * enfantSE);
 void inorderTravel(Quadtree * quadtree, Node nodes[], int *nodesCount);
-int quadAppartientTriangle(Quadtree* quadtree, float xCam, float yCam, float xRegard, float yRegard, float zfar, float fov );
+int quadAppartientTriangle(Quadtree* quadtree);//, float xCam, float yCam, float xRegard, float yRegard, float zfar, float fov );
 int camIntersectQuad(Quadtree *quadtree);
 
 #endif

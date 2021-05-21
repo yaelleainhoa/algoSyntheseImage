@@ -19,7 +19,7 @@
 /* variables globales pour la gestion de la caméra */
 float profondeur = 3;
 float latitude = 0.0;
-float longitude = M_PI/2.;
+float longitude = -M_PI/2.;
 float xLight1=1.;
 float yLight1=0.;
 int i=0;
@@ -34,6 +34,10 @@ float xCam=0;
 float yCam=0;
 float zCam=0.;
 HeightMap heightMap;
+float zfar=2;
+int fov=45;
+float xRegard2D=sin(-M_PI/2.);
+float yRegard2D=cos(-M_PI/2.);
 
 //pour tester la fonction tracerTriangles
 //int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
@@ -323,14 +327,20 @@ static void kbdSpFunc(int c, int x, int y) {
 			break;
 		case GLUT_KEY_LEFT :
 			longitude -= STEP_ANGLE;
+			xRegard2D=sin(longitude)+xCam;
+			yRegard2D=cos(longitude)+yCam;
 			break;
 		case GLUT_KEY_RIGHT :
 			longitude += STEP_ANGLE;
+			xRegard2D=sin(longitude)+xCam;
+			yRegard2D=cos(longitude)+yCam;
 			break;
 		case GLUT_KEY_F2 :
 			profondeur += STEP_PROF;
 			xCam+=STEP_PROF*sin(longitude);
 			yCam+=STEP_PROF*cos(longitude);
+			xRegard2D=sin(longitude)+xCam;
+			yRegard2D=cos(longitude)+yCam;
 			hauteur(xCam, yCam, heightMap, &zCam);
 			// xCam=profondeur*sin(longitude)*sin(latitude);
 			// yCam=profondeur*cos(latitude);
@@ -340,6 +350,8 @@ static void kbdSpFunc(int c, int x, int y) {
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
 			xCam-=STEP_PROF*sin(longitude);
 			yCam-=STEP_PROF*cos(longitude);
+			xRegard2D=sin(longitude)+xCam;
+			yRegard2D=cos(longitude)+yCam;
 			hauteur(xCam, yCam, heightMap, &zCam);
 			// xCam=profondeur*sin(longitude)*sin(latitude);
 			// yCam=profondeur*cos(latitude);
@@ -440,10 +452,10 @@ int main(int argc, char** argv) {
 	
 	//test 
 
-	Point3D NO=createPointFromCoord(0,vertex_coord);
-	Point3D NE=createPointFromCoord(3,vertex_coord);
-	Point3D SO=createPointFromCoord(3*heightMap.w,vertex_coord);
-	Point3D SE=createPointFromCoord(3*heightMap.w+3,vertex_coord);
+	Point3D NO=createPointFromCoord(0);
+	Point3D NE=createPointFromCoord(3);
+	Point3D SO=createPointFromCoord(3*heightMap.w);
+	Point3D SE=createPointFromCoord(3*heightMap.w+3);
 	Node node=createNode(NO,NE,SO,SE);
 	Quadtree quadtree= createQuadtree(&node);
 	buildQuadtree(&quadtree, vertex_coord,heightMap.w,3);
