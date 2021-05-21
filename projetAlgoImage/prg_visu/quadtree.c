@@ -1,5 +1,5 @@
 #include "quadtree.h"
-
+#include "geometry.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -238,9 +238,74 @@ int quadAppartientTriangle(Quadtree* quadtree, float xCam, float yCam, float xRe
     return 0;
 }
 
+int camIntersectQuad(Quadtree *quadtree)
+{
+    Point3D NO=quadtree->ptsExt->pointNO;
+    Point3D NE=quadtree->ptsExt->pointNE;
+    Point3D SO=quadtree->ptsExt->pointSO;
+    Point3D SE=quadtree->ptsExt->pointSE;
 
+    //points exterieurs triangle caméra
+    float xRegard = sin(longitude)*sin(latitude)+xCam;
+    float yRegard = cos(longitude)*sin(latitude)+yCam;
+    Point3D cam= createPoint(xCam,yCam,0.,NULL);
+    Point3D direction_regard = createPoint(xRegard,yRegard,0.,NULL);
 
+    Vector3D direction=normalize(createVectorFromPoints(cam,direction_regard));
+    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.);
 
+    Vector3D AB=addVectors(multVector(direction, zFar), multVector(R, tan(fov/2.)*zFar));
+    Vector3D BC=multVector(multVector(R, tan(fov/2.)*zFar), -2.);
+    Vector3D CA=addVectors(multVector(direction, -zFar), multVector(R, tan(fov/2.)*zFar));
+
+    Point3D B=createPoint(AB.x+cam.x, AB.y+cam.y, 0.,NULL);
+    Point3D C=createPoint(BC.x+B.x, BC.y+B.y, 0.,NULL);
+
+    //test  
+        // vecteur AB  du triangle intersection avec le quadtree ?
+    if(intersection(xCam,yCam,B.x, B.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
+        return 1; 
+    }
+    if(intersection(xCam,yCam,B.x, B.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
+        return 1;
+    }
+    if(intersection(xCam,yCam,B.x, B.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
+        return 1;
+    }
+    if(intersection(xCam,yCam,B.x, B.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
+        return 1;
+    }
+
+        // vecteur BC du triangle intersection avec le quadtree ?
+    if(intersection(B.x, B.y, C.x, C.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
+        return 1;
+    }
+    if(intersection(B.x, B.y, C.x, C.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
+        return 1;
+    }
+    if(intersection(B.x, B.y, C.x, C.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
+        return 1;
+    }
+    if(intersection(B.x, B.y, C.x, C.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
+        return 1;
+    }
+
+        // vecteur AC du triangle intersection avec le quadtree ?
+    if(intersection(xCam,yCam,C.x, C.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
+        return 1;
+    }
+    if(intersection(xCam,yCam,C.x, C.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
+        return 1;
+    }
+    if(intersection(xCam,yCam,C.x, C.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
+        return 1;
+    }
+    if(intersection(xCam,yCam,C.x, C.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
+        return 1;
+    }
+
+    return 0;
+}
 
 // void camIntersectQuad(Quadtree *quadtree)
 // {
