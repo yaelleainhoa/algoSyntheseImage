@@ -13,6 +13,6 @@ extern float l;
 
 void createCoordinates(HeightMap heightMap);
 void hauteur(float x, float y, HeightMap heightMap, float *zCam);
-void tracerTriangles(int (*coordonnees_quadtree)[], int taille);
+void tracerTriangles(Node (*coordonnees_quadtree)[], int taille);
 
 #endif

@@ -227,91 +227,21 @@ for (int i=0;i<h-1;i++){
 
 // }
 
-
+//Pas encore opti
 void tracerTriangles(Node (*coordonnees_quadtree)[], int taille){
 		int k=0;
 		int text=0;
 		triangle_index = (unsigned int*) realloc(triangle_index, sizeof(unsigned int)*3*2*taille);
 		textures_coord = (float*) realloc(textures_coord,sizeof(float)*2*taille);
 		for(int i=0; i<taille;i++){
-			    int NO=(*coordonnees_quadtree[i])->pointNO.coord;
-				int NE=(*coordonnees_quadtree[i])->pointNE.coord;
-				int SO=(*coordonnees_quadtree[i])->pointSO.coord;
-				int SE=(*coordonnees_quadtree[i])->pointSE.coord;
-			int largeur=abs(NO-NE);
-			int longueur=abs(NO-SO);
-			if(longueur!=largeur){
-				if(longueur<largeur){
-					Point3D midNO_NE=createPointFromCoord();
-					Point3D midSO_SE=createPointFromCoord();
-					triangle_index[k]=NO;
-					triangle_index[k+1]=midNO_NE;
-					triangle_index[k+2]=SO;
-					triangle_index[k+3]=midNO_NE;
-					triangle_index[k+4]=SO;
-					triangle_index[k+5]=midSO_SE;
-
-					triangle_index[k+6]=midNO_NE;
-					triangle_index[k+7]=NE;
-					triangle_index[k+8]=midSO_SE;
-					triangle_index[k+9]=NE;
-					triangle_index[k+10]=midSO_SE;
-					triangle_index[k+11]=SE;
-					k+=12;
-				}
-				else{
-					Point3D midNO_SO=createPointFromCoord();
-					Point3D midNE_SE=createPointFromCoord();
-					triangle_index[k]=NO;
-					triangle_index[k+1]=midNO_NE;
-					triangle_index[k+2]=SO;
-					triangle_index[k+3]=midNO_NE;
-					triangle_index[k+4]=SO;
-					triangle_index[k+5]=midSO_SE;
-
-					triangle_index[k+6]=midNO_NE;
-					triangle_index[k+7]=NE;
-					triangle_index[k+8]=midSO_SE;
-					triangle_index[k+9]=NE;
-					triangle_index[k+10]=midSO_SE;
-					triangle_index[k+11]=SE;
-					k+=12;
-				}
-			}
-			triangle_index[k]=(*coordonnees_quadtree)[i];
-			triangle_index[k+1]=(*coordonnees_quadtree)[i+1];
-			triangle_index[k+2]=(*coordonnees_quadtree)[i+2];
-			triangle_index[k+3]=(*coordonnees_quadtree)[i+1];
-			triangle_index[k+4]=(*coordonnees_quadtree)[i+2];
-			triangle_index[k+5]=(*coordonnees_quadtree)[i+3];
+			triangle_index[k]=(*coordonnees_quadtree)[i].pointNO.coord;
+			triangle_index[k+1]=(*coordonnees_quadtree)[i].pointNE.coord;
+			triangle_index[k+2]=(*coordonnees_quadtree)[i].pointSO.coord;
+			triangle_index[k+3]=(*coordonnees_quadtree)[i].pointNE.coord;
+			triangle_index[k+4]=(*coordonnees_quadtree)[i].pointSE.coord;
+			triangle_index[k+5]=(*coordonnees_quadtree)[i].pointSO.coord;
 			k+=6;
-
-			//marche pas, demander au prof
-			// textures_coord[text]=0.0;
-			// textures_coord[text+1]=0.0;
-
-			// textures_coord[text+2]=1.0;
-			// textures_coord[text+3]=0.0;
-
-			// textures_coord[text+4]=1.0;
-			// textures_coord[text+5]=1.0;
-
-			// textures_coord[text+6]=0.0;
-			// textures_coord[text+7]=1.0;
-			// text+=8;
 		}
-
-		//SI jamais on fait plutôt un tableau de node, on aurait plutôt
-		// for(int i=0; i<taille;i++){
-		// 	triangle_index[k]=(*coordonnees_quadtree)[i].pointNO;
-		// 	triangle_index[k+1]=(*coordonnees_quadtree)[i].pointNE;
-		// 	triangle_index[k+2]=(*coordonnees_quadtree)[i].pointSO;
-		// 	triangle_index[k+3]=(*coordonnees_quadtree)[i].pointNE;
-		// 	triangle_index[k+4]=(*coordonnees_quadtree)[i].pointSE;
-		// 	triangle_index[k+5]=(*coordonnees_quadtree)[i].pointSO;
-		// 	k+=6;
-		// }
-
 }
 
 
