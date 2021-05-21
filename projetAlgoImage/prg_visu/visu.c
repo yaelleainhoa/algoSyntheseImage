@@ -107,11 +107,10 @@ void skyBoxY(float x, float y, float z, GLuint texture){
 }
 
 
-void arbre(float x, float y, float z, float* teta, GLuint texture){
+void arbre(float x, float y, float z, float teta, GLuint texture){
 	glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture);
         glScalef(1.,1.,1.);
-		glRotatef(*teta,0.,0.,1.);
         glBegin(GL_QUADS);
             glTexCoord2f(0.,0.);
             glVertex3f(x,y+1/2.,z);
@@ -163,7 +162,7 @@ static void drawFunc(void) {
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
 
-	arbre(0.5,0.5,-1.1,&longitude,texture[0]);
+	arbre(0.5,0.5,-1.1,longitude,texture[0]);
 
 
 // 	int h = heightMap.h;
