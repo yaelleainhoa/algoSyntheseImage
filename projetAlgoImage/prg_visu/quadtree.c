@@ -171,10 +171,10 @@ int camIntersectQuad(Quadtree *quadtree)
     Point3D SE=quadtree->ptsExt->pointSE;
 
     //points exterieurs triangle caméra
-    float xRegard2D = sin(longitude)*sin(latitude)+xCam;
-    float yRegard2D = cos(longitude)*sin(latitude)+yCam;
-    Point3D cam= createPoint(xCam,yCam,0.,NULL);
-    Point3D direction_regard = createPoint(xRegard2D,yRegard2D,0.,NULL);
+    float xRegard = sin(longitude)+xCam;
+    float yRegard = cos(longitude)+yCam;
+    Point3D cam= createPoint(xCam,yCam,0.,0);
+    Point3D direction_regard = createPoint(xRegard,yRegard,0.,0);
 
     Vector3D direction=normalize(createVectorFromPoints(cam,direction_regard));
     Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.);
@@ -183,8 +183,8 @@ int camIntersectQuad(Quadtree *quadtree)
     Vector3D BC=multVector(multVector(R, tan(fov/2.)*zFar), -2.);
     Vector3D CA=addVectors(multVector(direction, -zFar), multVector(R, tan(fov/2.)*zFar));
 
-    Point3D B=createPoint(AB.x+cam.x, AB.y+cam.y, 0.,NULL);
-    Point3D C=createPoint(BC.x+B.x, BC.y+B.y, 0.,NULL);
+    Point3D B=createPoint(AB.x+cam.x, AB.y+cam.y, 0.,0);
+    Point3D C=createPoint(BC.x+B.x, BC.y+B.y, 0.,0);
 
     //test  
         // vecteur AB  du triangle intersection avec le quadtree ?
