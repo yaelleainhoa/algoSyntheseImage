@@ -15,9 +15,9 @@ int loop=0;
 
 Point3D createPointFromCoord(int coord){
     Point3D newPoint;
-    newPoint.x=vertex_coord[coord];
-    newPoint.y=vertex_coord[coord+1];
-    newPoint.z=vertex_coord[coord+2];
+    newPoint.x=vertex_coord[3*coord];
+    newPoint.y=vertex_coord[3*coord+1];
+    newPoint.z=vertex_coord[3*coord+2];
     newPoint.coord=coord;
     return newPoint;
 }
@@ -162,7 +162,45 @@ int quadAppartientTriangle(Quadtree* quadtree/*, float xCam, float yCam, float x
 
 //fonction qui regarde si un des sommets du triangle de la camera est dans le quadtree: 1 si oui 0 sinon
 //a faire
-//int triangleAppartientQuadtree()
+
+int triangleAppartientQuadtree(Quadtree *quadtree, float Px, float Py){
+
+    Point3D NO=quadtree->ptsExt->pointNO;
+    Point3D NE=quadtree->ptsExt->pointNE;
+    Point3D SO=quadtree->ptsExt->pointSO;
+    Point3D SE=quadtree->ptsExt->pointSE;
+
+    Point3D P = createPoint(Px, Py, 0,0);
+
+    Vector3D NENO = createVectorFromPoints(NE, NO);
+    Vector3D NOSO = createVectorFromPoints(NO, SO);
+    Vector3D SOSE = createVectorFromPoints(SO, SE);
+    Vector3D SENE = createVectorFromPoints(SE, NE);
+    
+
+    Vector3D NEP=createVectorFromPoints(NE,P);
+    Vector3D NOP=createVectorFromPoints(NO,P);
+    Vector3D SOP=createVectorFromPoints(SO,P);
+    Vector3D SEP=createVectorFromPoints(SE,P);
+    // printf("NE.x : %f, NO.x : %f, NE.y : %f, NO.y : %f, NENO.x : %f , NENO.y :%f, NEP.x:%f, NEP.y:%f \n",NE.x, NO.x, NE.y, NO.y, NENO.x,NENO.y, NEP.x, NEP.y);
+    // printf("NO.x : %f, SO.x : %f, NOSO.x : %f , NOSO.y :%f, NOP.x:%f, NOP.y:%f \n",NO.x, SO.x, NOSO.x,NOSO.y, NOP.x, NOP.y);
+    // printf("SO.x : %f, SE.x : %f, SO.y : %f, SE.y : %f, SOSE.x : %f , SOSE.y :%f, SOP.x:%f, SOP.y:%f \n",SO.x, SE.x, SO.y, SE.y, SOSE.x,SOSE.y, SOP.x, SOP.y);
+    // printf("SE.x : %f, NE.x : %f, SENE.x : %f , SENE.y :%f, SEP.x:%f, SEP.y:%f \n",SE.x, NE.x, SENE.x,SENE.y, SEP.x, SEP.y);
+
+    Vector3D vecteurs[4]={NENO, NOSO, SOSE, SENE};
+    Vector3D vecteursP[4]={NEP,NOP,SOP, SEP};
+    float determinant =0;
+
+    for(int i=0; i<4; i++){
+        determinant = vecteurs[i].x * vecteursP[i].y - vecteurs[i].y * vecteursP[i].x;
+        printf("vec.x : %f , vec.y :%f, AP.x:%f, AP.y:%f \n",vecteurs[i].x,vecteurs[i].y, vecteursP[i].x, vecteursP[i].y);
+        if (determinant<0){
+            printf("det : %f \n", determinant);
+            return 0;
+        }
+    }
+    return 1;
+}
 
 //fonction qui regarde si un des vect du triangle de la cam intersect un des vecteurs des contours du quadtree
 int camIntersectQuad(Quadtree *quadtree)
@@ -236,9 +274,12 @@ int camIntersectQuad(Quadtree *quadtree)
 
 
 //fonction qui effectue les differents test tout au long de l'arbre
-//renvoie la liste des coordonnées des points qui sont visibles
+//renvoie la liste des coordonnées des points qui sont visibles (moins lourds que les poins entiers mais à voir ce qui est mieux)
 
-        if(quadAppartientTriangle(quadtree->enfantNO) || camIntersectQuad(quadtree->enfantNO)/* || triangleAppartientQuadtree(quadtree->enfantNO)*/)
+// void travelQuadtree(int ptsVisibles[], Quadtree* quadtree )
+// {
+//     if()
+// }
 
 
 //archives
