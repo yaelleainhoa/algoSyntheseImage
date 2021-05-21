@@ -168,3 +168,11 @@ float distance(Point3D pt)
                         + (zCam-pt.z)*(zCam-pt.z));
     return distance;
 }
+
+
+float minimum(float d1, float d2)
+{   if(d1<d2)
+        {return d1;}
+    else
+        {return d2;}
+}

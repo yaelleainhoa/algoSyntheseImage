@@ -2,6 +2,9 @@
 #define __CREATE_OBJECT_H
 
 #include "valDeGris.h"
+#include "quadtree.h"
+
+
 
 extern unsigned int vertex_number;
 extern float* vertex_coord;
