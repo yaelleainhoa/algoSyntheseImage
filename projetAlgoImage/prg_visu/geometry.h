@@ -1,6 +1,7 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
+
 typedef struct Vec3f{
     float x;
     float y;
@@ -44,7 +45,6 @@ void printVector3D(Vector3D v);
 
 int pointAppartientTriangle(float x, float y);//, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov);
 int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD);
-
 float distance(Point3D pt);
 float min(float d1, float d2);
 

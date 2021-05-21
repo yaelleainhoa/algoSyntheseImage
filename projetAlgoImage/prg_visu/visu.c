@@ -39,7 +39,7 @@ int fov=45;
 float xRegard2D=sin(-M_PI/2.);
 float yRegard2D=cos(-M_PI/2.);
 
-Node ptsVisibles[1500];
+Node *ptsVisibles[1500];
 int ptCount=0;
 
 //pour tester la fonction tracerTriangles
@@ -166,12 +166,12 @@ static void drawFunc(void) {
 
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
-	tracerTriangles(&ptsVisibles, ptsVisibles);
+	//tracerTriangles(ptsVisibles, ptCount);
 
-	glRotatef(teta, 0.0, 0.0, 1.0);
+	//glRotatef(teta, 0.0, 0.0, 1.0);
 	glPushMatrix();
-	arbre(0.5,0.5,0.,teta,texture[0]);
-	teta += longitude;
+	//arbre(0.5,0.5,0.,teta,texture[0]);
+	//teta += longitude;
 	glPopMatrix();
 
 
@@ -469,7 +469,7 @@ int main(int argc, char** argv) {
 	Quadtree quadtree= createQuadtree(&node);
 	buildQuadtree(&quadtree, vertex_coord,heightMap.w,heightMap.w);
 	travelQuadtree(ptsVisibles, &quadtree, &ptCount, heightMap);
-
+	printf("rempli ou pas ??? %d",ptsVisibles[0]->pointNO.coord);
 
 	//printf("heightMap.h*heightMap.w : %d, heightMap.h*heightMap.w+heightMap.h-1.h : %d \n", heightMap.h*heightMap.w, heightMap.h*heightMap.w+heightMap.h-1);
 	//printf("triangle appartient au quadtree : %d \n", triangleAppartientQuadtree(&quadtree, xCam, yCam));

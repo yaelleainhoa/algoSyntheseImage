@@ -35,4 +35,6 @@ void inorderTravel(Quadtree * quadtree, Node nodes[], int *nodesCount);
 int quadAppartientTriangle(Quadtree* quadtree);//, float xCam, float yCam, float xRegard, float yRegard, float zfar, float fov );
 int camIntersectQuad(Quadtree *quadtree);
 void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int* ptCount, HeightMap heightMap);
+int pointAppartientQuadtree(Quadtree *quadtree, float Px, float Py);
+int triangleAppartientQuadtree(Quadtree *quadtree);
 #endif

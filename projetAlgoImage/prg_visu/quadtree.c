@@ -62,10 +62,10 @@ void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l)
     int NE=quadtree->ptsExt->pointNE.coord;
     int SO=quadtree->ptsExt->pointSO.coord;
     int SE=quadtree->ptsExt->pointSE.coord;
-printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
+//printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
     if((abs(NO-NE)==1) || (abs(NO-SO)==w))
     {
-        printf("fin\n");
+        //printf("fin\n");
         return;
     }
     else
@@ -106,36 +106,36 @@ printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
                                 SE_SE);
         Quadtree quadSE = createQuadtree(&nodeSE);
 
-        printf("nodeNE.NO: %d\n", nodeNE.pointNO.coord);
-        printf("nodeNE.NE: %d\n", nodeNE.pointNE.coord);
-        printf("nodeNE.SE: %d\n", nodeNE.pointSE.coord);
-        printf("nodeNE.SO: %d\n", nodeNE.pointSO.coord);
+        // printf("nodeNE.NO: %d\n", nodeNE.pointNO.coord);
+        // printf("nodeNE.NE: %d\n", nodeNE.pointNE.coord);
+        // printf("nodeNE.SE: %d\n", nodeNE.pointSE.coord);
+        // printf("nodeNE.SO: %d\n", nodeNE.pointSO.coord);
 
-        printf("nodeNO.NO: %d\n", nodeNO.pointNO.coord);
-        printf("nodeNO.NE: %d\n", nodeNO.pointNE.coord);
-        printf("nodeNO.SE: %d\n", nodeNO.pointSE.coord);
-        printf("nodeNO.SO: %d\n", nodeNO.pointSO.coord);
+        // printf("nodeNO.NO: %d\n", nodeNO.pointNO.coord);
+        // printf("nodeNO.NE: %d\n", nodeNO.pointNE.coord);
+        // printf("nodeNO.SE: %d\n", nodeNO.pointSE.coord);
+        // printf("nodeNO.SO: %d\n", nodeNO.pointSO.coord);
 
-        printf("nodeSE.NO: %d\n", nodeSE.pointNO.coord);
-        printf("nodeSE.NE: %d\n", nodeSE.pointNE.coord);
-        printf("nodeSE.SE: %d\n", nodeSE.pointSE.coord);
-        printf("nodeSE.SO: %d\n", nodeSE.pointSO.coord);
+        // printf("nodeSE.NO: %d\n", nodeSE.pointNO.coord);
+        // printf("nodeSE.NE: %d\n", nodeSE.pointNE.coord);
+        // printf("nodeSE.SE: %d\n", nodeSE.pointSE.coord);
+        // printf("nodeSE.SO: %d\n", nodeSE.pointSO.coord);
 
-        printf("nodeSO.NO: %d\n", nodeSO.pointNO.coord);
-        printf("nodeSO.NE: %d\n", nodeSO.pointNE.coord);
-        printf("nodeSO.SE: %d\n", nodeSO.pointSE.coord);
-        printf("nodeSO.SO: %d\n", nodeSO.pointSO.coord);
+        // printf("nodeSO.NO: %d\n", nodeSO.pointNO.coord);
+        // printf("nodeSO.NE: %d\n", nodeSO.pointNE.coord);
+        // printf("nodeSO.SE: %d\n", nodeSO.pointSE.coord);
+        // printf("nodeSO.SO: %d\n", nodeSO.pointSO.coord);
 
         //ajout des enfants au quadtree
         addChildQuadtree(quadtree,&quadNO,&quadNE,&quadSO,&quadSE);
         //Récursion
-        printf("NO\n");
+        //printf("NO\n");
         buildQuadtree(quadtree->enfantNO, vertex_coord,w, (int)(l/2));  
-        printf("NE\n");  
+       // printf("NE\n");  
         buildQuadtree(quadtree->enfantNE, vertex_coord,w, l-(int)(l/2));
-        printf("SO\n");
+        //printf("SO\n");
         buildQuadtree(quadtree->enfantSO, vertex_coord,w,(int)(l/2));
-        printf("SE\n");
+        //printf("SE\n");
         buildQuadtree(quadtree->enfantSE, vertex_coord,w,l-(int)(l/2));
     }
 
@@ -164,11 +164,6 @@ int quadAppartientTriangle(Quadtree* quadtree/*, float xCam, float yCam, float x
 
 int triangleAppartientQuadtree(Quadtree *quadtree){
 
-    Point3D NO=quadtree->ptsExt->pointNO;
-    Point3D NE=quadtree->ptsExt->pointNE;
-    Point3D SO=quadtree->ptsExt->pointSO;
-    Point3D SE=quadtree->ptsExt->pointSE;
-
     float xRegard2D = sin(longitude)+xCam;
     float yRegard2D = cos(longitude)+yCam;
     Point3D cam= createPoint(xCam,yCam,0.,0);
@@ -191,6 +186,46 @@ int triangleAppartientQuadtree(Quadtree *quadtree){
         return 1;
     }
     return 0;
+}
+
+
+int pointAppartientQuadtree(Quadtree *quadtree, float Px, float Py){
+
+    Point3D NO=quadtree->ptsExt->pointNO;
+    Point3D NE=quadtree->ptsExt->pointNE;
+    Point3D SO=quadtree->ptsExt->pointSO;
+    Point3D SE=quadtree->ptsExt->pointSE;
+
+    Point3D P = createPoint(Px, Py, 0,0);
+
+    Vector3D NENO = createVectorFromPoints(NE, NO);
+    Vector3D NOSO = createVectorFromPoints(NO, SO);
+    Vector3D SOSE = createVectorFromPoints(SO, SE);
+    Vector3D SENE = createVectorFromPoints(SE, NE);
+    
+
+    Vector3D NEP=createVectorFromPoints(NE,P);
+    Vector3D NOP=createVectorFromPoints(NO,P);
+    Vector3D SOP=createVectorFromPoints(SO,P);
+    Vector3D SEP=createVectorFromPoints(SE,P);
+    // printf("NE.x : %f, NO.x : %f, NE.y : %f, NO.y : %f, NENO.x : %f , NENO.y :%f, NEP.x:%f, NEP.y:%f \n",NE.x, NO.x, NE.y, NO.y, NENO.x,NENO.y, NEP.x, NEP.y);
+    // printf("NO.x : %f, SO.x : %f, NOSO.x : %f , NOSO.y :%f, NOP.x:%f, NOP.y:%f \n",NO.x, SO.x, NOSO.x,NOSO.y, NOP.x, NOP.y);
+    // printf("SO.x : %f, SE.x : %f, SO.y : %f, SE.y : %f, SOSE.x : %f , SOSE.y :%f, SOP.x:%f, SOP.y:%f \n",SO.x, SE.x, SO.y, SE.y, SOSE.x,SOSE.y, SOP.x, SOP.y);
+    // printf("SE.x : %f, NE.x : %f, SENE.x : %f , SENE.y :%f, SEP.x:%f, SEP.y:%f \n",SE.x, NE.x, SENE.x,SENE.y, SEP.x, SEP.y);
+
+    Vector3D vecteurs[4]={NENO, NOSO, SOSE, SENE};
+    Vector3D vecteursP[4]={NEP,NOP,SOP, SEP};
+    float determinant =0;
+
+    for(int i=0; i<4; i++){
+        determinant = vecteurs[i].x * vecteursP[i].y - vecteurs[i].y * vecteursP[i].x;
+        printf("vec.x : %f , vec.y :%f, AP.x:%f, AP.y:%f \n",vecteurs[i].x,vecteurs[i].y, vecteursP[i].x, vecteursP[i].y);
+        if (determinant<0){
+            printf("det : %f \n", determinant);
+            return 0;
+        }
+    }
+    return 1;
 }
 
 //fonction qui regarde si un des vect du triangle de la cam intersect un des vecteurs des contours du quadtree
@@ -267,117 +302,117 @@ int camIntersectQuad(Quadtree *quadtree)
 //fonction qui effectue les differents test tout au long de l'arbre
 //renvoie la liste des coordonnées des points qui sont visibles
 
-void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int *ptCount, HeightMap heightMap)
-{
-    if(quadtree->enfantNO)
-    {
-        if(quadAppartientTriangle(quadtree->enfantNO) || camIntersectQuad(quadtree->enfantNO) || triangleAppartientQuadtree(quadtree->enfantNO))
-        {
-            float distNO=distance(quadtree->enfantNO->ptsExt->pointNO);
-            float distSO=distance(quadtree->enfantNO->ptsExt->pointSO);
-            float distSE=distance(quadtree->enfantNO->ptsExt->pointSE);
-            float distNE=distance(quadtree->enfantNO->ptsExt->pointNE);
-            int distMin = min(min(distNO,distNE),min(distSO,distSE));
-            if(distMin>(2*heightMap.w/(quadtree->enfantNO->ptsExt->pointNO.x - quadtree->enfantNO->ptsExt->pointNE.x)))
-            {
-                ptsVisibles[*ptCount]=quadtree->enfantNO->ptsExt;
-                (*ptCount)++;
-                return;
-            }
-            else
-            {
-                travelQuadtree(ptsVisibles, quadtree->enfantNO,ptCount,heightMap);
-            }
-        }
-    }
+// void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int *ptCount, HeightMap heightMap)
+// {
+//     if(quadtree->enfantNO)
+//     {
+//         if(quadAppartientTriangle(quadtree->enfantNO) || camIntersectQuad(quadtree->enfantNO) || triangleAppartientQuadtree(quadtree->enfantNO))
+//         {
+//             float distNO=distance(quadtree->enfantNO->ptsExt->pointNO);
+//             float distSO=distance(quadtree->enfantNO->ptsExt->pointSO);
+//             float distSE=distance(quadtree->enfantNO->ptsExt->pointSE);
+//             float distNE=distance(quadtree->enfantNO->ptsExt->pointNE);
+//             int distMin = min(min(distNO,distNE),min(distSO,distSE));
+//             if(distMin>(2*heightMap.w/(quadtree->enfantNO->ptsExt->pointNO.x - quadtree->enfantNO->ptsExt->pointNE.x)))
+//             {
+//                 ptsVisibles[*ptCount]=quadtree->enfantNO->ptsExt;
+//                 (*ptCount)++;
+//                 return;
+//             }
+//             else
+//             {
+//                 travelQuadtree(ptsVisibles, quadtree->enfantNO,ptCount,heightMap);
+//             }
+//         }
+//     }
 
-    if(quadtree->enfantNE)
-    {
-        if(quadAppartientTriangle(quadtree->enfantNE) || camIntersectQuad(quadtree->enfantNE) || triangleAppartientQuadtree(quadtree->enfantNE))
-        {
-            float distNO=distance(quadtree->enfantNE->ptsExt->pointNO);
-            float distSO=distance(quadtree->enfantNE->ptsExt->pointSO);
-            float distSE=distance(quadtree->enfantNE->ptsExt->pointSE);
-            float distNE=distance(quadtree->enfantNE->ptsExt->pointNE);
-            int distMin = min(min(distNO,distNE),min(distSO,distSE));
-            if(distMin>(2*heightMap.w/(quadtree->enfantNE->ptsExt->pointNO.x - quadtree->enfantNE->ptsExt->pointNE.x)))
-            {
-                ptsVisibles[*ptCount]=quadtree->enfantNE->ptsExt;
-                (*ptCount)++;
-                return;
-            }
-            else
-            {
-                travelQuadtree(ptsVisibles, quadtree->enfantNE,ptCount,heightMap);
-            }
-        }
-    }
+//     if(quadtree->enfantNE)
+//     {
+//         if(quadAppartientTriangle(quadtree->enfantNE) || camIntersectQuad(quadtree->enfantNE) || triangleAppartientQuadtree(quadtree->enfantNE))
+//         {
+//             float distNO=distance(quadtree->enfantNE->ptsExt->pointNO);
+//             float distSO=distance(quadtree->enfantNE->ptsExt->pointSO);
+//             float distSE=distance(quadtree->enfantNE->ptsExt->pointSE);
+//             float distNE=distance(quadtree->enfantNE->ptsExt->pointNE);
+//             int distMin = min(min(distNO,distNE),min(distSO,distSE));
+//             if(distMin>(2*heightMap.w/(quadtree->enfantNE->ptsExt->pointNO.x - quadtree->enfantNE->ptsExt->pointNE.x)))
+//             {
+//                 ptsVisibles[*ptCount]=quadtree->enfantNE->ptsExt;
+//                 (*ptCount)++;
+//                 return;
+//             }
+//             else
+//             {
+//                 travelQuadtree(ptsVisibles, quadtree->enfantNE,ptCount,heightMap);
+//             }
+//         }
+//     }
 
-    if(quadtree->enfantSO)
-    {
-        if(quadAppartientTriangle(quadtree->enfantSO) || camIntersectQuad(quadtree->enfantSO)||  triangleAppartientQuadtree(quadtree->enfantSO))
-        {
-            float distNO=distance(quadtree->enfantSO->ptsExt->pointNO);
-            float distSO=distance(quadtree->enfantSO->ptsExt->pointSO);
-            float distSE=distance(quadtree->enfantSO->ptsExt->pointSE);
-            float distNE=distance(quadtree->enfantSO->ptsExt->pointNE);
-            int distMin = min(min(distNO,distNE),min(distSO,distSE));
-            if(distMin>(2*heightMap.w/(quadtree->enfantSO->ptsExt->pointNO.x - quadtree->enfantSO->ptsExt->pointNE.x)))
-            {
-                ptsVisibles[*ptCount]=quadtree->enfantSO->ptsExt;
-                (*ptCount)++;
-                return;
-            }
-            else
-            {
-                travelQuadtree(ptsVisibles, quadtree->enfantSO,ptCount,heightMap);
-            }
-        }
-    }
+//     if(quadtree->enfantSO)
+//     {
+//         if(quadAppartientTriangle(quadtree->enfantSO) || camIntersectQuad(quadtree->enfantSO)||  triangleAppartientQuadtree(quadtree->enfantSO))
+//         {
+//             float distNO=distance(quadtree->enfantSO->ptsExt->pointNO);
+//             float distSO=distance(quadtree->enfantSO->ptsExt->pointSO);
+//             float distSE=distance(quadtree->enfantSO->ptsExt->pointSE);
+//             float distNE=distance(quadtree->enfantSO->ptsExt->pointNE);
+//             int distMin = min(min(distNO,distNE),min(distSO,distSE));
+//             if(distMin>(2*heightMap.w/(quadtree->enfantSO->ptsExt->pointNO.x - quadtree->enfantSO->ptsExt->pointNE.x)))
+//             {
+//                 ptsVisibles[*ptCount]=quadtree->enfantSO->ptsExt;
+//                 (*ptCount)++;
+//                 return;
+//             }
+//             else
+//             {
+//                 travelQuadtree(ptsVisibles, quadtree->enfantSO,ptCount,heightMap);
+//             }
+//         }
+//     }
 
-    if(quadtree->enfantSE)
-    {
-        if(quadAppartientTriangle(quadtree->enfantSE) || camIntersectQuad(quadtree->enfantSE) || triangleAppartientQuadtree(quadtree->enfantSE))
-        {
-            float distNO=distance(quadtree->enfantSE->ptsExt->pointNO);
-            float distSO=distance(quadtree->enfantSE->ptsExt->pointSO);
-            float distSE=distance(quadtree->enfantSE->ptsExt->pointSE);
-            float distNE=distance(quadtree->enfantSE->ptsExt->pointNE);
-            int distMin = min(min(distNO,distNE),min(distSO,distSE));
-            if(distMin>(2*heightMap.w/(quadtree->enfantSE->ptsExt->pointNO.x - quadtree->enfantSE->ptsExt->pointNE.x)))
-            {
-                ptsVisibles[*ptCount]=quadtree->enfantSE->ptsExt;
-                (*ptCount)++;
-                return;
-            }
-            else
-            {
-                travelQuadtree(ptsVisibles, quadtree->enfantSE,ptCount,heightMap);
-            }
-        }
-    }
+//     if(quadtree->enfantSE)
+//     {
+//         if(quadAppartientTriangle(quadtree->enfantSE) || camIntersectQuad(quadtree->enfantSE) || triangleAppartientQuadtree(quadtree->enfantSE))
+//         {
+//             float distNO=distance(quadtree->enfantSE->ptsExt->pointNO);
+//             float distSO=distance(quadtree->enfantSE->ptsExt->pointSO);
+//             float distSE=distance(quadtree->enfantSE->ptsExt->pointSE);
+//             float distNE=distance(quadtree->enfantSE->ptsExt->pointNE);
+//             int distMin = min(min(distNO,distNE),min(distSO,distSE));
+//             if(distMin>(2*heightMap.w/(quadtree->enfantSE->ptsExt->pointNO.x - quadtree->enfantSE->ptsExt->pointNE.x)))
+//             {
+//                 ptsVisibles[*ptCount]=quadtree->enfantSE->ptsExt;
+//                 (*ptCount)++;
+//                 return;
+//             }
+//             else
+//             {
+//                 travelQuadtree(ptsVisibles, quadtree->enfantSE,ptCount,heightMap);
+//             }
+//         }
+//     }
 
-    else //si on rentre la c'est que le quadtree est une feuille
-    {
-        ptsVisibles[*ptCount]=quadtree->ptsExt;
-        (*ptCount)++;
-        return;
-    }
-}
+//     else //si on rentre la c'est que le quadtree est une feuille
+//     {
+//         ptsVisibles[*ptCount]=quadtree->ptsExt;
+//         (*ptCount)++;
+//         return;
+//     }
+// }
 
 
 //SANS LOD
-/*
-//fonction qui effectue les differents test tout au long de l'arbre
-//renvoie la liste des coordonnées des points qui sont visibles
 
-void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount )
+// fonction qui effectue les differents test tout au long de l'arbre
+// renvoie la liste des coordonnées des points qui sont visibles
+
+void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int *ptCount, HeightMap heightMap )
 {
     if(quadtree->enfantNO)
     {
         if(quadAppartientTriangle(quadtree->enfantNO) || camIntersectQuad(quadtree->enfantNO) || triangleAppartientQuadtree(quadtree->enfantNO))
         {
-            travelQuadtree(ptsVisibles, quadtree->enfantNO,ptCount);
+            travelQuadtree(ptsVisibles, quadtree->enfantNO,ptCount, heightMap);
         }
     }
 
@@ -385,7 +420,7 @@ void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount )
     {
         if(quadAppartientTriangle(quadtree->enfantNE) || camIntersectQuad(quadtree->enfantNE) || triangleAppartientQuadtree(quadtree->enfantNE))
         {
-            travelQuadtree(ptsVisibles, quadtree->enfantNE,ptCount);
+            travelQuadtree(ptsVisibles, quadtree->enfantNE,ptCount, heightMap);
         }
     }
 
@@ -393,7 +428,7 @@ void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount )
     {
         if(quadAppartientTriangle(quadtree->enfantSO) || camIntersectQuad(quadtree->enfantSO)||  triangleAppartientQuadtree(quadtree->enfantSO))
         {
-            travelQuadtree(ptsVisibles, quadtree->enfantSO,ptCount);
+            travelQuadtree(ptsVisibles, quadtree->enfantSO,ptCount, heightMap);
         }
     }
 
@@ -401,17 +436,17 @@ void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount )
     {
         if(quadAppartientTriangle(quadtree->enfantSE) || camIntersectQuad(quadtree->enfantSE) || triangleAppartientQuadtree(quadtree->enfantSE))
         {
-            travelQuadtree(ptsVisibles, quadtree->enfantSE,ptCount);
+            travelQuadtree(ptsVisibles, quadtree->enfantSE,ptCount, heightMap);
         }
     }
 
     else //si on rentre la c'est que le quadtree est une feuille
     {
-        ptsVisibles[ptCount]=quadtree->ptsExt;
-        ptCount++;
+        ptsVisibles[(*ptCount)]=quadtree->ptsExt;
+        (*ptCount)++;
     }
 }
-*/
+
 
 
 

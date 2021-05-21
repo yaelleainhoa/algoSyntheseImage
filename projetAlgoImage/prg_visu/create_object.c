@@ -194,18 +194,18 @@ for (int i=0;i<h;i++){
 // }
 
 //Pas encore opti
-void tracerTriangles(Node (*coordonnees_quadtree)[], int taille){
+void tracerTriangles(Node *coordonnees_quadtree[], int taille){
 		int k=0;
 		int text=0;
 		triangle_index = (unsigned int*) realloc(triangle_index, sizeof(unsigned int)*3*2*taille);
 		textures_coord = (float*) realloc(textures_coord,sizeof(float)*2*taille);
 		for(int i=0; i<taille;i++){
-			triangle_index[k]=(*coordonnees_quadtree)[i].pointNO.coord;
-			triangle_index[k+1]=(*coordonnees_quadtree)[i].pointNE.coord;
-			triangle_index[k+2]=(*coordonnees_quadtree)[i].pointSO.coord;
-			triangle_index[k+3]=(*coordonnees_quadtree)[i].pointNE.coord;
-			triangle_index[k+4]=(*coordonnees_quadtree)[i].pointSE.coord;
-			triangle_index[k+5]=(*coordonnees_quadtree)[i].pointSO.coord;
+			triangle_index[k]=coordonnees_quadtree[i]->pointNO.coord;
+			triangle_index[k+1]=coordonnees_quadtree[i]->pointNE.coord;
+			triangle_index[k+2]=coordonnees_quadtree[i]->pointSO.coord;
+			triangle_index[k+3]=coordonnees_quadtree[i]->pointNE.coord;
+			triangle_index[k+4]=coordonnees_quadtree[i]->pointSE.coord;
+			triangle_index[k+5]=coordonnees_quadtree[i]->pointSO.coord;
 			k+=6;
 		}
 }
