@@ -42,7 +42,11 @@ Vector3D normalize(Vector3D v);
 void printPoint3D(Point3D p);
 void printVector3D(Vector3D v);
 
+<<<<<<< Updated upstream
 int pointAppartientTriangle(float x, float y);//, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov);
+=======
+int pointAppartientTriangle(float x, float y/*, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov*/);
+>>>>>>> Stashed changes
 int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD);
 
 float distance(Point3D pt);
