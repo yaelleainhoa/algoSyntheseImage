@@ -85,11 +85,7 @@ void printVector3D(Vector3D p){
 }
 
 //regarde si un point est à l'interieur du triangle formé par la caméra
-<<<<<<< Updated upstream
 int pointAppartientTriangle(float x, float y){//, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov){
-=======
-int pointAppartientTriangle(float x, float y/*, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov*/){
->>>>>>> Stashed changes
 //normalement zfar longitude et fov sont en variables globales on devrait pouvoir ne pas les mettre en parametres
     Point3D A=createPoint(xCam,yCam,0.,0);//j'ai mis des NULL pour les coordonnées dans vertex_coord à voir si ça marche ou si on doit revoir la struct
     Point3D P=createPoint(x,y,0.,0);

@@ -457,8 +457,11 @@ int main(int argc, char** argv) {
 	Point3D SE=createPointFromCoord(3*heightMap.w+3);
 	Node node=createNode(NO,NE,SO,SE);
 	Quadtree quadtree= createQuadtree(&node);
-	buildQuadtree(&quadtree, vertex_coord,heightMap.w,3);
+	buildQuadtree(&quadtree, vertex_coord,heightMap.w,heightMap.w);
 
+	//printf("heightMap.h*heightMap.w : %d, heightMap.h*heightMap.w+heightMap.h-1.h : %d \n", heightMap.h*heightMap.w, heightMap.h*heightMap.w+heightMap.h-1);
+	//printf("triangle appartient au quadtree : %d \n", triangleAppartientQuadtree(&quadtree, xCam, yCam));
+	//printf("OH : %f", vertex_coord[3*heightMap.w]);
 	Node tab_node[50];
 	int count;
 	count=0;
