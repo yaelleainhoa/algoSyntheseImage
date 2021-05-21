@@ -29,7 +29,7 @@ float obj_rot = 0.0;
 GLuint texture[2];
 float largeur_skybox=10.;
 
-const float hauteur_regard=2.;
+const float hauteur_regard=0.2;
 float xCam=0;
 float yCam=0;
 float zCam=0.;

@@ -160,3 +160,11 @@ int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, fl
     return 1;
 
 }
+
+float distance(Point3D pt)
+{
+    float distance = sqrt((xCam-pt.x)*(xCam-pt.x) 
+                        + (yCam-pt.y)*(yCam-pt.y) 
+                        + (zCam-pt.z)*(zCam-pt.z));
+    return distance;
+}
