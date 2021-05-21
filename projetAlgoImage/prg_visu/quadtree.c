@@ -34,7 +34,6 @@ Node createNode(Point3D pointNO,Point3D pointNE, Point3D pointSO,Point3D pointSE
     return newNode;
 }
 
-
 Quadtree createQuadtree(Node* ptsExt)
 {
     Quadtree newQuadtree;
@@ -276,7 +275,7 @@ int camIntersectQuad(Quadtree *quadtree)
 //fonction qui effectue les differents test tout au long de l'arbre
 //renvoie la liste des coordonnées des points qui sont visibles
 
-void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount, HeightMap heightMap)
+void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int *ptCount, HeightMap heightMap)
 {
     if(quadtree->enfantNO)
     {
@@ -289,8 +288,8 @@ void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount, Height
             int distMin = min(min(distNO,distNE),min(distSO,distSE));
             if(distMin>(2*heightMap.w/(quadtree->enfantNO->ptsExt->pointNO.x - quadtree->enfantNO->ptsExt->pointNE.x)))
             {
-                ptsVisibles[ptCount]=quadtree->enfantNO->ptsExt;
-                ptCount++;
+                ptsVisibles[*ptCount]=quadtree->enfantNO->ptsExt;
+                (*ptCount)++;
                 return;
             }
             else
@@ -311,8 +310,8 @@ void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount, Height
             int distMin = min(min(distNO,distNE),min(distSO,distSE));
             if(distMin>(2*heightMap.w/(quadtree->enfantNE->ptsExt->pointNO.x - quadtree->enfantNE->ptsExt->pointNE.x)))
             {
-                ptsVisibles[ptCount]=quadtree->enfantNE->ptsExt;
-                ptCount++;
+                ptsVisibles[*ptCount]=quadtree->enfantNE->ptsExt;
+                (*ptCount)++;
                 return;
             }
             else
@@ -333,8 +332,8 @@ void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount, Height
             int distMin = min(min(distNO,distNE),min(distSO,distSE));
             if(distMin>(2*heightMap.w/(quadtree->enfantSO->ptsExt->pointNO.x - quadtree->enfantSO->ptsExt->pointNE.x)))
             {
-                ptsVisibles[ptCount]=quadtree->enfantSO->ptsExt;
-                ptCount++;
+                ptsVisibles[*ptCount]=quadtree->enfantSO->ptsExt;
+                (*ptCount)++;
                 return;
             }
             else
@@ -355,8 +354,8 @@ void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount, Height
             int distMin = min(min(distNO,distNE),min(distSO,distSE));
             if(distMin>(2*heightMap.w/(quadtree->enfantSE->ptsExt->pointNO.x - quadtree->enfantSE->ptsExt->pointNE.x)))
             {
-                ptsVisibles[ptCount]=quadtree->enfantSE->ptsExt;
-                ptCount++;
+                ptsVisibles[*ptCount]=quadtree->enfantSE->ptsExt;
+                (*ptCount)++;
                 return;
             }
             else
@@ -368,8 +367,8 @@ void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int ptCount, Height
 
     else //si on rentre la c'est que le quadtree est une feuille
     {
-        ptsVisibles[ptCount]=quadtree->ptsExt;
-        ptCount++;
+        ptsVisibles[*ptCount]=quadtree->ptsExt;
+        (*ptCount)++;
         return;
     }
 }

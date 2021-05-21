@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 unsigned int vertex_number;
 float* vertex_coord;
 float* normal_coord;
@@ -77,16 +75,16 @@ for (int i=0;i<h;i++){
 	}
 }
 
-int k=0;
-for (int i=0;i<h-1;i++){
-	for(int j=0;j<w-1;j++){
-		triangle_index[k]=w*i+j;
-		triangle_index[k+1]=w*i+j+1;
-		triangle_index[k+2]=w*(i+1)+j;
-		triangle_index[k+3]=w*i+j+1;
-		triangle_index[k+4]=w*(i+1)+j;
-		triangle_index[k+5]=w*(i+1)+j+1;
-		k+=6;
+// int k=0;
+// for (int i=0;i<h-1;i++){
+// 	for(int j=0;j<w-1;j++){
+// 		triangle_index[k]=w*i+j;
+// 		triangle_index[k+1]=w*i+j+1;
+// 		triangle_index[k+2]=w*(i+1)+j;
+// 		triangle_index[k+3]=w*i+j+1;
+// 		triangle_index[k+4]=w*(i+1)+j;
+// 		triangle_index[k+5]=w*(i+1)+j+1;
+// 		k+=6;
 
 // 		textures_coord[text]=0.0;
 // 		textures_coord[text+1]=0.0;
