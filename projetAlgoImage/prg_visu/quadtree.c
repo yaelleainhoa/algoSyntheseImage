@@ -162,6 +162,7 @@ int quadAppartientTriangle(Quadtree* quadtree/*, float xCam, float yCam, float x
 
 //fonction qui regarde si un des sommets du triangle de la camera est dans le quadtree: 1 si oui 0 sinon
 //a faire
+//int triangleAppartientQuadtree()
 
 //fonction qui regarde si un des vect du triangle de la cam intersect un des vecteurs des contours du quadtree
 int camIntersectQuad(Quadtree *quadtree)
@@ -235,12 +236,9 @@ int camIntersectQuad(Quadtree *quadtree)
 
 
 //fonction qui effectue les differents test tout au long de l'arbre
-//renvoie la liste des coordonnées des points qui sont visibles (moins lourds que les poins entiers mais à voir ce qui est mieux)
+//renvoie la liste des coordonnées des points qui sont visibles
 
-// void travelQuadtree(int ptsVisibles[], Quadtree* quadtree )
-// {
-//     if()
-// }
+        if(quadAppartientTriangle(quadtree->enfantNO) || camIntersectQuad(quadtree->enfantNO)/* || triangleAppartientQuadtree(quadtree->enfantNO)*/)
 
 
 //archives
