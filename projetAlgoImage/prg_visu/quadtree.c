@@ -162,43 +162,35 @@ int quadAppartientTriangle(Quadtree* quadtree/*, float xCam, float yCam, float x
 //fonction qui regarde si un des sommets du triangle de la camera est dans le quadtree: 1 si oui 0 sinon
 //a faire
 
-int triangleAppartientQuadtree(Quadtree *quadtree, float Px, float Py){
+int triangleAppartientQuadtree(Quadtree *quadtree){
 
     Point3D NO=quadtree->ptsExt->pointNO;
     Point3D NE=quadtree->ptsExt->pointNE;
     Point3D SO=quadtree->ptsExt->pointSO;
     Point3D SE=quadtree->ptsExt->pointSE;
 
-    Point3D P = createPoint(Px, Py, 0,0);
+    float xRegard2D = sin(longitude)+xCam;
+    float yRegard2D = cos(longitude)+yCam;
+    Point3D cam= createPoint(xCam,yCam,0.,0);
+    Point3D direction_regard = createPoint(xRegard2D,yRegard2D,0.,0);
 
-    Vector3D NENO = createVectorFromPoints(NE, NO);
-    Vector3D NOSO = createVectorFromPoints(NO, SO);
-    Vector3D SOSE = createVectorFromPoints(SO, SE);
-    Vector3D SENE = createVectorFromPoints(SE, NE);
-    
+    Vector3D direction=normalize(createVectorFromPoints(cam,direction_regard));
+    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.,0);
 
-    Vector3D NEP=createVectorFromPoints(NE,P);
-    Vector3D NOP=createVectorFromPoints(NO,P);
-    Vector3D SOP=createVectorFromPoints(SO,P);
-    Vector3D SEP=createVectorFromPoints(SE,P);
-    // printf("NE.x : %f, NO.x : %f, NE.y : %f, NO.y : %f, NENO.x : %f , NENO.y :%f, NEP.x:%f, NEP.y:%f \n",NE.x, NO.x, NE.y, NO.y, NENO.x,NENO.y, NEP.x, NEP.y);
-    // printf("NO.x : %f, SO.x : %f, NOSO.x : %f , NOSO.y :%f, NOP.x:%f, NOP.y:%f \n",NO.x, SO.x, NOSO.x,NOSO.y, NOP.x, NOP.y);
-    // printf("SO.x : %f, SE.x : %f, SO.y : %f, SE.y : %f, SOSE.x : %f , SOSE.y :%f, SOP.x:%f, SOP.y:%f \n",SO.x, SE.x, SO.y, SE.y, SOSE.x,SOSE.y, SOP.x, SOP.y);
-    // printf("SE.x : %f, NE.x : %f, SENE.x : %f , SENE.y :%f, SEP.x:%f, SEP.y:%f \n",SE.x, NE.x, SENE.x,SENE.y, SEP.x, SEP.y);
+    Vector3D AB=addVectors(multVector(direction, zfar), multVector(R, tan(fov/2.)*zfar));
+    Vector3D BC=multVector(multVector(R, tan(fov/2.)*zfar), -2.);
+    //Vector3D CA=addVectors(multVector(direction, -zfar), multVector(R, tan(fov/2.)*zfar));
 
-    Vector3D vecteurs[4]={NENO, NOSO, SOSE, SENE};
-    Vector3D vecteursP[4]={NEP,NOP,SOP, SEP};
-    float determinant =0;
+    Point3D B=createPoint(AB.x+cam.x, AB.y+cam.y, 0.,0);
+    Point3D C=createPoint(BC.x+B.x, BC.y+B.y, 0.,0);
 
-    for(int i=0; i<4; i++){
-        determinant = vecteurs[i].x * vecteursP[i].y - vecteurs[i].y * vecteursP[i].x;
-        printf("vec.x : %f , vec.y :%f, AP.x:%f, AP.y:%f \n",vecteurs[i].x,vecteurs[i].y, vecteursP[i].x, vecteursP[i].y);
-        if (determinant<0){
-            printf("det : %f \n", determinant);
-            return 0;
-        }
+    if(pointAppartientQuadtree(quadtree, cam.x, cam.y)
+    ||pointAppartientQuadtree(quadtree, B.x, B.y)
+    ||pointAppartientQuadtree(quadtree, C.x, C.y))
+    {
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
 //fonction qui regarde si un des vect du triangle de la cam intersect un des vecteurs des contours du quadtree

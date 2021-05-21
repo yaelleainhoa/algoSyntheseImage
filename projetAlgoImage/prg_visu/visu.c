@@ -29,7 +29,7 @@ float obj_rot = 0.0;
 GLuint texture[2];
 float largeur_skybox=10.;
 
-const float hauteur_regard=0.2;
+const float hauteur_regard=0.1;
 float xCam=0;
 float yCam=0;
 float zCam=0.;
@@ -113,6 +113,7 @@ void skyBoxY(float x, float y, float z, GLuint texture){
 void arbre(float x, float y, float z, float teta, GLuint texture){
 	glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture);
+		//glRotatef(teta, 0. ,0. ,1. );
         glScalef(1.,1.,1.);
         glBegin(GL_QUADS);
             glTexCoord2f(0.,0.);
@@ -167,7 +168,11 @@ static void drawFunc(void) {
 	glDrawRepere(2.0);
 	tracerTriangles(&ptsVisibles, ptsVisibles);
 
-	arbre(0.5,0.5,-1.1,longitude,texture[0]);
+	glRotatef(teta, 0.0, 0.0, 1.0);
+	glPushMatrix();
+	arbre(0.5,0.5,0.,teta,texture[0]);
+	teta += longitude;
+	glPopMatrix();
 
 
 // 	int h = heightMap.h;
@@ -426,7 +431,7 @@ static void init(HeightMap heightMap) {
 }
 
 void idle(void) {
-	obj_rot+=STEP_ANGLE;
+	obj_rot=longitude;
 	glutPostRedisplay();
 }
 
@@ -496,7 +501,7 @@ int main(int argc, char** argv) {
 	/* association de la fonction callback de DRAG de la souris */
 	glutMotionFunc(motionFunc);
 
-	glutIdleFunc(NULL);
+	glutIdleFunc(idle);
 
 	/* boucle principale de gestion des événements */
 	glutMainLoop();
