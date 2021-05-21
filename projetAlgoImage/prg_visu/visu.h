@@ -12,6 +12,9 @@ extern float xCam;
 extern float yCam;
 extern float zCam;
 
+extern float xRegard;
+extern float yRegard;
+
 extern int fov;
 extern float zfar;
 
