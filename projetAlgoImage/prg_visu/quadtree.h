@@ -18,12 +18,13 @@ typedef struct Quadtree Quadtree;
 
 struct Quadtree
 {
-    Node * ptsExt;
+    Node ptsExt;
     struct Quadtree * enfantNO;
     struct Quadtree * enfantNE;
     struct Quadtree * enfantSO;
     struct Quadtree * enfantSE;
 };
+
 
 
 Point3D createPointFromCoord(int coord);
@@ -32,9 +33,10 @@ Quadtree createQuadtree(Node *ptsExt);
 void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l);
 void addChildQuadtree(Quadtree *quadtree, Quadtree * enfantNO,Quadtree * enfantNE,Quadtree * enfantSO,Quadtree * enfantSE);
 void inorderTravel(Quadtree * quadtree, Node nodes[], int *nodesCount);
-int quadAppartientTriangle(Quadtree* quadtree);//, float xCam, float yCam, float xRegard, float yRegard, float zfar, float fov );
+int quadAppartientTriangle(Node node);//, float xCam, float yCam, float xRegard, float yRegard, float zfar, float fov );
 int camIntersectQuad(Quadtree *quadtree);
-void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int* ptCount, HeightMap *heightMap);
-int pointAppartientQuadtree(Node *node, float Px, float Py);
-int triangleAppartientQuadtree(Node *node);
+void travelQuadtree(Node ptsVisibles[], Quadtree quadtree, int* ptCount);
+int pointAppartientQuadtree(Node node, float Px, float Py);
+int triangleAppartientQuadtree(Node node);
+void printNode(Node node);
 #endif

@@ -33,21 +33,21 @@ void glDrawObject() {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 
-	char * sources={"images/sol.jpg"};
-	GLuint textureSol;
-		glEnable(GL_TEXTURE_2D);
-        SDL_Surface* image=IMG_Load(sources);
-        glGenTextures(1, &textureSol);
-        glBindTexture(GL_TEXTURE_2D, textureSol);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
-        glBindTexture(GL_TEXTURE_2D, 0);
-	glBindTexture(GL_TEXTURE_2D, textureSol);
+	// char * sources={"images/sol.jpg"};
+	// GLuint textureSol;
+	// 	glEnable(GL_TEXTURE_2D);
+    //     SDL_Surface* image=IMG_Load(sources);
+    //     glGenTextures(1, &textureSol);
+    //     glBindTexture(GL_TEXTURE_2D, textureSol);
+    //     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+    //     glBindTexture(GL_TEXTURE_2D, 0);
+	// glBindTexture(GL_TEXTURE_2D, textureSol);
 
 	glVertexPointer(3,GL_FLOAT,0,vertex_coord);
 	glNormalPointer(GL_FLOAT,0,normal_coord);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glTexCoordPointer(2, GL_FLOAT, 0, textures_coord);
+    //glTexCoordPointer(2, GL_FLOAT, 0, textures_coord);
 	glDrawElements(GL_TRIANGLES,3*triangle_number,GL_UNSIGNED_INT,triangle_index);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -62,21 +62,21 @@ void glDrawObject_1() {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 
-	char * sources={"images/sky.jpg"};
-	GLuint textureSol;
-		glEnable(GL_TEXTURE_2D);
-        SDL_Surface* image=IMG_Load(sources);
-        glGenTextures(1, &textureSol);
-        glBindTexture(GL_TEXTURE_2D, textureSol);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
-        glBindTexture(GL_TEXTURE_2D, 0);
-	glBindTexture(GL_TEXTURE_2D, textureSol);
+	// char * sources={"images/sky.jpg"};
+	// GLuint textureSol;
+	// 	glEnable(GL_TEXTURE_2D);
+    //     SDL_Surface* image=IMG_Load(sources);
+    //     glGenTextures(1, &textureSol);
+    //     glBindTexture(GL_TEXTURE_2D, textureSol);
+    //     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+    //     glBindTexture(GL_TEXTURE_2D, 0);
+	// glBindTexture(GL_TEXTURE_2D, textureSol);
 
 	glVertexPointer(3,GL_FLOAT,0,vertex_coord_1);
 	glNormalPointer(GL_FLOAT,0,normal_coord_1);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glTexCoordPointer(2, GL_FLOAT, 0, textures_coord_1);
+    //glTexCoordPointer(2, GL_FLOAT, 0, textures_coord_1);
 	glDrawElements(GL_TRIANGLES,3*triangle_number_1,GL_UNSIGNED_INT,triangle_index_1);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);

@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
+
+using namespace std;
 
 unsigned int vertex_number;
 float* vertex_coord;
@@ -102,31 +105,31 @@ for (int i=0;i<h;i++){
 }
 
 
-int k=0;
-int k_1=0;
-for(int i=0;i<h-1;i++){
-	for(int j=0;j<w-1;j++){
-		if(j%2==0){
-			triangle_index[k]=w*i+j;
-			triangle_index[k+1]=w*i+j+1;
-			triangle_index[k+2]=w*(i+1)+j;
-			triangle_index[k+3]=w*i+j+1;
-			triangle_index[k+4]=w*(i+1)+j;
-			triangle_index[k+5]=w*(i+1)+j+1;
-			k+=6;
-		}
-		else{
-			triangle_index_1[k_1]=w*i+j;
-			triangle_index_1[k_1+1]=w*i+j+1;
-			triangle_index_1[k_1+2]=w*(i+1)+j;
-			triangle_index_1[k_1+3]=w*i+j+1;
-			triangle_index_1[k_1+4]=w*(i+1)+j;
-			triangle_index_1[k_1+5]=w*(i+1)+j+1;
- 		k_1+=6;
-		}
+// int k=0;
+// int k_1=0;
+// for(int i=0;i<h-1;i++){
+// 	for(int j=0;j<w-1;j++){
+// 		if(j%2==0){
+// 			triangle_index[k]=w*i+j;
+// 			triangle_index[k+1]=w*i+j+1;
+// 			triangle_index[k+2]=w*(i+1)+j;
+// 			triangle_index[k+3]=w*i+j+1;
+// 			triangle_index[k+4]=w*(i+1)+j;
+// 			triangle_index[k+5]=w*(i+1)+j+1;
+// 			k+=6;
+// 		}
+// 		else{
+// 			triangle_index_1[k_1]=w*i+j;
+// 			triangle_index_1[k_1+1]=w*i+j+1;
+// 			triangle_index_1[k_1+2]=w*(i+1)+j;
+// 			triangle_index_1[k_1+3]=w*i+j+1;
+// 			triangle_index_1[k_1+4]=w*(i+1)+j;
+// 			triangle_index_1[k_1+5]=w*(i+1)+j+1;
+//  		k_1+=6;
+// 		}
 
-}
-}
+// }
+// }
 }
 
 
@@ -234,19 +237,19 @@ for(int i=0;i<h-1;i++){
 // }
 
 //Pas encore opti
-void tracerTriangles(Node *coordonnees_quadtree[], int taille){
+void tracerTriangles(Node *coordonnees_quadtree, int taille){
 		int k=0;
 		int text=0;
-		triangle_index = (unsigned int*) realloc(triangle_index, sizeof(unsigned int)*3*2*taille);
+		triangle_index = (unsigned int*) realloc(triangle_index, sizeof(int)*3*2*taille);
 		textures_coord = (float*) realloc(textures_coord,sizeof(float)*2*taille);
 		for(int i=0; i<taille;i++){
-			triangle_index[k]=coordonnees_quadtree[i]->pointNO.coord;
-			triangle_index[k+1]=coordonnees_quadtree[i]->pointNE.coord;
-			triangle_index[k+2]=coordonnees_quadtree[i]->pointSO.coord;
-			triangle_index[k+3]=coordonnees_quadtree[i]->pointNE.coord;
-			triangle_index[k+4]=coordonnees_quadtree[i]->pointSE.coord;
-			triangle_index[k+5]=coordonnees_quadtree[i]->pointSO.coord;
-			k+=6;
+			// triangle_index[k]=coordonnees_quadtree[i].pointNO.coord;
+			// triangle_index[k+1]=coordonnees_quadtree[i].pointNE.coord;
+			// triangle_index[k+2]=coordonnees_quadtree[i].pointSO.coord;
+			// triangle_index[k+3]=coordonnees_quadtree[i].pointNE.coord;
+			// triangle_index[k+4]=coordonnees_quadtree[i].pointSE.coord;
+			// triangle_index[k+5]=coordonnees_quadtree[i].pointSO.coord;
+			// k+=6;
 		}
 }
 

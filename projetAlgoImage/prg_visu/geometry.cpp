@@ -4,6 +4,11 @@
 #include "visu.h"
 #include <stdio.h>
 
+#include <iostream>
+
+using namespace std;
+
+
 Point3D createPoint(float x, float y, float z, int coord){
     Point3D newPoint;
     newPoint.x=x;
@@ -87,7 +92,7 @@ void printVector3D(Vector3D p){
 //regarde si un point est à l'interieur du triangle formé par la caméra
 int pointAppartientTriangle(float x, float y){//, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov){
 //normalement zfar longitude et fov sont en variables globales on devrait pouvoir ne pas les mettre en parametres
-    printf("\n P(%f, %f) \n", x,y);
+    //cout << "\n P(%f, %f) \n"<< x<<y<<endl;
     
     Point3D A=createPoint(xCam,yCam,0.,0);//j'ai mis des NULL pour les coordonnées dans vertex_coord à voir si ça marche ou si on doit revoir la struct
     Point3D P=createPoint(x,y,0.,0);
@@ -108,18 +113,18 @@ int pointAppartientTriangle(float x, float y){//, float xCam, float yCam, float 
     Vector3D BP=createVectorFromPoints(B,P);
     Vector3D CP=createVectorFromPoints(C,P);
 
-    printf("les coord sont : A(%f,%f), B(%f,%f), C(%f,%f)\n", A.x,A.y,B.x,B.y,C.x,C.y);
+   // cout << "les coord sont : A(%f,%f), B(%f,%f), C(%f,%f)\n"<<  A.x<<A.y<<B.x<<B.y<<C.x<<C.y<<endl;
 
     Vector3D vecteurs[3]={AB, BC, CA};
     Vector3D vecteursP[3]={AP,BP,CP};
     float determinant =0;
-
     for(int i=0; i<3; i++){
         determinant = vecteurs[i].x * vecteursP[i].y - vecteurs[i].y * vecteursP[i].x;
-        //printf("vec.x : %f , vec.y :%f, AP.x:%f, AP.y:%f \n",vecteurs[i].x,vecteurs[i].y, vecteursP[i].x, vecteursP[i].y);
-        //printf("det : %f \n", determinant);
+        //cout << "vec.x : %f , vec.y :%f, AP.x:%f, AP.y:%f \n"<< vecteurs[i].x,vecteurs[i].y, vecteursP[i].x, vecteursP[i].y<<endl;
+        //cout << "det : %f \n"<<  determinant<<endl;
+
         if (determinant<0){
-            //printf("det : %f \n", determinant);
+            //cout << "det : %f \n"<<  determinant<<endl;
             return 0;
         }
     }

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
+#include <iostream>
 
 #include <GL/glut.h>
 #include <GL/glu.h>
@@ -15,6 +16,8 @@
 #include "quadtree.h"
 #include "geometry.h"
 
+using namespace std;
+
 /* variables globales pour la gestion de la caméra */
 float profondeur = 3;
 float latitude = 0.0;
@@ -28,7 +31,7 @@ float obj_rot = 0.0;
 GLuint texture[2];
 float largeur_skybox=10.;
 
-const float hauteur_regard=0.1;
+const float hauteur_regard=0.5;
 float xCam=0;
 float yCam=0;
 float zCam=0.;
@@ -38,7 +41,7 @@ int fov=45;
 float xRegard2D=sin(-M_PI/2.);
 float yRegard2D=cos(-M_PI/2.);
 
-Node *ptsVisibles[1500];
+Node ptsVisibles[3000];
 int ptCount=0;
 
 //pour tester la fonction tracerTriangles
@@ -165,8 +168,7 @@ static void drawFunc(void) {
 
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
-	//tracerTriangles(ptsVisibles, ptCount);
-
+	tracerTriangles(ptsVisibles, ptCount);
 // 	int h = heightMap.h;
 // 	int w=heightMap.w;
 // 	for (int i=0;i<h-1;i++){
@@ -455,26 +457,49 @@ int main(int argc, char** argv) {
 	//test 
 
 	Point3D NO=createPointFromCoord(0);
-	Point3D NE=createPointFromCoord(2);
-	Point3D SO=createPointFromCoord(2*heightMap.w);
-	Point3D SE=createPointFromCoord(2*heightMap.w+2);
+	Point3D NE=createPointFromCoord(1000);
+	Point3D SO=createPointFromCoord(1000*heightMap.w);
+	Point3D SE=createPointFromCoord(1000*heightMap.w+1000);
+	// Point3D NO=createPointFromCoord(0);
+	// Point3D NE=createPointFromCoord(heightMap.w-1);
+	// Point3D SO=createPointFromCoord((heightMap.h-1)*heightMap.w);
+	// Point3D SE=createPointFromCoord((heightMap.h-1)*heightMap.w+heightMap.w-1);
 	Node node=createNode(NO,NE,SO,SE);
-	Quadtree quadtree= createQuadtree(&node);
-	buildQuadtree(&quadtree, vertex_coord,heightMap.w,2);
-	//printf("No(%f,%f)\n", quadtree.enfantNE->ptsExt->pointNO.x,quadtree.enfantNE->ptsExt->pointNO.y);
-	//printf("No(%f,%f)\n", quadtree.enfantNE->ptsExt->pointNO.x,quadtree.enfantNE->ptsExt->pointNO.y);
-	//printf("triangleAppartientQuadtree(quadtree->enfantNO): %d\n",triangleAppartientQuadtree(quadtree.enfantNE->ptsExt));
-	//printf("purée");
+	Quadtree *quadtree= new Quadtree;
+	*quadtree=createQuadtree(&node);
+	buildQuadtree(quadtree, vertex_coord,heightMap.w,1000);
 
-	//travelQuadtree(ptsVisibles, &quadtree, &ptCount, &heightMap);
-	//printf("rempli ou pas ??? %d",ptsVisibles[0]->pointNO.coord);
+// 	int t=camIntersectQuad(&SEq);
+// 	cout << "quadAppartientTriangle(quadtree->enfantSE) : \n"<<t<<endl;
+// 	t=camIntersectQuad(&NOq);
+// 	cout << "quadAppartientTriangle(quadtree->enfantNO) : \n"<<t<<endl;
+// 	t=camIntersectQuad(&NEq);
+// 	cout << "quadAppartientTriangle(quadtree->enfantNE) : \n"<<t<<endl;
+// 	t=camIntersectQuad(&SOq);
+// 	cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
 
-	//printf("heightMap.h*heightMap.w : %d, heightMap.h*heightMap.w+heightMap.h-1.h : %d \n", heightMap.h*heightMap.w, heightMap.h*heightMap.w+heightMap.h-1);
-	//printf("triangle appartient au quadtree : %d \n", triangleAppartientQuadtree(&quadtree, xCam, yCam));
-	//printf("NO(%f,%f), NE(%f,%f), SO (%f,%f), SE(%f,%f)\n", quadtree.ptsExt->pointNO.x,quadtree.ptsExt->pointNO.y,quadtree.ptsExt->pointNE.x,quadtree.ptsExt->pointNE.y,quadtree.ptsExt->pointSO.x,quadtree.ptsExt->pointSO.y,quadtree.ptsExt->pointSE.x,quadtree.ptsExt->pointSE.y);
-	Node tab_node[50];
-	int count;
-	count=0;
+// 	t=quadAppartientTriangle(SEq.ptsExt);
+//     cout << "quadAppartientTriangle(quadtree->enfantSE) : \n"<<t<<endl;
+// 	t=quadAppartientTriangle(NOq.ptsExt);
+//     cout << "quadAppartientTriangle(quadtree->enfantNO) : \n"<<t<<endl;
+// 	t=quadAppartientTriangle(NEq.ptsExt);
+//     cout << "quadAppartientTriangle(quadtree->enfantNE) : \n"<<t<<endl;
+// 	t=quadAppartientTriangle(SOq.ptsExt);
+//     cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
+
+// t=triangleAppartientQuadtree(SEq.ptsExt);
+// cout << "quadAppartientTriangle(quadtree->enfantSE) : \n"<<t<<endl;
+// t=triangleAppartientQuadtree(NOq.ptsExt);
+// cout << "quadAppartientTriangle(quadtree->enfantNO) : \n"<<t<<endl;
+// t=triangleAppartientQuadtree(NEq.ptsExt);
+// cout << "quadAppartientTriangle(quadtree->enfantNE) : \n"<<t<<endl;
+// t=triangleAppartientQuadtree(SOq.ptsExt);
+// cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
+	travelQuadtree(ptsVisibles, *quadtree, &ptCount);
+	cout << "ptCount : "<<ptCount<<endl<<endl<<endl;
+	printf("rempli ou pas ??? %d",ptsVisibles[0].pointNO.coord);
+
+	//Node tab_node[50];
 	//inorderTravel(&quadtree, tab_node,&count);
 	// for(int i=0; i<10 ; i++)
 	// {
