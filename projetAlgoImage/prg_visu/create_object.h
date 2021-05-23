@@ -7,11 +7,19 @@
 
 
 extern unsigned int vertex_number;
+
 extern float* vertex_coord;
 extern float* normal_coord;
 extern float* textures_coord;
 extern unsigned int triangle_number;
 extern unsigned int* triangle_index;
+
+extern float* vertex_coord_1;
+extern float* normal_coord_1;
+extern float* textures_coord_1;
+extern unsigned int triangle_number_1;
+extern unsigned int* triangle_index_1;
+
 extern float l;
 
 void createCoordinates(HeightMap heightMap);

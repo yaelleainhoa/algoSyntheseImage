@@ -12,7 +12,6 @@
 #include "gldrawing.h"
 #include "create_object.h"
 #include "valDeGris.h"
-#include "lodepng.h"
 #include "quadtree.h"
 #include "geometry.h"
 
@@ -168,13 +167,6 @@ static void drawFunc(void) {
 	glDrawRepere(2.0);
 	//tracerTriangles(ptsVisibles, ptCount);
 
-	//glRotatef(teta, 0.0, 0.0, 1.0);
-	glPushMatrix();
-	//arbre(0.5,0.5,0.,teta,texture[0]);
-	//teta += longitude;
-	glPopMatrix();
-
-
 // 	int h = heightMap.h;
 // 	int w=heightMap.w;
 // 	for (int i=0;i<h-1;i++){
@@ -255,6 +247,7 @@ static void drawFunc(void) {
 	glRotatef(obj_rot,0.0,1.0,0.0);
 	glColor3f(1.0,1.,1.);
 	glDrawObject();
+	glDrawObject_1();
 
 	glDisable(GL_LIGHTING);
 
@@ -462,18 +455,23 @@ int main(int argc, char** argv) {
 	//test 
 
 	Point3D NO=createPointFromCoord(0);
-	Point3D NE=createPointFromCoord(3);
-	Point3D SO=createPointFromCoord(3*heightMap.w);
-	Point3D SE=createPointFromCoord(3*heightMap.w+3);
+	Point3D NE=createPointFromCoord(2);
+	Point3D SO=createPointFromCoord(2*heightMap.w);
+	Point3D SE=createPointFromCoord(2*heightMap.w+2);
 	Node node=createNode(NO,NE,SO,SE);
 	Quadtree quadtree= createQuadtree(&node);
-	buildQuadtree(&quadtree, vertex_coord,heightMap.w,heightMap.w);
-	travelQuadtree(ptsVisibles, &quadtree, &ptCount, heightMap);
-	printf("rempli ou pas ??? %d",ptsVisibles[0]->pointNO.coord);
+	buildQuadtree(&quadtree, vertex_coord,heightMap.w,2);
+	//printf("No(%f,%f)\n", quadtree.enfantNE->ptsExt->pointNO.x,quadtree.enfantNE->ptsExt->pointNO.y);
+	//printf("No(%f,%f)\n", quadtree.enfantNE->ptsExt->pointNO.x,quadtree.enfantNE->ptsExt->pointNO.y);
+	//printf("triangleAppartientQuadtree(quadtree->enfantNO): %d\n",triangleAppartientQuadtree(quadtree.enfantNE->ptsExt));
+	//printf("purée");
+
+	//travelQuadtree(ptsVisibles, &quadtree, &ptCount, &heightMap);
+	//printf("rempli ou pas ??? %d",ptsVisibles[0]->pointNO.coord);
 
 	//printf("heightMap.h*heightMap.w : %d, heightMap.h*heightMap.w+heightMap.h-1.h : %d \n", heightMap.h*heightMap.w, heightMap.h*heightMap.w+heightMap.h-1);
 	//printf("triangle appartient au quadtree : %d \n", triangleAppartientQuadtree(&quadtree, xCam, yCam));
-	//printf("OH : %f", vertex_coord[3*heightMap.w]);
+	//printf("NO(%f,%f), NE(%f,%f), SO (%f,%f), SE(%f,%f)\n", quadtree.ptsExt->pointNO.x,quadtree.ptsExt->pointNO.y,quadtree.ptsExt->pointNE.x,quadtree.ptsExt->pointNE.y,quadtree.ptsExt->pointSO.x,quadtree.ptsExt->pointSO.y,quadtree.ptsExt->pointSE.x,quadtree.ptsExt->pointSE.y);
 	Node tab_node[50];
 	int count;
 	count=0;

@@ -22,15 +22,15 @@ $(BIN): $(OBJECTS)
 	$(GCC) $(OBJECTS) $(FLAGS) -o $(BIN) $(LIBDIR) $(LIBS) 
 
 
-visu.o: visu.c visu.h
+visu.o: visu.cpp visu.h
 	@echo "**** td1_maze.c ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 
-gl_drawing.o: gl_drawing.c gl_drawing.h
+gl_drawing.o: gl_drawing.cpp gl_drawing.h
 	@echo "**** $@ ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 
-create_object.o: create_object.c create_object.h
+create_object.o: create_object.cpp create_object.h
 	@echo "**** $@ ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 
@@ -39,11 +39,11 @@ valDeGris.o: valDeGris.cpp valDeGris.h
 	@echo "**** $@ ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 
-quadtree.o: quadtree.c quadtree.h
+quadtree.o: quadtree.cpp quadtree.h
 	@echo "**** $@ ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 	
-geometry.o: geometry.c geometry.h
+geometry.o: geometry.cpp geometry.h
 	@echo "**** $@ ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 

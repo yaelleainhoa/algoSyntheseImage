@@ -8,5 +8,6 @@
 void glDrawRepere(float length);
 
 void glDrawObject();
+void glDrawObject_1();
 
 #endif

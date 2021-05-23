@@ -10,6 +10,13 @@ float* normal_coord;
 float* textures_coord;
 unsigned int triangle_number;
 unsigned int* triangle_index;
+
+float* vertex_coord_1;
+float* normal_coord_1;
+float* textures_coord_1;
+unsigned int triangle_number_1;
+unsigned int* triangle_index_1;
+
 float l;
 
 
@@ -25,7 +32,8 @@ void createCoordinates(HeightMap heightMap) {
 	int w =heightMap.w;
 	int h=heightMap.h;
 	vertex_number =(w*h)*3; 
-	triangle_number = (w-1)*(h-1)*2;
+	triangle_number = (w-1)*(h-1)*2/2.;
+	triangle_number_1 = (w-1)*(h-1)*2/2.;
 	int zmin=-3;
 	int zmax=0;
 	
@@ -33,6 +41,11 @@ void createCoordinates(HeightMap heightMap) {
 	normal_coord = (float*) calloc(sizeof(float),3*vertex_number);
 	textures_coord = (float*) calloc(sizeof(float),3*triangle_number);
 	triangle_index = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number);
+
+	vertex_coord_1 = (float*) calloc(sizeof(float),3*vertex_number);
+	normal_coord_1 = (float*) calloc(sizeof(float),3*vertex_number);
+	textures_coord_1 = (float*) calloc(sizeof(float),3*triangle_number_1);
+	triangle_index_1 = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number_1);
 	
 	// CONSTRUIRE LES TABLEAUX
 
@@ -61,33 +74,60 @@ for (int i=0;i<h;i++){
 		normal_coord[p]=(i-h/2)*l ;
 		normal_coord[2+p]=zmin+heightMap.valeursDeGris[i][j]/(255.)*abs(zmax-zmin);
 		normal_coord[1+p]=(j-w/2)*l ;
+
+		vertex_coord_1[p]=(i-h/2)*l ;
+		vertex_coord_1[2+p]=zmin+heightMap.valeursDeGris[i][j]/(255.)*abs(zmax-zmin);
+		vertex_coord_1[1+p]=(j-w/2)*l;
+		normal_coord_1[p]=(i-h/2)*l ;
+		normal_coord_1[2+p]=zmin+heightMap.valeursDeGris[i][j]/(255.)*abs(zmax-zmin);
+		normal_coord_1[1+p]=(j-w/2)*l ;
 		p+=3;
 		if(j%2==0){
 			textures_coord[text]=text_coord_i[0][0];
 			textures_coord[text+1]=text_coord_i[0][1];
+
+			textures_coord_1[text]=text_coord_i[0][0];
+			textures_coord_1[text+1]=text_coord_i[0][1];
 		}
 		else{
 			textures_coord[text]=text_coord_i[1][0];
 			textures_coord[text+1]=text_coord_i[1][1];
+
+			textures_coord_1[text]=text_coord_i[1][0];
+			textures_coord_1[text+1]=text_coord_i[1][1];
 		}
 		text+=2;
 
 	}
 }
-}
 
-// int k=0;
-// for (int i=0;i<h-1;i++){
-// 	for(int j=0;j<w-1;j++){
-// 		triangle_index[k]=w*i+j;
-// 		triangle_index[k+1]=w*i+j+1;
-// 		triangle_index[k+2]=w*(i+1)+j;
-// 		triangle_index[k+3]=w*i+j+1;
-// 		triangle_index[k+4]=w*(i+1)+j;
-// 		triangle_index[k+5]=w*(i+1)+j+1;
-// // 		k+=6;
-// }
-// }
+
+int k=0;
+int k_1=0;
+for(int i=0;i<h-1;i++){
+	for(int j=0;j<w-1;j++){
+		if(j%2==0){
+			triangle_index[k]=w*i+j;
+			triangle_index[k+1]=w*i+j+1;
+			triangle_index[k+2]=w*(i+1)+j;
+			triangle_index[k+3]=w*i+j+1;
+			triangle_index[k+4]=w*(i+1)+j;
+			triangle_index[k+5]=w*(i+1)+j+1;
+			k+=6;
+		}
+		else{
+			triangle_index_1[k_1]=w*i+j;
+			triangle_index_1[k_1+1]=w*i+j+1;
+			triangle_index_1[k_1+2]=w*(i+1)+j;
+			triangle_index_1[k_1+3]=w*i+j+1;
+			triangle_index_1[k_1+4]=w*(i+1)+j;
+			triangle_index_1[k_1+5]=w*(i+1)+j+1;
+ 		k_1+=6;
+		}
+
+}
+}
+}
 
 
 

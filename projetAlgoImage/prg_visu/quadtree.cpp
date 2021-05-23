@@ -148,6 +148,7 @@ int quadAppartientTriangle(Quadtree* quadtree/*, float xCam, float yCam, float x
     Point3D NE=quadtree->ptsExt->pointNE;
     Point3D SO=quadtree->ptsExt->pointSO;
     Point3D SE=quadtree->ptsExt->pointSE;
+    
 
     if(pointAppartientTriangle(NO.x, NO.y/*,xCam, yCam,xRegard,yRegard,longitude, zfar, fov*/)
     ||pointAppartientTriangle(NE.x, NE.y/*,xCam, yCam,xRegard,yRegard,longitude, zfar, fov*/)
@@ -162,26 +163,32 @@ int quadAppartientTriangle(Quadtree* quadtree/*, float xCam, float yCam, float x
 //fonction qui regarde si un des sommets du triangle de la camera est dans le quadtree: 1 si oui 0 sinon
 //a faire
 
-int triangleAppartientQuadtree(Quadtree *quadtree){
+int triangleAppartientQuadtree(Node *node){
 
-    float xRegard2D = sin(longitude)+xCam;
-    float yRegard2D = cos(longitude)+yCam;
-    Point3D cam= createPoint(xCam,yCam,0.,0);
-    Point3D direction_regard = createPoint(xRegard2D,yRegard2D,0.,0);
-
-    Vector3D direction=normalize(createVectorFromPoints(cam,direction_regard));
+    Point3D cam=createPoint(xCam,yCam,0.,0);//j'ai mis des NULL pour les coordonnées dans vertex_coord à voir si ça marche ou si on doit revoir la struct
+    Point3D direction_regard=createPoint(xRegard2D, yRegard2D,0.,0);
+    Vector3D direction = createVectorFromPoints(cam, direction_regard);
+    direction = normalize(direction);
     Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.,0);
 
     Vector3D AB=addVectors(multVector(direction, zfar), multVector(R, tan(fov/2.)*zfar));
     Vector3D BC=multVector(multVector(R, tan(fov/2.)*zfar), -2.);
-    //Vector3D CA=addVectors(multVector(direction, -zfar), multVector(R, tan(fov/2.)*zfar));
 
-    Point3D B=createPoint(AB.x+cam.x, AB.y+cam.y, 0.,0);
-    Point3D C=createPoint(BC.x+B.x, BC.y+B.y, 0.,0);
+    Point3D B = createPoint(AB.x+cam.x, AB.y +cam.y,0.,0);
+    Point3D C=createPoint(BC.x+B.x, BC.y+B.y,0,0);
 
-    if(pointAppartientQuadtree(quadtree, cam.x, cam.y)
-    ||pointAppartientQuadtree(quadtree, B.x, B.y)
-    ||pointAppartientQuadtree(quadtree, C.x, C.y))
+    //printf("NO(%f,%f) \n", node->pointNO.x,node->pointNO.y);
+
+
+    printf("A(%f,%f), B(%f,%f), C(%f,%f)\n", cam.x,cam.y,B.x,B.y,C.x,C.y);
+
+//  printf("pointAppartientQuadtree(quadtree, cam.x, cam.y) :%d\n", pointAppartientQuadtree(node, cam.x, cam.y));
+//  printf("pointAppartientQuadtree(quadtree, B.x, B.y) :%d\n", pointAppartientQuadtree(node, B.x, B.y));
+//  printf("pointAppartientQuadtree(quadtree, C.x, C.y) :%d\n", pointAppartientQuadtree(node, C.x, C.y));
+
+    if(pointAppartientQuadtree(node, cam.x, cam.y)
+    ||pointAppartientQuadtree(node, B.x, B.y)
+    ||pointAppartientQuadtree(node, C.x, C.y))
     {
         return 1;
     }
@@ -189,12 +196,13 @@ int triangleAppartientQuadtree(Quadtree *quadtree){
 }
 
 
-int pointAppartientQuadtree(Quadtree *quadtree, float Px, float Py){
+int pointAppartientQuadtree(Node *node, float Px, float Py){
 
-    Point3D NO=quadtree->ptsExt->pointNO;
-    Point3D NE=quadtree->ptsExt->pointNE;
-    Point3D SO=quadtree->ptsExt->pointSO;
-    Point3D SE=quadtree->ptsExt->pointSE;
+    Point3D NO=node->pointNO;
+    Point3D NE=node->pointNE;
+    Point3D SO=node->pointSO;
+    Point3D SE=node->pointSE;
+    printf("No : %f\n", node->pointNO.x);
 
     Point3D P = createPoint(Px, Py, 0,0);
 
@@ -208,10 +216,10 @@ int pointAppartientQuadtree(Quadtree *quadtree, float Px, float Py){
     Vector3D NOP=createVectorFromPoints(NO,P);
     Vector3D SOP=createVectorFromPoints(SO,P);
     Vector3D SEP=createVectorFromPoints(SE,P);
-    // printf("NE.x : %f, NO.x : %f, NE.y : %f, NO.y : %f, NENO.x : %f , NENO.y :%f, NEP.x:%f, NEP.y:%f \n",NE.x, NO.x, NE.y, NO.y, NENO.x,NENO.y, NEP.x, NEP.y);
-    // printf("NO.x : %f, SO.x : %f, NOSO.x : %f , NOSO.y :%f, NOP.x:%f, NOP.y:%f \n",NO.x, SO.x, NOSO.x,NOSO.y, NOP.x, NOP.y);
-    // printf("SO.x : %f, SE.x : %f, SO.y : %f, SE.y : %f, SOSE.x : %f , SOSE.y :%f, SOP.x:%f, SOP.y:%f \n",SO.x, SE.x, SO.y, SE.y, SOSE.x,SOSE.y, SOP.x, SOP.y);
-    // printf("SE.x : %f, NE.x : %f, SENE.x : %f , SENE.y :%f, SEP.x:%f, SEP.y:%f \n",SE.x, NE.x, SENE.x,SENE.y, SEP.x, SEP.y);
+    printf("NE.x : %f, NO.x : %f, NE.y : %f, NO.y : %f, NENO.x : %f , NENO.y :%f, NEP.x:%f, NEP.y:%f \n",NE.x, NO.x, NE.y, NO.y, NENO.x,NENO.y, NEP.x, NEP.y);
+    printf("NO.x : %f, SO.x : %f, NOSO.x : %f , NOSO.y :%f, NOP.x:%f, NOP.y:%f \n",NO.x, SO.x, NOSO.x,NOSO.y, NOP.x, NOP.y);
+    printf("SO.x : %f, SE.x : %f, SO.y : %f, SE.y : %f, SOSE.x : %f , SOSE.y :%f, SOP.x:%f, SOP.y:%f \n",SO.x, SE.x, SO.y, SE.y, SOSE.x,SOSE.y, SOP.x, SOP.y);
+    printf("SE.x : %f, NE.x : %f, SENE.x : %f , SENE.y :%f, SEP.x:%f, SEP.y:%f \n",SE.x, NE.x, SENE.x,SENE.y, SEP.x, SEP.y);
 
     Vector3D vecteurs[4]={NENO, NOSO, SOSE, SENE};
     Vector3D vecteursP[4]={NEP,NOP,SOP, SEP};
@@ -219,9 +227,9 @@ int pointAppartientQuadtree(Quadtree *quadtree, float Px, float Py){
 
     for(int i=0; i<4; i++){
         determinant = vecteurs[i].x * vecteursP[i].y - vecteurs[i].y * vecteursP[i].x;
-        printf("vec.x : %f , vec.y :%f, AP.x:%f, AP.y:%f \n",vecteurs[i].x,vecteurs[i].y, vecteursP[i].x, vecteursP[i].y);
+        //printf("vec.x : %f , vec.y :%f, AP.x:%f, AP.y:%f \n",vecteurs[i].x,vecteurs[i].y, vecteursP[i].x, vecteursP[i].y);
+        //printf("det : %f \n", determinant);
         if (determinant<0){
-            printf("det : %f \n", determinant);
             return 0;
         }
     }
@@ -255,44 +263,57 @@ int camIntersectQuad(Quadtree *quadtree)
     //test  
         // vecteur AB  du triangle intersection avec le quadtree ?
     if(intersectionDeuxSegments(xCam,yCam,B.x, B.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
+        //printf("B.x : %f B.y :%f NE.x: %f NE.y :%f NO.x :%f NO.y :%f",B.x, B.y, NE.x, NE.y, NO.x, NO.y);
+        //printf("AB 1 \n");
         return 1; 
     }
     if(intersectionDeuxSegments(xCam,yCam,B.x, B.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
+      //  printf("AB 2\n");
         return 1;
     }
     if(intersectionDeuxSegments(xCam,yCam,B.x, B.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
+      //  printf("AB 3\n");
         return 1;
     }
     if(intersectionDeuxSegments(xCam,yCam,B.x, B.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
+       // printf("AB 4\n");
         return 1;
     }
 
         // vecteur BC du triangle intersection avec le quadtree ?
     if(intersectionDeuxSegments(B.x, B.y, C.x, C.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
+       // printf("BC 1\n");
         return 1;
     }
     if(intersectionDeuxSegments(B.x, B.y, C.x, C.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
+       // printf("BC 2\n");
         return 1;
     }
     if(intersectionDeuxSegments(B.x, B.y, C.x, C.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
+       // printf("BC 3\n");
         return 1;
     }
     if(intersectionDeuxSegments(B.x, B.y, C.x, C.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
+      //  printf("BC 4\n");
         return 1;
     }
 
         // vecteur AC du triangle intersection avec le quadtree ?
     if(intersectionDeuxSegments(xCam,yCam,C.x, C.y, NE.x, NE.y, NO.x, NO.y)== 1 ){
+       // printf("AC 1\n");
         return 1;
     }
     if(intersectionDeuxSegments(xCam,yCam,C.x, C.y, NO.x, NO.y, SO.x, SO.y)== 1 ){
+       // printf("AC 2\n");
         return 1;
     }
     if(intersectionDeuxSegments(xCam,yCam,C.x, C.y, SO.x, SO.y, SE.x, SE.y)== 1 ){
+       // printf("AC 3\n");
         return 1;
     }
     if(intersectionDeuxSegments(xCam,yCam,C.x, C.y, SE.x, SE.y, NE.x, NE.y)== 1 ){
         return 1;
+       // printf("AC 4\n");
     }
 
     return 0;
@@ -406,45 +427,61 @@ int camIntersectQuad(Quadtree *quadtree)
 // fonction qui effectue les differents test tout au long de l'arbre
 // renvoie la liste des coordonnées des points qui sont visibles
 
-void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int *ptCount, HeightMap heightMap )
+void travelQuadtree(Node *ptsVisibles[], Quadtree* quadtree, int* ptCount, HeightMap *heightMap)
 {
-    if(quadtree->enfantNO)
-    {
-        if(quadAppartientTriangle(quadtree->enfantNO) || camIntersectQuad(quadtree->enfantNO) || triangleAppartientQuadtree(quadtree->enfantNO))
-        {
-            travelQuadtree(ptsVisibles, quadtree->enfantNO,ptCount, heightMap);
-        }
-    }
 
-    if(quadtree->enfantNE)
-    {
-        if(quadAppartientTriangle(quadtree->enfantNE) || camIntersectQuad(quadtree->enfantNE) || triangleAppartientQuadtree(quadtree->enfantNE))
-        {
-            travelQuadtree(ptsVisibles, quadtree->enfantNE,ptCount, heightMap);
-        }
-    }
+    // if(quadtree->enfantNO)
+    // {
+       
+    //     printf("quadAppartientTriangle(quadtree->enfantNO) : %d \n",quadAppartientTriangle(quadtree->enfantNO));
+    //     printf("camIntersectQuad(quadtree->enfantNO) : %d\n",camIntersectQuad(quadtree->enfantNO));
+    //     printf("triangleAppartientQuadtree(quadtree->enfantNO): %d\n",triangleAppartientQuadtree(quadtree->enfantNO));
+    //     if(quadAppartientTriangle(quadtree->enfantNO) || camIntersectQuad(quadtree->enfantNO) || triangleAppartientQuadtree(quadtree->enfantNO))
+    //     {
+    //         printf(" if(quadAppartientTriangle(quadtree->enfantNO) || )\n");
+    //         travelQuadtree(ptsVisibles, quadtree->enfantNO,ptCount, heightMap);
+    //     }
+    //     printf("no");
+    // }
 
-    if(quadtree->enfantSO)
-    {
-        if(quadAppartientTriangle(quadtree->enfantSO) || camIntersectQuad(quadtree->enfantSO)||  triangleAppartientQuadtree(quadtree->enfantSO))
-        {
-            travelQuadtree(ptsVisibles, quadtree->enfantSO,ptCount, heightMap);
-        }
-    }
+    // if(quadtree->enfantNE)
+    // {
+    //     printf("quadAppartientTriangle(quadtree->enfantNO) : %d \n",quadAppartientTriangle(quadtree->enfantNE));
+    //     printf("camIntersectQuad(quadtree->enfantNO) : %d\n",camIntersectQuad(quadtree->enfantNE));
+    //     printf("triangleAppartientQuadtree(quadtree->enfantNO): %d\n",triangleAppartientQuadtree(quadtree->enfantNE));
+    //     if(quadAppartientTriangle(quadtree->enfantNE) || camIntersectQuad(quadtree->enfantNE) || triangleAppartientQuadtree(quadtree->enfantNE))
+    //     {
+    //         travelQuadtree(ptsVisibles, quadtree->enfantNE,ptCount, heightMap);
+    //     }
+    // }
+
+    // if(quadtree->enfantSO)
+    // {
+    //     //printf("quadAppartientTriangle(quadtree->enfantNO) : %d \n",quadAppartientTriangle(quadtree->enfantSO));
+    //     //printf("camIntersectQuad(quadtree->enfantNO) : %d\n",camIntersectQuad(quadtree->enfantSO));
+    //     //printf("triangleAppartientQuadtree(quadtree->enfantNO): %d\n",triangleAppartientQuadtree(quadtree->enfantSO));
+    //     if(quadAppartientTriangle(quadtree->enfantSO) || camIntersectQuad(quadtree->enfantSO)||  triangleAppartientQuadtree(quadtree->enfantSO))
+    //     {
+    //         travelQuadtree(ptsVisibles, quadtree->enfantSO,ptCount, heightMap);
+    //     }
+    // }
 
     if(quadtree->enfantSE)
     {
-        if(quadAppartientTriangle(quadtree->enfantSE) || camIntersectQuad(quadtree->enfantSE) || triangleAppartientQuadtree(quadtree->enfantSE))
+        printf("quadAppartientTriangle(quadtree->enfantNO) : %d \n",quadAppartientTriangle(quadtree->enfantSE));
+        printf("camIntersectQuad(quadtree->enfantNO) : %d\n",camIntersectQuad(quadtree->enfantSE));
+        printf("triangleAppartientQuadtree(quadtree->enfantNO): %d\n",triangleAppartientQuadtree(quadtree->enfantSE->ptsExt));
+        if(quadAppartientTriangle(quadtree->enfantSE) || camIntersectQuad(quadtree->enfantSE) || triangleAppartientQuadtree(quadtree->enfantSE->ptsExt))
         {
-            travelQuadtree(ptsVisibles, quadtree->enfantSE,ptCount, heightMap);
+            //travelQuadtree(ptsVisibles, quadtree->enfantSE,ptCount, heightMap);
         }
     }
 
-    else //si on rentre la c'est que le quadtree est une feuille
-    {
-        ptsVisibles[(*ptCount)]=quadtree->ptsExt;
-        (*ptCount)++;
-    }
+    // else //si on rentre la c'est que le quadtree est une feuille
+    // {
+    //     ptsVisibles[(*ptCount)]=quadtree->ptsExt;
+    //     (*ptCount)++;
+    // }
 }
 
 

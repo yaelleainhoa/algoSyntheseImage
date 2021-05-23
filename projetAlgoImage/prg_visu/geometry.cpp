@@ -87,6 +87,8 @@ void printVector3D(Vector3D p){
 //regarde si un point est à l'interieur du triangle formé par la caméra
 int pointAppartientTriangle(float x, float y){//, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov){
 //normalement zfar longitude et fov sont en variables globales on devrait pouvoir ne pas les mettre en parametres
+    printf("\n P(%f, %f) \n", x,y);
+    
     Point3D A=createPoint(xCam,yCam,0.,0);//j'ai mis des NULL pour les coordonnées dans vertex_coord à voir si ça marche ou si on doit revoir la struct
     Point3D P=createPoint(x,y,0.,0);
     Vector3D AP=createVectorFromPoints(A,P);
@@ -114,9 +116,10 @@ int pointAppartientTriangle(float x, float y){//, float xCam, float yCam, float 
 
     for(int i=0; i<3; i++){
         determinant = vecteurs[i].x * vecteursP[i].y - vecteurs[i].y * vecteursP[i].x;
-        printf("vec.x : %f , vec.y :%f, AP.x:%f, AP.y:%f \n",vecteurs[i].x,vecteurs[i].y, vecteursP[i].x, vecteursP[i].y);
+        //printf("vec.x : %f , vec.y :%f, AP.x:%f, AP.y:%f \n",vecteurs[i].x,vecteurs[i].y, vecteursP[i].x, vecteursP[i].y);
+        //printf("det : %f \n", determinant);
         if (determinant<0){
-            printf("det : %f \n", determinant);
+            //printf("det : %f \n", determinant);
             return 0;
         }
     }
