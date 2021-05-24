@@ -188,10 +188,11 @@ int triangleAppartientQuadtree(Node node){
     Point3D direction_regard=createPoint(xRegard2D, yRegard2D,0.,0);
     Vector3D direction = createVectorFromPoints(cam, direction_regard);
     direction = normalize(direction);
-    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.,0);
+    Vector3D R=createVector(direction.y, -direction.x,0.,0);
 
-    Vector3D AB=addVectors(multVector(direction, zfar), multVector(R, tan(fov/2.)*zfar));
-    Vector3D BC=multVector(multVector(R, tan(fov/2.)*zfar), -2.);
+
+    Vector3D AB=addVectors(multVector(direction, zfar), multVector(R, tan(180/M_PI*(fov/2.))*zfar));
+    Vector3D BC=multVector(multVector(R, tan(180/M_PI*(fov/2.))*zfar), -2.);
 
     Point3D B = createPoint(AB.x+cam.x, AB.y +cam.y,0.,0);
     Point3D C=createPoint(BC.x+B.x, BC.y+B.y,0,0);
@@ -270,10 +271,10 @@ int camIntersectQuad(Quadtree *quadtree)
     Point3D direction_regard = createPoint(xRegard2D,yRegard2D,0.,0);
 
     Vector3D direction=normalize(createVectorFromPoints(cam,direction_regard));
-    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.,0);
+    Vector3D R=createVector(direction.y, -direction.x,0.,0);
 
-    Vector3D AB=addVectors(multVector(direction, zfar), multVector(R, tan(fov/2.)*zfar));
-    Vector3D BC=multVector(multVector(R, tan(fov/2.)*zfar), -2.);
+    Vector3D AB=addVectors(multVector(direction, zfar), multVector(R, tan(180/M_PI*(fov/2.))*zfar));
+    Vector3D BC=multVector(multVector(R, tan(180/M_PI*(fov/2.))*zfar), -2.);
     //Vector3D CA=addVectors(multVector(direction, -zfar), multVector(R, tan(fov/2.)*zfar));
 
     Point3D B=createPoint(AB.x+cam.x, AB.y+cam.y, 0.,0);
@@ -460,7 +461,7 @@ void travelQuadtree(Node ptsVisibles[], Quadtree quadtree, int* ptCount)
 	// Quadtree SO = *(quadtree.enfantSO);
 
 //cout << "count : "<<*ptCount<<endl;
-    if(quadtree.enfantNO && quadtree.enfantNO->ptsExt.pointNO.x!=0)
+    if(quadtree.enfantNO)// && quadtree.enfantNO->ptsExt.pointNO.x!=0)
     {
         //cout <<"\n \n enfantNO\n";
         if(quadAppartientTriangle(quadtree.enfantNO->ptsExt) || camIntersectQuad(quadtree.enfantNO) || triangleAppartientQuadtree(quadtree.enfantNO->ptsExt))
