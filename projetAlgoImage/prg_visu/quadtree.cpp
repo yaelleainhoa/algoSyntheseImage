@@ -160,7 +160,7 @@ void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l)
 //fonction qui regarde si un des points du quadtree est dans le triangle de la camera: 1 si oui 0 sinon
 int quadAppartientTriangle(Node node/*, float xCam, float yCam, float xRegard, float yRegard, float zfar, float fov*/ )
 {
-    cout<<"quad\n";
+    //cout<<"quad\n";
     //cout <<"on entre dans la fonction \n";
     Point3D NO=node.pointNO;
     Point3D NE=node.pointNE;
@@ -172,7 +172,7 @@ int quadAppartientTriangle(Node node/*, float xCam, float yCam, float xRegard, f
     ||pointAppartientTriangle(SO.x, SO.y/*,xCam, yCam,xRegard,yRegard,longitude, zfar, fov*/)
     ||pointAppartientTriangle(SE.x, SE.y/*,xCam, yCam,xRegard,yRegard,longitude, zfar, fov)*/))
     {
-        cout << "QUAD APPARTIENT TRIANGLE\n";
+        //cout << "QUAD APPARTIENT TRIANGLE\n";
         return 1;
     }
     return 0;
@@ -182,7 +182,7 @@ int quadAppartientTriangle(Node node/*, float xCam, float yCam, float xRegard, f
 //a faire
 
 int triangleAppartientQuadtree(Node node){
-    cout<<"triangle\n";
+    //cout<<"triangle\n";
 
     Point3D cam=createPoint(xCam,yCam,0.,0);//j'ai mis des NULL pour les coordonnées dans vertex_coord à voir si ça marche ou si on doit revoir la struct
     Point3D direction_regard=createPoint(xRegard2D, yRegard2D,0.,0);
@@ -207,7 +207,7 @@ int triangleAppartientQuadtree(Node node){
     ||pointAppartientQuadtree(node, B.x, B.y)
     ||pointAppartientQuadtree(node, C.x, C.y))
     {
-        cout << "TRIANGLE APPARTIENT QUAD \n";
+        //cout << "TRIANGLE APPARTIENT QUAD \n";
         return 1;
     }
     return 0;
@@ -257,7 +257,7 @@ int pointAppartientQuadtree(Node node, float Px, float Py){
 //fonction qui regarde si un des vect du triangle de la cam intersect un des vecteurs des contours du quadtree
 int camIntersectQuad(Quadtree *quadtree)
 {
-    cout<<"cam\n";
+    //cout<<"cam\n";
     Point3D NO=quadtree->ptsExt.pointNO;
     Point3D NE=quadtree->ptsExt.pointNE;
     Point3D SO=quadtree->ptsExt.pointSO;
@@ -449,7 +449,7 @@ int camIntersectQuad(Quadtree *quadtree)
 void travelQuadtree(Node ptsVisibles[], Quadtree quadtree, int* ptCount)
 {
     //cout << "SE : "<<quadtree.enfantNO->ptsExt.pointNE.y;
-    printNode(quadtree.ptsExt);
+    //printNode(quadtree.ptsExt);
     // printNode(quadtree.enfantNO->ptsExt);
     // printNode(quadtree.enfantNE->ptsExt);
     // printNode(quadtree.enfantSO->ptsExt);
@@ -459,50 +459,50 @@ void travelQuadtree(Node ptsVisibles[], Quadtree quadtree, int* ptCount)
 	// Quadtree NE = *(quadtree.enfantNE);
 	// Quadtree SO = *(quadtree.enfantSO);
 
-cout << "count : "<<*ptCount<<endl;
+//cout << "count : "<<*ptCount<<endl;
     if(quadtree.enfantNO && quadtree.enfantNO->ptsExt.pointNO.x!=0)
     {
-        cout <<"\n \n enfantNO\n";
+        //cout <<"\n \n enfantNO\n";
         if(quadAppartientTriangle(quadtree.enfantNO->ptsExt) || camIntersectQuad(quadtree.enfantNO) || triangleAppartientQuadtree(quadtree.enfantNO->ptsExt))
         {
-            cout << "NO : 1\n";
+            //cout << "NO : 1\n";
             travelQuadtree(ptsVisibles, *(quadtree.enfantNO),ptCount);
         }
 //     }
 
 //    if(quadtree.enfantNE)
 //     {
-        cout <<"\n \n enfantNE\n";
+        //cout <<"\n \n enfantNE\n";
         if(quadAppartientTriangle(quadtree.enfantNE->ptsExt) || camIntersectQuad(quadtree.enfantNE) || triangleAppartientQuadtree(quadtree.enfantNE->ptsExt))
         {
-            cout << "NE : 2\n";
+            //cout << "NE : 2\n";
             travelQuadtree(ptsVisibles, *(quadtree.enfantNE),ptCount);
         }
 //    }
 
 //     if(quadtree.enfantSO)
 //     {
-        cout <<"\n \n enfantSO\n";
+        //cout <<"\n \n enfantSO\n";
         if(quadAppartientTriangle(quadtree.enfantSO->ptsExt) || camIntersectQuad(quadtree.enfantSO)||  triangleAppartientQuadtree(quadtree.enfantSO->ptsExt))
         {
-            cout << "SO : 3\n";
+            //cout << "SO : 3\n";
             travelQuadtree(ptsVisibles, *(quadtree.enfantSO),ptCount);
         }
 //    }
 
 //    if(quadtree.enfantSE)
 //     {
-        cout <<"\n \n enfantSE\n";
+        //cout <<"\n \n enfantSE\n";
         if(quadAppartientTriangle(quadtree.enfantSE->ptsExt) || camIntersectQuad(quadtree.enfantSE) || triangleAppartientQuadtree(quadtree.enfantSE->ptsExt))
         {
-            cout << "SE : 4\n";
+            //cout << "SE : 4\n";
             travelQuadtree(ptsVisibles, *(quadtree.enfantSE),ptCount);
         }
     }
 
     else //si on rentre la c'est que le quadtree est une feuille
     {
-        cout <<"fin \n";
+        //cout <<"fin \n";
         ptsVisibles[(*ptCount)]=quadtree.ptsExt;
         (*ptCount)++;
     }

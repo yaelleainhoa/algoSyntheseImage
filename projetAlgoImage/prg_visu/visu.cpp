@@ -36,13 +36,14 @@ float xCam=0;
 float yCam=0;
 float zCam=0.;
 HeightMap heightMap;
-float zfar=2;
-int fov=45;
+float zfar=5;
+int fov=90;
 float xRegard2D=sin(-M_PI/2.);
 float yRegard2D=cos(-M_PI/2.);
 
 Node ptsVisibles[3000];
 int ptCount=0;
+Quadtree *quadtree= new Quadtree;
 
 //pour tester la fonction tracerTriangles
 //int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
@@ -168,7 +169,7 @@ static void drawFunc(void) {
 
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
-	tracerTriangles(ptsVisibles, ptCount);
+	//tracerTriangles(ptsVisibles, ptCount);
 // 	int h = heightMap.h;
 // 	int w=heightMap.w;
 // 	for (int i=0;i<h-1;i++){
@@ -333,11 +334,17 @@ static void kbdSpFunc(int c, int x, int y) {
 			longitude -= STEP_ANGLE;
 			xRegard2D=sin(longitude)+xCam;
 			yRegard2D=cos(longitude)+yCam;
+			ptCount=0;
+			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
+			tracerTriangles(ptsVisibles, ptCount);
 			break;
 		case GLUT_KEY_RIGHT :
 			longitude += STEP_ANGLE;
 			xRegard2D=sin(longitude)+xCam;
 			yRegard2D=cos(longitude)+yCam;
+			ptCount=0;
+			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
+			tracerTriangles(ptsVisibles, ptCount);
 			break;
 		case GLUT_KEY_F2 :
 			profondeur += STEP_PROF;
@@ -345,10 +352,10 @@ static void kbdSpFunc(int c, int x, int y) {
 			yCam+=STEP_PROF*cos(longitude);
 			xRegard2D=sin(longitude)+xCam;
 			yRegard2D=cos(longitude)+yCam;
-			hauteur(xCam, yCam, heightMap, &zCam);
-			// xCam=profondeur*sin(longitude)*sin(latitude);
-			// yCam=profondeur*cos(latitude);
-			// zCam=profondeur*cos(longitude)*sin(latitude);
+			ptCount=0;
+			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
+			tracerTriangles(ptsVisibles, ptCount);
+			//hauteur(xCam, yCam, heightMap, &zCam);
 			break;
 		case GLUT_KEY_F1 :
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
@@ -356,10 +363,10 @@ static void kbdSpFunc(int c, int x, int y) {
 			yCam-=STEP_PROF*cos(longitude);
 			xRegard2D=sin(longitude)+xCam;
 			yRegard2D=cos(longitude)+yCam;
-			hauteur(xCam, yCam, heightMap, &zCam);
-			// xCam=profondeur*sin(longitude)*sin(latitude);
-			// yCam=profondeur*cos(latitude);
-			// zCam=profondeur*cos(longitude)*sin(latitude);
+			ptCount=0;
+			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
+			tracerTriangles(ptsVisibles, ptCount);
+			//hauteur(xCam, yCam, heightMap, &zCam);
 			break;
 		// case GLUT_KEY_F3 :
 		// 	moveLight();
@@ -465,7 +472,7 @@ int main(int argc, char** argv) {
 	// Point3D SO=createPointFromCoord((heightMap.h-1)*heightMap.w);
 	// Point3D SE=createPointFromCoord((heightMap.h-1)*heightMap.w+heightMap.w-1);
 	Node node=createNode(NO,NE,SO,SE);
-	Quadtree *quadtree= new Quadtree;
+	// Quadtree *quadtree= new Quadtree;
 	*quadtree=createQuadtree(&node);
 	buildQuadtree(quadtree, vertex_coord,heightMap.w,1000);
 
