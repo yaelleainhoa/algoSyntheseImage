@@ -48,6 +48,6 @@ int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, fl
 float distance(Point3D pt);
 float min(float d1, float d2);
 
-int pointAppartientQuadtree(Quadtree *quadtree, float Px, float Py);
+int pointAppartientQuadtree(float Px, float Py);
 
 #endif
