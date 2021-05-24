@@ -36,8 +36,8 @@ float xCam=0;
 float yCam=0;
 float zCam=0.;
 HeightMap heightMap;
-float zfar=5;
-const int fov=35;
+float zfar=15;
+const int fov=95;
 float xRegard2D=sin(180/M_PI*(-M_PI/2.));
 float yRegard2D=cos(180/M_PI*(-M_PI/2.));
 
@@ -116,7 +116,7 @@ void skyBoxY(float x, float y, float z, GLuint texture){
 
 
 void arbre(float x, float y, float z, GLuint texture){
-	cout << "longitude "<< longitude <<endl; 
+	//cout << "longitude "<< longitude <<endl; 
 	glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture);
 		//glTranslatef(x,y,0.);
@@ -173,6 +173,8 @@ static void drawFunc(void) {
 
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
+
+	//glScalef(0.1,0.1,0.1);
 
 	//tracerTriangles(ptsVisibles, ptCount);
 // 	int h = heightMap.h;
@@ -337,7 +339,8 @@ static void kbdSpFunc(int c, int x, int y) {
 			if (latitude>STEP_ANGLE) latitude -= STEP_ANGLE*180/M_PI*0.01;
 			break;
 		case GLUT_KEY_DOWN :
-			if(latitude<M_PI-STEP_ANGLE) latitude += STEP_ANGLE*180/M_PI*0.01;
+			cout<<"latitute"<<latitude<<endl;
+			if(latitude<M_PI-STEP_ANGLE&& latitude<2.4) latitude += STEP_ANGLE*180/M_PI*0.01;
 			break;
 		case GLUT_KEY_LEFT :
 			longitude -= STEP_ANGLE*180/M_PI*0.01;
@@ -345,7 +348,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount);
+			tracerTriangles(ptsVisibles, ptCount, heightMap);
 
 			break;
 		case GLUT_KEY_RIGHT :
@@ -354,7 +357,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount);
+			tracerTriangles(ptsVisibles, ptCount, heightMap);
 
 			break;
 		case GLUT_KEY_F2 :
@@ -365,7 +368,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount);
+			tracerTriangles(ptsVisibles, ptCount, heightMap);
 			//hauteur(xCam, yCam, heightMap, &zCam);
 			break;
 		case GLUT_KEY_F1 :
@@ -376,7 +379,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount);
+			tracerTriangles(ptsVisibles, ptCount, heightMap);
 			//hauteur(xCam, yCam, heightMap, &zCam);
 			break;
 		// case GLUT_KEY_F3 :
