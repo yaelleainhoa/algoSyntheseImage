@@ -45,7 +45,7 @@ Node ptsVisibles[3000];
 int ptCount=0;
 Quadtree *quadtree= new Quadtree;
 
-
+float teta = 0;
 
 //pour tester la fonction tracerTriangles
 //int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
@@ -115,20 +115,22 @@ void skyBoxY(float x, float y, float z, GLuint texture){
 }
 
 
-void arbre(float x, float y, float z, float teta, GLuint texture){
+void arbre(float x, float y, float z, GLuint texture){
+	cout << "longitude "<< longitude <<endl; 
 	glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture);
-		//glRotatef(teta, 0. ,0. ,1. );
+		//glTranslatef(x,y,0.);
+		//glRotatef(longitude, 0. ,0. ,1. );
         glScalef(1.,1.,1.);
         glBegin(GL_QUADS);
             glTexCoord2f(0.,0.);
-            glVertex3f(x,y+1/2.,z);
+            glVertex3f(x-cos(longitude)/2,(y-tan(longitude))/2,z);
             glTexCoord2f(1.,0.);
-            glVertex3f(x,y+1/2.,z+1);
+            glVertex3f(x-cos(longitude)/2,(y-tan(longitude))/2,z+1);
             glTexCoord2f(1.,1.);
-            glVertex3f(x,y-1/2.,z+1);
+            glVertex3f(x+cos(longitude)/2,(y-tan(longitude))/2,z+1);
             glTexCoord2f(0.,1.);
-            glVertex3f(x,y-1/2.,z);
+            glVertex3f(x+cos(longitude)/2,(y+tan(longitude))/2,z);
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
@@ -257,6 +259,10 @@ static void drawFunc(void) {
 
 	glDisable(GL_LIGHTING);
 
+	glPopMatrix();
+	glPushMatrix();
+	arbre(0.5,0.5,0., texture[0]);
+	glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
 
@@ -425,7 +431,7 @@ static void init(HeightMap heightMap) {
 	createCoordinates(heightMap);
 
 
-	char * sources[2]={"images/doggy.jpg","images/sky.jpg"};
+	char const * sources[2]={"images/doggy.jpg","images/sky.jpg"};
     for(int i=0; i<2; i++){
 		glEnable(GL_TEXTURE_2D);
         SDL_Surface* image=IMG_Load(sources[i]);

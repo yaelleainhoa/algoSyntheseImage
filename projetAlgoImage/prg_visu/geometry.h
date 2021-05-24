@@ -49,4 +49,6 @@ float distanceCam(Point3D pt);
 float distance2points(Point3D p1, Point3D p2);
 float min(float d1, float d2);
 
+int pointAppartientQuadtree(float Px, float Py);
+
 #endif
