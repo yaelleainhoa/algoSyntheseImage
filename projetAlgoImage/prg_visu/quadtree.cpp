@@ -74,7 +74,7 @@ void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l)
     int NE=quadtree->ptsExt.pointNE.coord;
     int SO=quadtree->ptsExt.pointSO.coord;
     int SE=quadtree->ptsExt.pointSE.coord;
-//printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
+printf(" (abs(NO-SO): %d\n (abs(NO-NE):%d\n", abs(NO-SO),abs(NO-NE));
     if((abs(NO-NE)==1) || (abs(NO-SO)==w))
     {
         //printf("fin\n");

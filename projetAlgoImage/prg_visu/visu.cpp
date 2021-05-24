@@ -460,21 +460,21 @@ int main(int argc, char** argv) {
 	//printf(" le point apparitent ou pas : %d \n",pointAppartientTriangle(2.93, -0.7, 2.1, -3.1, 2.84, -2.43, 13.3, 2.4, 2*19.4));
 	//int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float teta, float zFar, float fov);
 	init(heightMap);
-	
 	//test 
 
-	Point3D NO=createPointFromCoord(0);
-	Point3D NE=createPointFromCoord(1000);
-	Point3D SO=createPointFromCoord(1000*heightMap.w);
-	Point3D SE=createPointFromCoord(1000*heightMap.w+1000);
 	// Point3D NO=createPointFromCoord(0);
-	// Point3D NE=createPointFromCoord(heightMap.w-1);
-	// Point3D SO=createPointFromCoord((heightMap.h-1)*heightMap.w);
-	// Point3D SE=createPointFromCoord((heightMap.h-1)*heightMap.w+heightMap.w-1);
+	// Point3D NE=createPointFromCoord(1000);
+	// Point3D SO=createPointFromCoord(1000*heightMap.w);
+	// Point3D SE=createPointFromCoord(1000*heightMap.w+1000);
+	Point3D NO=createPointFromCoord(0);
+	Point3D NE=createPointFromCoord(heightMap.w-1);
+	Point3D SO=createPointFromCoord((heightMap.h-1)*heightMap.w);
+	Point3D SE=createPointFromCoord((heightMap.h-1)*heightMap.w+heightMap.w-1);
 	Node node=createNode(NO,NE,SO,SE);
 	// Quadtree *quadtree= new Quadtree;
 	*quadtree=createQuadtree(&node);
-	buildQuadtree(quadtree, vertex_coord,heightMap.w,1000);
+	buildQuadtree(quadtree, vertex_coord,heightMap.w,heightMap.w-1);
+cout << vertex_coord[150498]<<endl<<endl;
 
 // 	int t=camIntersectQuad(&SEq);
 // 	cout << "quadAppartientTriangle(quadtree->enfantSE) : \n"<<t<<endl;
@@ -503,6 +503,7 @@ int main(int argc, char** argv) {
 // t=triangleAppartientQuadtree(SOq.ptsExt);
 // cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
 	travelQuadtree(ptsVisibles, *quadtree, &ptCount);
+	cout << vertex_coord[150498]<<endl<<endl;
 	cout << "ptCount : "<<ptCount<<endl<<endl<<endl;
 	printf("rempli ou pas ??? %d",ptsVisibles[0].pointNO.coord);
 
