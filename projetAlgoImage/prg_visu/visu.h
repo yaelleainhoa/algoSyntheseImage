@@ -15,8 +15,9 @@ extern float zCam;
 extern float xRegard2D;
 extern float yRegard2D;
 
-extern int fov;
+extern const int fov;
 extern float zfar;
+
 
 /* variables globales pour la gestion de l'objet */
 extern float obj_rot;

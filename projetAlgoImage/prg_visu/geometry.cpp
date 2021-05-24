@@ -101,11 +101,11 @@ int pointAppartientTriangle(float x, float y){//, float xCam, float yCam, float 
     Vector3D direction = createVectorFromPoints(A, direction_regard);
     direction = normalize(direction);
     //Vector3D L=createVector(cos(longitude+M_PI/2), sin(longitude+M_PI/2),0.,0);
-    Vector3D R=createVector(cos(longitude-M_PI/2), sin(longitude-M_PI/2),0.,0);
+    Vector3D R=createVector(direction.y, -direction.x,0.,0);
 
-    Vector3D AB=addVectors(multVector(direction, zfar), multVector(R, tan(fov/2.)*zfar));
-    Vector3D BC=multVector(multVector(R, tan(fov/2.)*zfar), -2.);
-    Vector3D CA=addVectors(multVector(direction, -zfar), multVector(R, tan(fov/2.)*zfar));
+    Vector3D AB=addVectors(multVector(direction, zfar), multVector(R, tan(180/M_PI*(fov/2.))*zfar));
+    Vector3D BC=multVector(multVector(R, tan(180/M_PI*(fov/2.))*zfar), -2.);
+    Vector3D CA=addVectors(multVector(direction, -zfar), multVector(R, tan(180/M_PI*(fov/2.))*zfar));
 
     Point3D B = createPoint(AB.x+A.x, AB.y +A.y,0.,0);
     Point3D C=createPoint(BC.x+B.x, BC.y+B.y,0,0);

@@ -21,7 +21,7 @@ using namespace std;
 /* variables globales pour la gestion de la caméra */
 float profondeur = 3;
 float latitude = 0.0;
-float longitude = -M_PI/2.;
+float longitude = 180/M_PI*(-M_PI/2.);
 float xLight1=1.;
 float yLight1=0.;
 int i=0;
@@ -37,13 +37,15 @@ float yCam=0;
 float zCam=0.;
 HeightMap heightMap;
 float zfar=5;
-int fov=90;
-float xRegard2D=sin(-M_PI/2.);
-float yRegard2D=cos(-M_PI/2.);
+const int fov=35;
+float xRegard2D=sin(180/M_PI*(-M_PI/2.));
+float yRegard2D=cos(180/M_PI*(-M_PI/2.));
 
 Node ptsVisibles[3000];
 int ptCount=0;
 Quadtree *quadtree= new Quadtree;
+
+
 
 //pour tester la fonction tracerTriangles
 //int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
@@ -169,6 +171,7 @@ static void drawFunc(void) {
 
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
+
 	//tracerTriangles(ptsVisibles, ptCount);
 // 	int h = heightMap.h;
 // 	int w=heightMap.w;
@@ -247,7 +250,7 @@ static void drawFunc(void) {
 	//glLightf(GL_LIGHT0,GL_SPECULAR,black);
 
 	glPushMatrix();
-	glRotatef(obj_rot,0.0,1.0,0.0);
+	//glRotatef(obj_rot,0.0,1.0,0.0);
 	glColor3f(1.0,1.,1.);
 	glDrawObject();
 	glDrawObject_1();
@@ -325,26 +328,28 @@ static void kbdSpFunc(int c, int x, int y) {
 	/* sortie du programme si utilisation des touches ESC, */
 	switch(c) {
 		case GLUT_KEY_UP :
-			if (latitude>STEP_ANGLE) latitude -= STEP_ANGLE;
+			if (latitude>STEP_ANGLE) latitude -= STEP_ANGLE*180/M_PI*0.01;
 			break;
 		case GLUT_KEY_DOWN :
-			if(latitude<M_PI-STEP_ANGLE) latitude += STEP_ANGLE;
+			if(latitude<M_PI-STEP_ANGLE) latitude += STEP_ANGLE*180/M_PI*0.01;
 			break;
 		case GLUT_KEY_LEFT :
-			longitude -= STEP_ANGLE;
+			longitude -= STEP_ANGLE*180/M_PI*0.01;
 			xRegard2D=sin(longitude)+xCam;
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount);
+
 			break;
 		case GLUT_KEY_RIGHT :
-			longitude += STEP_ANGLE;
+			longitude += STEP_ANGLE*180/M_PI*0.01;
 			xRegard2D=sin(longitude)+xCam;
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount);
+
 			break;
 		case GLUT_KEY_F2 :
 			profondeur += STEP_PROF;
@@ -474,7 +479,6 @@ int main(int argc, char** argv) {
 	// Quadtree *quadtree= new Quadtree;
 	*quadtree=createQuadtree(&node);
 	buildQuadtree(quadtree, vertex_coord,heightMap.w,heightMap.w-1);
-cout << vertex_coord[150498]<<endl<<endl;
 
 // 	int t=camIntersectQuad(&SEq);
 // 	cout << "quadAppartientTriangle(quadtree->enfantSE) : \n"<<t<<endl;
@@ -506,6 +510,7 @@ cout << vertex_coord[150498]<<endl<<endl;
 	cout << vertex_coord[150498]<<endl<<endl;
 	cout << "ptCount : "<<ptCount<<endl<<endl<<endl;
 	printf("rempli ou pas ??? %d",ptsVisibles[0].pointNO.coord);
+	cout << "test division float 180/M_PI = "<<180/M_PI<<endl;
 
 	//Node tab_node[50];
 	//inorderTravel(&quadtree, tab_node,&count);
