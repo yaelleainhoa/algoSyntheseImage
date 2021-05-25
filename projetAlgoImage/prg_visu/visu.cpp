@@ -254,14 +254,14 @@ static void drawFunc(void) {
 	glPushMatrix();
 	//glRotatef(obj_rot,0.0,1.0,0.0);
 	glColor3f(1.0,1.,1.);
-	glDrawObject(texture[2]);
-	glDrawObject_1(texture[1]);
+	glDrawObject(texture[1]);
+	glDrawObject_1(texture[2]);
 
 	glDisable(GL_LIGHTING);
 
 	glPopMatrix();
 	glPushMatrix();
-	////arbre(0.5,0.5,1., texture[0]);
+	arbre(0.5,0.5,1., texture[0]);
 	glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
@@ -539,10 +539,6 @@ int main(int argc, char** argv) {
 // t=triangleAppartientQuadtree(SOq.ptsExt);
 // cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
 	travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-	cout << vertex_coord[150498]<<endl<<endl;
-	cout << "ptCount : "<<ptCount<<endl<<endl<<endl;
-	printf("rempli ou pas ??? %d",ptsVisibles[0].pointNO.coord);
-	cout << "test division float 180/M_PI = "<<180/M_PI<<endl;
 
 	//Node tab_node[50];
 	//inorderTravel(&quadtree, tab_node,&count);

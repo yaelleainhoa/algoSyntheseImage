@@ -45,7 +45,7 @@ void glDrawObject(GLuint textureSol) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textureSol);
 
-	glVertexPointer(3,GL_FLOAT,0,vertex_coord);
+	glVertexPointer(3,GL_FLOAT,0,vertex_texture);
 	glNormalPointer(GL_FLOAT,0,normal_coord);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, textures_coord);
@@ -65,7 +65,7 @@ void glDrawObject_1(GLuint textureSol) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textureSol);
 	glVertexPointer(3,GL_FLOAT,0,vertex_texture_1);
-	glNormalPointer(GL_FLOAT,0,normal_coord_1);
+	glNormalPointer(GL_FLOAT,0,normal_coord);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, textures_coord_1);
 	glDrawElements(GL_TRIANGLES,3*triangle_number_1,GL_UNSIGNED_INT,triangle_index_1);
