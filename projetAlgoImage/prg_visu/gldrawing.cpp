@@ -64,7 +64,7 @@ void glDrawObject_1(GLuint textureSol) {
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textureSol);
-	glVertexPointer(3,GL_FLOAT,0,vertex_coord_1);
+	glVertexPointer(3,GL_FLOAT,0,vertex_texture_1);
 	glNormalPointer(GL_FLOAT,0,normal_coord_1);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, textures_coord_1);

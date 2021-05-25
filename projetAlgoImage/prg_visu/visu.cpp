@@ -20,8 +20,8 @@ using namespace std;
 
 /* variables globales pour la gestion de la caméra */
 float profondeur = 3;
-float latitude = 0.0;
-float longitude = 180/M_PI*(-M_PI/2.);
+float latitude = M_PI/2.0;
+float longitude = -M_PI;
 float xLight1=1.;
 float yLight1=0.;
 int i=0;
@@ -38,8 +38,8 @@ float zCam=0.;
 HeightMap heightMap;
 float zfar=15;
 const int fov=95;
-float xRegard2D=sin(180/M_PI*(-M_PI/2.));
-float yRegard2D=cos(180/M_PI*(-M_PI/2.));
+float xRegard2D=sin(-180/M_PI*(-M_PI/2.));
+float yRegard2D=cos(-180/M_PI*(-M_PI/2.));
 
 Node ptsVisibles[3000];
 int ptCount=0;
@@ -117,23 +117,26 @@ void skyBoxY(float x, float y, float z, GLuint texture){
 
 void arbre(float x, float y, float z, GLuint texture){
 	//cout << "longitude "<< longitude <<endl; 
+	//cout << "latitude "<< latitude <<endl; 
+	glPushMatrix();
 	glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture);
-		//glTranslatef(x,y,0.);
-		//glRotatef(longitude, 0. ,0. ,1. );
-        glScalef(1.,1.,1.);
+		glTranslatef(x/2,0,-z/2);
+        //glScalef(1.,1.,1.);
+		glRotatef(-obj_rot*180/M_PI, 0. ,0. ,1. );
         glBegin(GL_QUADS);
             glTexCoord2f(0.,0.);
-            glVertex3f(x-cos(longitude)/2,(y-tan(longitude))/2,z);
+            glVertex3f(x-1.0/2,y,z);
             glTexCoord2f(1.,0.);
-            glVertex3f(x-cos(longitude)/2,(y-tan(longitude))/2,z+1);
+            glVertex3f(x+1.0/2/2,y,z);
             glTexCoord2f(1.,1.);
-            glVertex3f(x+cos(longitude)/2,(y-tan(longitude))/2,z+1);
+            glVertex3f(x+1.0/2/2,y,0);
             glTexCoord2f(0.,1.);
-            glVertex3f(x+cos(longitude)/2,(y+tan(longitude))/2,z);
+            glVertex3f(x-1.0/2,y,0);
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
 }
 
 /*********************************************************/
@@ -263,7 +266,7 @@ static void drawFunc(void) {
 
 	glPopMatrix();
 	glPushMatrix();
-	//arbre(0.5,0.5,0., texture[0]);
+	////arbre(0.5,0.5,1., texture[0]);
 	glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
@@ -336,13 +339,15 @@ static void kbdSpFunc(int c, int x, int y) {
 	/* sortie du programme si utilisation des touches ESC, */
 	switch(c) {
 		case GLUT_KEY_UP :
-			if (latitude>STEP_ANGLE) latitude -= STEP_ANGLE*180/M_PI*0.01;
+			//if (latitude>STEP_ANGLE) 
+			latitude -= STEP_ANGLE;
 			break;
 		case GLUT_KEY_DOWN :
-			if(latitude<M_PI-STEP_ANGLE&& latitude<2.4) latitude += STEP_ANGLE*180/M_PI*0.01;
+			//if(latitude<M_PI-STEP_ANGLE) 
+			latitude += STEP_ANGLE;
 			break;
 		case GLUT_KEY_LEFT :
-			longitude -= STEP_ANGLE*180/M_PI*0.01;
+			longitude -= STEP_ANGLE;
 			xRegard2D=sin(longitude)+xCam;
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
@@ -351,7 +356,7 @@ static void kbdSpFunc(int c, int x, int y) {
 
 			break;
 		case GLUT_KEY_RIGHT :
-			longitude += STEP_ANGLE*180/M_PI*0.01;
+			longitude += STEP_ANGLE;
 			xRegard2D=sin(longitude)+xCam;
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
@@ -413,8 +418,8 @@ static void motionFunc(int x, int y) {
 /* fonction d'initialisation des paramètres de rendu et  */
 /* des objets de la scènes.                              */
 static void init(HeightMap heightMap) {
-	latitude = M_PI/2.;
-	longitude = -M_PI;
+	//latitude = M_PI/2.;
+	//longitude = -M_PI;
 
 	obj_rot = 0.0;
 
@@ -446,7 +451,7 @@ static void init(HeightMap heightMap) {
 }
 
 void idle(void) {
-	obj_rot=longitude;
+	obj_rot+=0.1;;
 	glutPostRedisplay();
 }
 

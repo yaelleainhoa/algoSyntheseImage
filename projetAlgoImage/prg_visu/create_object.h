@@ -19,6 +19,7 @@ extern float* normal_coord_1;
 extern float* textures_coord_1;
 extern unsigned int triangle_number_1;
 extern unsigned int* triangle_index_1;
+extern float* vertex_texture_1;
 
 extern float l;
 
