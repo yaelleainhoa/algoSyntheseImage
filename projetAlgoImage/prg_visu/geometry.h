@@ -13,6 +13,9 @@ typedef struct Vec3f{
 // Construit le point (x, y, z)
 Point3D createPoint(float x, float y, float z, int coord);
 
+// ajoute des points
+Point3D addPoint(Point3D p1, Point3D p2);
+
 // Construit le vecteur (x, y, z)
 Vector3D createVector(float x, float y, float z, int coord);
 
@@ -30,8 +33,11 @@ Vector3D subVectors(Vector3D v1, Vector3D v2);
 Vector3D multVector(Vector3D v, float a);
 Vector3D divVector(Vector3D v, float a);
 
-// Produit scalaire des vecteurs V1 et V2
+// Produit scalaire des vecteurs a et b
 float dot(Vector3D a, Vector3D b);
+
+//Produit Vectoriel des vecteurs a et b
+Vector3D crossProduct(Vector3D a, Vector3D b);
 
 // Norme d'un vecteur V
 float norm(Vector3D v);
@@ -48,7 +54,10 @@ int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, fl
 float distanceCam(Point3D pt);
 float distance2points(Point3D p1, Point3D p2);
 float min(float d1, float d2);
+float max(float d1, float d2);
 
 int pointAppartientQuadtree(float Px, float Py);
+Vector3D normalTriangle(Point3D p1, Point3D p2, Point3D p3);
+Point3D centreTriangle(Point3D a, Point3D b, Point3D c);
 
 #endif
