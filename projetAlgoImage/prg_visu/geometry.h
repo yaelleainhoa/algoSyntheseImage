@@ -13,6 +13,9 @@ typedef struct Vec3f{
 // Construit le point (x, y, z)
 Point3D createPoint(float x, float y, float z, int coord);
 
+// Construit le point qui correspond à la coordonnées coord dans le tableau de vertex
+Point3D createPointFromCoord(int coord, float coord_vert[]);
+
 // ajoute des points
 Point3D addPoint(Point3D p1, Point3D p2);
 

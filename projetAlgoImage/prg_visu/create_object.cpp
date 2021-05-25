@@ -1,4 +1,5 @@
 #include "create_object.h"
+#include "light.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +10,6 @@ using namespace std;
 
 unsigned int vertex_number;
 float* vertex_coord;
-float* normal_coord;
 
 float* textures_coord;
 unsigned int triangle_number;
@@ -17,14 +17,13 @@ unsigned int* triangle_index;
 float* vertex_texture;
 
 // float* vertex_coord_1;
-// float* normal_coord_1;
 float* textures_coord_1;
 unsigned int triangle_number_1;
 unsigned int* triangle_index_1;
 float* vertex_texture_1;
 
 int zmin=-4;
-int zmax=0;
+int zmax=10;
 
 float l;
 
@@ -39,12 +38,10 @@ void createCoordinates(HeightMap heightMap) {
 	triangle_number_1 = (w-1)*(h-1)*2/2.;
 	
 	vertex_coord = (float*) calloc(sizeof(float),3*vertex_number);
-	normal_coord = (float*) calloc(sizeof(float),3*vertex_number);
 	//textures_coord = (float*) calloc(sizeof(float),3*triangle_number);
 	//triangle_index = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number);
 
 	//vertex_coord_1 = (float*) calloc(sizeof(float),3*vertex_number);
-	//normal_coord_1 = (float*) calloc(sizeof(float),3*vertex_number);
 	//textures_coord_1 = (float*) calloc(sizeof(float),3*triangle_number_1);
 	//triangle_index_1 = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number_1);
 	
@@ -55,9 +52,6 @@ for (int i=0;i<h;i++){
 		vertex_coord[p]=(i-h/2)*l ;
 		vertex_coord[2+p]=zmin+heightMap.valeursDeGris[i][j]/(255.)*abs(zmax-zmin);
 		vertex_coord[1+p]=(j-w/2)*l;
-		normal_coord[p]=(i-h/2)*l ;
-		normal_coord[2+p]=zmin+heightMap.valeursDeGris[i][j]/(255.)*abs(zmax-zmin);
-		normal_coord[1+p]=(j-w/2)*l ;
 		p+=3;
 
 	}
@@ -331,7 +325,8 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
  }
 }
 
-void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, int* text, int* t, int* vertex, int* k, int NO, int NE, int SO, int SE){
+void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, 
+														int* text, int* t, int* vertex, int* k, int NO, int NE, int SO, int SE){
 		vertex_texture[*vertex]=vertex_coord[3*NO];
 		vertex_texture[*vertex+1]=vertex_coord[3*NO+1];
 		vertex_texture[*vertex+2]=vertex_coord[3*NO+2];
@@ -381,6 +376,21 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 		triangle_index[*k+5]=*t+2;
 		(*k)+=6;
 }
+/*
+void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, 
+														int* text, int* t, int* vertex, int* k, int NO, int NE, int SO, int SE, light sun)
+{
+	//creation des 3 sommets du triangle en question
+	Point3D p1= createPointFromCoord(*triangle_index, vertex_coord);
+	Point3D p2= createPointFromCoord((*triangle_index)+1, vertex_coord);
+	Point3D p3= createPointFromCoord((*triangle_index)+2, vertex_coord);
+
+	float lambert=calculLambertCoef(sun, p1, p2, p3);
+	vertex_texture[*text]=lambert*
+		//trouver comment recuperer->
+		//lambert *texture du triangle
+}*/
+													
 
 // //Pas encore opti
 // void tracerTriangles(Node *coordonnees_quadtree, int taille,HeightMap heightMap){

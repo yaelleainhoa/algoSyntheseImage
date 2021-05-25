@@ -18,6 +18,11 @@ Point3D createPoint(float x, float y, float z, int coord){
     return newPoint;
 }
 
+Point3D createPointFromCoord(int coord, float coord_vertex[])
+{
+    return createPoint(coord_vertex[coord], coord_vertex[coord+1],coord_vertex[coord+2] , coord);
+}
+
 Point3D addPoint(Point3D p1, Point3D p2)
 {
     Point3D sum = createPoint(p1.x+p2.x, p1.y+p2.y, p1.z+p2.z, 0);
