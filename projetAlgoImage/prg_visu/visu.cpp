@@ -50,7 +50,6 @@ float teta = 0;
 //pour tester la fonction tracerTriangles
 //int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
 
-
 void moveLight(void){
 	i++;
     xLight1=largeur_plan*cos(3.14/180*i);
@@ -134,28 +133,6 @@ void arbre(float x, float y, float z, GLuint texture){
 	glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
 }
-
-/*
-void arbre(float x, float y, float z, GLuint texture){
-	//cout << "longitude "<< longitude <<endl; 
-	glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texture);
-		//glTranslatef(x,y,0.);
-		//glRotatef(longitude, 0. ,0. ,1. );
-        glScalef(1.,1.,1.);
-		glBegin(GL_QUADS);
-            glTexCoord2f(0.,0.);
-            glVertex3f(x-cos(longitude)/2,(y-tan(longitude))/2,z);
-            glTexCoord2f(1.,0.);
-            glVertex3f(x-cos(longitude)/2,(y-tan(longitude))/2,z+1);
-            glTexCoord2f(1.,1.);
-            glVertex3f(x+cos(longitude)/2,(y-tan(longitude))/2,z+1);
-            glTexCoord2f(0.,1.);
-            glVertex3f(x+cos(longitude)/2,(y+tan(longitude))/2,z);
-        glEnd();
-        glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
-}*/
 
 /*********************************************************/
 /* fonction de dessin de la scène à l'écran              */
@@ -337,10 +314,32 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			break;
 		case 'R' : case 'r' : glutIdleFunc(idle);
 			break;
-		case 'S' : case 's' : glutIdleFunc(NULL);
+		case 'M' : case 'm' : glutIdleFunc(NULL);
 			break;
 		case 'A' : case 'a' : printf("xpos : %f, ypos : %f \n", xCam, yCam);
 			break;
+		case 'Z' : case 'z': 
+			profondeur += STEP_PROF;
+			xCam+=STEP_PROF*sin(longitude);
+			yCam+=STEP_PROF*cos(longitude);
+			xRegard2D=sin(longitude)+xCam;
+			yRegard2D=cos(longitude)+yCam;
+			ptCount=0;
+			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
+			tracerTriangles(ptsVisibles, ptCount, heightMap);
+			//hauteur(xCam, yCam, heightMap, &zCam);
+			break;
+		case 'S':case 's':
+			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
+			xCam-=STEP_PROF*sin(longitude);
+			yCam-=STEP_PROF*cos(longitude);
+			xRegard2D=sin(longitude)+xCam;
+			yRegard2D=cos(longitude)+yCam;
+			ptCount=0;
+			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
+			tracerTriangles(ptsVisibles, ptCount, heightMap);
+			//hauteur(xCam, yCam, heightMap, &zCam);
+			break;	
 		default:
 			printf("Appui sur la touche %c\n",c);
 	}
@@ -381,6 +380,8 @@ static void kbdSpFunc(int c, int x, int y) {
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
 
 			break;
+		/*case SDL_KEYDOWN
+
 		case GLUT_KEY_F2 :
 			profondeur += STEP_PROF;
 			xCam+=STEP_PROF*sin(longitude);
@@ -391,8 +392,8 @@ static void kbdSpFunc(int c, int x, int y) {
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
 			//hauteur(xCam, yCam, heightMap, &zCam);
-			break;
-		case GLUT_KEY_F1 :
+			break;*/
+/*		case GLUT_KEY_F1 :
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
 			xCam-=STEP_PROF*sin(longitude);
 			yCam-=STEP_PROF*cos(longitude);
@@ -402,7 +403,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
 			//hauteur(xCam, yCam, heightMap, &zCam);
-			break;
+			break;*/
 		// case GLUT_KEY_F3 :
 		// 	moveLight();
 		// 	break;
