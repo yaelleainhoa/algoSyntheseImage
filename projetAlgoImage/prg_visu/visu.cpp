@@ -272,16 +272,22 @@ static void drawFunc(void) {
 	glPopMatrix();
 	glPushMatrix();
 	//place aléatoirement des objets sur la map
-	for(int i =0; i<NOMBRE_PALMIERS; i++)
+		for(int i =0; i<NOMBRE_PALMIERS; i++)
 	{
 		srand(i);
 		int coord= rand()%(heightMap.h*heightMap.w);
+		while((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<zmin+230/(255.)*abs(zmax-zmin)){
+			coord= rand()%(heightMap.h*heightMap.w);
+		}
 		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[0]);
 	}
 	for(int i =0; i<NOMBRE_PALMIERS; i++)
 	{
 		srand(i*i);
 		int coord= rand()%((heightMap.h*heightMap.w));
+		while((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<zmin+230/(255.)*abs(zmax-zmin)){
+			coord= rand()%(heightMap.h*heightMap.w);
+		}
 		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2],texture[2]);
 	}
 	glPopMatrix();
