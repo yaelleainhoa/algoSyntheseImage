@@ -27,6 +27,8 @@ float yLight1=0.;
 int i=0;
 float largeur_plan=1.;
 int const NOMBRE_TEXTURE =5;
+int const NOMBRE_PALMIERS= 100;
+int const NOMBRE_PARASOLS =50;
 
 float obj_rot = 0.0;
 GLuint texture[NOMBRE_TEXTURE];
@@ -122,7 +124,7 @@ void arbre(float x, float y, float z, GLuint texture){
 		glTranslatef(x,y,z);
 		glRotatef(90-longitude*180/M_PI, 0. ,0. ,1. );
 		glColor4f(1,1,1,1);
-        glScalef(0.25,0.25,0.25);
+        glScalef(1.,1.,1.);
 		glPushMatrix();
 			glBegin(GL_POLYGON);
 				glTexCoord2f(0.,0.); glVertex3f(0., -0.5, 1.);
@@ -260,6 +262,7 @@ static void drawFunc(void) {
 	glPushMatrix();
 	//glRotatef(obj_rot,0.0,1.0,0.0);
 	glColor3f(1.0,1.,1.);
+
 	glDrawObject(texture[3]);
 	glDrawObject_1(texture[4]);
 
@@ -268,8 +271,19 @@ static void drawFunc(void) {
 
 	glPopMatrix();
 	glPushMatrix();
-	arbre(0,1.,0., texture[0]);
-	arbre(-0.5,1.5,0., texture[2]);
+	//place aléatoirement des objets sur la map
+	for(int i =0; i<NOMBRE_PALMIERS; i++)
+	{
+		srand(i);
+		int coord= rand()%(heightMap.h*heightMap.w);
+		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[0]);
+	}
+	for(int i =0; i<NOMBRE_PALMIERS; i++)
+	{
+		srand(i*i);
+		int coord= rand()%((heightMap.h*heightMap.w));
+		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2],texture[2]);
+	}
 	glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
