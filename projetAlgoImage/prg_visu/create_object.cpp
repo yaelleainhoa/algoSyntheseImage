@@ -23,7 +23,7 @@ unsigned int triangle_number_1;
 unsigned int* triangle_index_1;
 float* vertex_texture_1;
 
-int zmin=-8;
+int zmin=-4;
 int zmax=0;
 
 float l;
@@ -31,7 +31,7 @@ float l;
 
 void createCoordinates(HeightMap heightMap) {
 
-	l=.2;
+	l=.1;
 	int w =heightMap.w;
 	int h=heightMap.h;
 	vertex_number =(w*h)*3; 
@@ -271,9 +271,11 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 				int SE=coordonnees_quadtree[i].pointSE.coord;
 			int largeur=heightMap.w*abs(NO-NE);
 			int longueur=abs(NO-SO);
-			float limite = zmin+0.1*abs(zmax-zmin);
+			float limite = zmin+230/(255.)*abs(zmax-zmin);
+			//printf("limite : %f\n",limite);
 			float moyenneHauteur=(coordonnees_quadtree[i].pointNO.z+coordonnees_quadtree[i].pointNE.z+coordonnees_quadtree[i].pointSO.z+coordonnees_quadtree[i].pointSE.z)/4.;
-		 	if(largeur==heightMap.w){
+			//printf("hauteur : %f\n", moyenneHauteur);
+		 	if(moyenneHauteur<limite){
 			if(longueur!=largeur){
 				if(longueur<largeur){
 					int midNO_NE=(int)((NO+NE)/2);
@@ -329,14 +331,14 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
  }
 }
 
-void textureTriangle(unsigned int *triangle_index, float* texture_coord, float* vertex_texture, int* text, int* t, int* vertex, int* k, int NO, int NE, int SO, int SE){
+void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, int* text, int* t, int* vertex, int* k, int NO, int NE, int SO, int SE){
 		vertex_texture[*vertex]=vertex_coord[3*NO];
 		vertex_texture[*vertex+1]=vertex_coord[3*NO+1];
 		vertex_texture[*vertex+2]=vertex_coord[3*NO+2];
 		(*vertex)+=3;
 		(*t)++;
-		textures_coord[*text]=0.;
-		textures_coord[*text+1]=0.;
+		textures[*text]=0.;
+		textures[*text+1]=0.;
 		(*text)+=2;
 
 
@@ -346,8 +348,8 @@ void textureTriangle(unsigned int *triangle_index, float* texture_coord, float* 
 		(*vertex)+=3;
 		(*t)++;
 
-		textures_coord[*text]=1.;
-		textures_coord[*text+1]=0.;
+		textures[*text]=1.;
+		textures[*text+1]=0.;
 		(*text)+=2;
 
 
@@ -357,8 +359,8 @@ void textureTriangle(unsigned int *triangle_index, float* texture_coord, float* 
 		(*vertex)+=3;
 		(*t)++;
 
-		textures_coord[*text]=0.;
-		textures_coord[*text+1]=1.;
+		textures[*text]=0.;
+		textures[*text+1]=1.;
 		(*text)+=2;
 
 		vertex_texture[*vertex]=vertex_coord[3*SE];
@@ -367,8 +369,8 @@ void textureTriangle(unsigned int *triangle_index, float* texture_coord, float* 
 		(*vertex)+=3;
 		(*t)++;
 
-		textures_coord[*text]=1.;
-		textures_coord[*text+1]=1.;
+		textures[*text]=1.;
+		textures[*text+1]=1.;
 		(*text)+=2;
 
 		triangle_index[*k]=*t;
