@@ -22,6 +22,9 @@ extern unsigned int* triangle_index_1;
 
 extern float l;
 
+extern int zmin;
+extern int zmax;
+
 void createCoordinates(HeightMap heightMap);
 void hauteur(float x, float y, HeightMap heightMap, float *zCam);
 void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap);

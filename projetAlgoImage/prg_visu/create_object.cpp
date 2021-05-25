@@ -20,6 +20,9 @@ float* textures_coord_1;
 unsigned int triangle_number_1;
 unsigned int* triangle_index_1;
 
+int zmin=-4;
+int zmax=0;
+
 float l;
 
 
@@ -31,14 +34,12 @@ void createCoordinates(HeightMap heightMap) {
 	// - le nombre de triangles (triangle_number)
 	// - le tableau des indices des sommets constituant les triangles (triangle_index)
 	// CUBE
-	l=.1;
+	l=.2;
 	int w =heightMap.w;
 	int h=heightMap.h;
 	vertex_number =(w*h)*3; 
 	triangle_number = (w-1)*(h-1)*2/2.;
 	triangle_number_1 = (w-1)*(h-1)*2/2.;
-	int zmin=-3;
-	int zmax=0;
 	
 	vertex_coord = (float*) calloc(sizeof(float),3*vertex_number);
 	normal_coord = (float*) calloc(sizeof(float),3*vertex_number);
@@ -162,45 +163,44 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 				int SE=coordonnees_quadtree[i].pointSE.coord;
 			int largeur=heightMap.w*abs(NO-NE);
 			int longueur=abs(NO-SO);
+			float limite = zmin+0.5*abs(zmax-zmin);
+			float moyenneHauteur=(coordonnees_quadtree[i].pointNO.z+coordonnees_quadtree[i].pointNE.z+coordonnees_quadtree[i].pointSO.z+coordonnees_quadtree[i].pointSE.z)/4.;
+			if(moyenneHauteur<limite){
 			if(longueur!=largeur){
 				if(longueur<largeur){
-					// Point3D midNO_NE=createPointFromCoord((int)((NO+NE)/2));
-					// Point3D midSO_SE=createPointFromCoord((int)((SO+SE)/2));
 					int midNO_NE=(int)((NO+NE)/2);
 					int midSO_SE=(int)((SO+SE)/2);
 					triangle_index[k]=NO;
 					triangle_index[k+1]=midNO_NE;
 					triangle_index[k+2]=SO;
 					triangle_index[k+3]=midNO_NE;
-					triangle_index[k+4]=SO;
-					triangle_index[k+5]=midSO_SE;
+					triangle_index[k+4]=midSO_SE;
+					triangle_index[k+5]=SO;
 
 					triangle_index[k+6]=midNO_NE;
 					triangle_index[k+7]=NE;
 					triangle_index[k+8]=midSO_SE;
 					triangle_index[k+9]=NE;
-					triangle_index[k+10]=midSO_SE;
-					triangle_index[k+11]=SE;
+					triangle_index[k+10]=SE;
+					triangle_index[k+11]=midSO_SE;
 					k+=12;
 				}
 				else{
-					//Point3D midNO_SO=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w));
-					//Point3D midNE_SE=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w)+(int)l);
 					int midNO_SO=(int)(((int)(NO/heightMap.w)+(int)(SO/heightMap.w))/2)*heightMap.w + (NO-(int)(NO/heightMap.w)*heightMap.w);
-					int midNE_SE=(int)(((int)(NO/heightMap.w)+(int)(SO/heightMap.w))/2)*heightMap.w + (NO-(int)(NO/heightMap.w)*heightMap.w)+(int)l;
-					triangle_index[k]=NO;
-					triangle_index[k+1]=NE;
-					triangle_index[k+2]=midNO_SO;
-					triangle_index[k+3]=NE;
-					triangle_index[k+4]=midNO_SO;
-					triangle_index[k+5]=midNE_SE;
+					int midNE_SE=(int)(((int)(NE/heightMap.w)+(int)(SE/heightMap.w))/2)*heightMap.w + (NE-(int)(NE/heightMap.w)*heightMap.w);
+					triangle_index_1[k]=NO;
+					triangle_index_1[k+1]=NE;
+					triangle_index_1[k+2]=midNO_SO;
+					triangle_index_1[k+3]=NE;
+					triangle_index_1[k+4]=midNE_SE;
+					triangle_index_1[k+5]=midNO_SO;
 
-					triangle_index[k+6]=midNO_SO;
-					triangle_index[k+7]=midNE_SE;
-					triangle_index[k+8]=SO;
-					triangle_index[k+9]=midNO_SO;
-					triangle_index[k+10]=midNE_SE;
-					triangle_index[k+11]=SE;
+					triangle_index_1[k+6]=midNO_SO;
+					triangle_index_1[k+7]=midNE_SE;
+					triangle_index_1[k+8]=SO;
+					triangle_index[k+9]=midNE_SE;
+					triangle_index[k+10]=SE;
+					triangle_index[k+11]=SO;
 					k+=12;
 				}
 			}
@@ -215,12 +215,66 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 
 			
 		}
+			}
 
+			else{
+							if(longueur!=largeur){
+				if(longueur<largeur){
+					// Point3D midNO_NE=createPointFromCoord((int)((NO+NE)/2));
+					// Point3D midSO_SE=createPointFromCoord((int)((SO+SE)/2));
+					int midNO_NE=(int)((NO+NE)/2);
+					int midSO_SE=(int)((SO+SE)/2);
+					triangle_index_1[k]=NO;
+					triangle_index_1[k+1]=midNO_NE;
+					triangle_index_1[k+2]=SO;
+					triangle_index_1[k+3]=midNO_NE;
+					triangle_index_1[k+4]=midSO_SE;
+					triangle_index_1[k+5]=SO;
+
+					triangle_index_1[k+6]=midNO_NE;
+					triangle_index_1[k+7]=NE;
+					triangle_index_1[k+8]=midSO_SE;
+					triangle_index_1[k+9]=NE;
+					triangle_index_1[k+10]=SE;
+					triangle_index_1[k+11]=midSO_SE;
+					k+=12;
+				}
+				else{
+					//Point3D midNO_SO=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w));
+					//Point3D midNE_SE=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w)+(int)l);
+					int midNO_SO=(int)(((int)(NO/heightMap.w)+(int)(SO/heightMap.w))/2)*heightMap.w + (NO-(int)(NO/heightMap.w)*heightMap.w);
+					int midNE_SE=(int)(((int)(NE/heightMap.w)+(int)(SE/heightMap.w))/2)*heightMap.w + (NE-(int)(NE/heightMap.w)*heightMap.w);
+					triangle_index_1[k]=NO;
+					triangle_index_1[k+1]=NE;
+					triangle_index_1[k+2]=midNO_SO;
+					triangle_index_1[k+3]=NE;
+					triangle_index_1[k+4]=midNE_SE;
+					triangle_index_1[k+5]=midNO_SO;
+
+					triangle_index_1[k+6]=midNO_SO;
+					triangle_index_1[k+7]=midNE_SE;
+					triangle_index_1[k+8]=SO;
+					triangle_index[k+9]=midNE_SE;
+					triangle_index[k+10]=SE;
+					triangle_index[k+11]=SO;
+					k+=12;
+				}
+			}
+			else{
+			triangle_index_1[k]=coordonnees_quadtree[i].pointNO.coord;
+			triangle_index_1[k+1]=coordonnees_quadtree[i].pointNE.coord;
+			triangle_index_1[k+2]=coordonnees_quadtree[i].pointSO.coord;
+			triangle_index_1[k+3]=coordonnees_quadtree[i].pointNE.coord;
+			triangle_index_1[k+4]=coordonnees_quadtree[i].pointSE.coord;
+			triangle_index_1[k+5]=coordonnees_quadtree[i].pointSO.coord;
+			k+=6;
+		}
+			}
 }
 }
 
 // //Pas encore opti
-// void tracerTriangles(Node *coordonnees_quadtree, int taille){
+// void tracerTriangles(Node *coordonnees_quadtree, int taille,HeightMap heightMap){
 // 		int k=0;
 // 		int text=0;
 // 		free(triangle_index);

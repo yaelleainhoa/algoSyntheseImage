@@ -28,7 +28,7 @@ int i=0;
 float largeur_plan=1.;
 
 float obj_rot = 0.0;
-GLuint texture[2];
+GLuint texture[3];
 float largeur_skybox=10.;
 
 const float hauteur_regard=0.5;
@@ -256,14 +256,14 @@ static void drawFunc(void) {
 	glPushMatrix();
 	//glRotatef(obj_rot,0.0,1.0,0.0);
 	glColor3f(1.0,1.,1.);
-	glDrawObject();
-	glDrawObject_1();
+	glDrawObject(texture[2]);
+	glDrawObject_1(texture[1]);
 
 	glDisable(GL_LIGHTING);
 
 	glPopMatrix();
 	glPushMatrix();
-	arbre(0.5,0.5,0., texture[0]);
+	//arbre(0.5,0.5,0., texture[0]);
 	glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
@@ -339,7 +339,6 @@ static void kbdSpFunc(int c, int x, int y) {
 			if (latitude>STEP_ANGLE) latitude -= STEP_ANGLE*180/M_PI*0.01;
 			break;
 		case GLUT_KEY_DOWN :
-			cout<<"latitute"<<latitude<<endl;
 			if(latitude<M_PI-STEP_ANGLE&& latitude<2.4) latitude += STEP_ANGLE*180/M_PI*0.01;
 			break;
 		case GLUT_KEY_LEFT :
@@ -369,7 +368,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
-			//hauteur(xCam, yCam, heightMap, &zCam);
+			hauteur(xCam, yCam, heightMap, &zCam);
 			break;
 		case GLUT_KEY_F1 :
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
@@ -380,7 +379,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
-			//hauteur(xCam, yCam, heightMap, &zCam);
+			hauteur(xCam, yCam, heightMap, &zCam);
 			break;
 		// case GLUT_KEY_F3 :
 		// 	moveLight();
@@ -434,8 +433,8 @@ static void init(HeightMap heightMap) {
 	createCoordinates(heightMap);
 
 
-	char const * sources[2]={"images/doggy.jpg","images/sky.jpg"};
-    for(int i=0; i<2; i++){
+	char const * sources[3]={"images/doggy.jpg","images/sky.jpg","images/sol.jpg"};
+    for(int i=0; i<3; i++){
 		glEnable(GL_TEXTURE_2D);
         SDL_Surface* image=IMG_Load(sources[i]);
         glGenTextures(1, &texture[i]);
