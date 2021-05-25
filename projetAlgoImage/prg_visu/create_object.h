@@ -28,7 +28,8 @@ extern int zmin;
 extern int zmax;
 
 void createCoordinates(HeightMap heightMap);
-void hauteur(float x, float y, HeightMap heightMap, float *zCam);
+void hauteurCam(float x, float y, HeightMap heightMap, float *zCam);
+int hauteur(float x, float y, HeightMap heightMap);
 void textureTriangle(unsigned int *triangle_index, float* texture_coord, float* vertex_texture, int* text, int* t, int* vertex, int* k, int NO, int NE, int SO, int SE);
 void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap);
 

@@ -26,9 +26,10 @@ float xLight1=1.;
 float yLight1=0.;
 int i=0;
 float largeur_plan=1.;
+int const NOMBRE_TEXTURE =5;
 
 float obj_rot = 0.0;
-GLuint texture[3];
+GLuint texture[NOMBRE_TEXTURE];
 float largeur_skybox=10.;
 
 const float hauteur_regard=0.5;
@@ -145,6 +146,7 @@ static void drawFunc(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+
 	/* Debut du dessin de la scène */
 	glPushMatrix();
 	
@@ -153,6 +155,10 @@ static void drawFunc(void) {
 			sin(longitude)*sin(latitude)+xCam,cos(longitude)*sin(latitude)+yCam,cos(latitude)+zCam+hauteur_regard,
             0.0,0.0,1.0);
 
+	
+	
+	glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//tracerTriangles(&coordonnees_quadtree, 12);
 
@@ -254,14 +260,16 @@ static void drawFunc(void) {
 	glPushMatrix();
 	//glRotatef(obj_rot,0.0,1.0,0.0);
 	glColor3f(1.0,1.,1.);
-	glDrawObject(texture[1]);
-	glDrawObject_1(texture[2]);
+	glDrawObject(texture[3]);
+	glDrawObject_1(texture[4]);
 
 	glDisable(GL_LIGHTING);
+	//glDisable(GL_BLEND);
 
 	glPopMatrix();
 	glPushMatrix();
-	arbre(0.5,0.5,1., texture[0]);
+	arbre(0,1.,0., texture[0]);
+	arbre(-0.5,1.5,0., texture[2]);
 	glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
@@ -327,7 +335,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
-			//hauteur(xCam, yCam, heightMap, &zCam);
+			hauteurCam(xCam, yCam, heightMap, &zCam);
 			break;
 		case 'S':case 's':
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
@@ -338,7 +346,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
-			//hauteur(xCam, yCam, heightMap, &zCam);
+			hauteurCam(xCam, yCam, heightMap, &zCam);
 			break;	
 		default:
 			printf("Appui sur la touche %c\n",c);
@@ -457,15 +465,33 @@ static void init(HeightMap heightMap) {
 	createCoordinates(heightMap);
 
 
-	char const * sources[3]={"images/doggy.jpg","images/sky.jpg","images/sol.jpg"};
-    for(int i=0; i<3; i++){
+	char const * sources[NOMBRE_TEXTURE]={"images/palmier.png","images/sky.jpg", "images/parasol.png","images/sol_eau.png","images/sol_sable.png"};
+    for(int i=0; i<NOMBRE_TEXTURE; i++){
 		glEnable(GL_TEXTURE_2D);
         SDL_Surface* image=IMG_Load(sources[i]);
         glGenTextures(1, &texture[i]);
         glBindTexture(GL_TEXTURE_2D, texture[i]);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+
+		GLenum format;
+		switch(image->format->BytesPerPixel) {
+			case 1:
+				format = GL_RED;
+				break;
+			case 3:
+				format = GL_RGB;
+				break;
+			case 4:
+				format = GL_RGBA;
+				break;
+			default:
+				fprintf(stderr, "Format des pixels de l'image %s non supporte.\n", sources[i]);
+				return;
+    	}
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0,format, GL_UNSIGNED_BYTE, image->pixels);
         glBindTexture(GL_TEXTURE_2D, 0);
+		SDL_FreeSurface(image);
     }
 }
 
@@ -539,6 +565,7 @@ int main(int argc, char** argv) {
 // t=triangleAppartientQuadtree(SOq.ptsExt);
 // cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
 	travelQuadtree(ptsVisibles, *quadtree, &ptCount);
+	tracerTriangles(ptsVisibles, ptCount, heightMap);
 
 	//Node tab_node[50];
 	//inorderTravel(&quadtree, tab_node,&count);

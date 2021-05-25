@@ -402,9 +402,16 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 // }
 
 
-void hauteur(float x, float y, HeightMap heightMap, float *zCam){
+void hauteurCam(float x, float y, HeightMap heightMap, float *zCam){
 	int h=heightMap.h;
 	int w=heightMap.w;
 	int coord=3*(w*(int)(x/l+h/2)+(int)(y/l+w/2));
 	*zCam=vertex_coord[coord+2];
+}
+
+int hauteur(float x, float y, HeightMap heightMap){
+	int h=heightMap.h;
+	int w=heightMap.w;
+	int coord=3*(w*(int)(x/l+h/2)+(int)(y/l+w/2));
+	return vertex_coord[coord+2];
 }
