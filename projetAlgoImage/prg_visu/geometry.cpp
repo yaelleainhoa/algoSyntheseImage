@@ -18,6 +18,12 @@ Point3D createPoint(float x, float y, float z, int coord){
     return newPoint;
 }
 
+Point3D addPoint(Point3D p1, Point3D p2)
+{
+    Point3D sum = createPoint(p1.x+p2.x, p1.y+p2.y, p1.z+p2.z, 0);
+    return sum;
+}
+
 Vector3D createVector(float x, float y, float z, int coord){
     Vector3D newVect;
     newVect.x=x;
@@ -81,6 +87,16 @@ Vector3D normalize(Vector3D v){
     return divVector(v, norm(v));
 }
 
+Vector3D crossProduct(Vector3D a, Vector3D b)
+{
+    float x= a.x*b.z - a.z*b.x;
+    float y= b.x*a.z - b.z*a.x;
+    float z= a.x*b.y - a.y*b.x;
+
+    Vector3D prod =createVector(x,y,z,0.);
+    return prod;
+}
+
 void printPoint3D(Point3D p){
     printf("Point : (%f,%f,%f)\n", p.x, p.y, p.z);
 }
@@ -131,8 +147,6 @@ int pointAppartientTriangle(float x, float y){//, float xCam, float yCam, float 
     return 1;
 
 }
-
-
 
 //regarde si deux segments se croisent : renvoie 1 si oui 0, si non
 int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD){
@@ -191,3 +205,28 @@ float min(float d1, float d2)
     else
         {return d2;}
 }
+
+float max(float d1, float d2)
+{
+    if(d1<d2)
+        {return d2;}
+    else
+        {return d1;}
+}
+
+Vector3D normalTriangle(Point3D A, Point3D B, Point3D C)
+{
+    Vector3D AC = createVectorFromPoints(A, C);
+    Vector3D AB = createVectorFromPoints(A, B);
+    Vector3D normal = crossProduct(AB, AC);
+    normal=normalize(normal);
+    return normal;
+}
+
+Point3D centreTriangle(Point3D a, Point3D b, Point3D c)
+{
+    Point3D sum= addPoint(addPoint(a, b), c);
+    Point3D center = multVector(sum, 3.);
+    return center;
+}
+

@@ -114,7 +114,28 @@ void skyBoxY(float x, float y, float z, GLuint texture){
     glDisable(GL_TEXTURE_2D);
 }
 
+void arbre(float x, float y, float z, GLuint texture){
+	//cout << "longitude "<< longitude <<endl; 
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
+		glTranslatef(x,y,z);
+		glRotatef(90-longitude*180/M_PI, 0. ,0. ,1. );
+		glColor4f(1,1,1,1);
+        glScalef(0.25,0.25,0.25);
+		glPushMatrix();
+			glBegin(GL_POLYGON);
+				glTexCoord2f(0.,0.); glVertex3f(0., -0.5, 1.);
+				glTexCoord2f(1.,0.); glVertex3f(0., 0.5, 1.);
+				glTexCoord2f(1.,1.); glVertex3f(0., 0.5, 0.);
+				glTexCoord2f(0.,1.); glVertex3f(0., -0.5, 0.);				
+        	glEnd();
+		glPopMatrix();
+	glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
 
+/*
 void arbre(float x, float y, float z, GLuint texture){
 	//cout << "longitude "<< longitude <<endl; 
 	glEnable(GL_TEXTURE_2D);
@@ -122,7 +143,7 @@ void arbre(float x, float y, float z, GLuint texture){
 		//glTranslatef(x,y,0.);
 		//glRotatef(longitude, 0. ,0. ,1. );
         glScalef(1.,1.,1.);
-        glBegin(GL_QUADS);
+		glBegin(GL_QUADS);
             glTexCoord2f(0.,0.);
             glVertex3f(x-cos(longitude)/2,(y-tan(longitude))/2,z);
             glTexCoord2f(1.,0.);
@@ -134,7 +155,7 @@ void arbre(float x, float y, float z, GLuint texture){
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
-}
+}*/
 
 /*********************************************************/
 /* fonction de dessin de la scène à l'écran              */
