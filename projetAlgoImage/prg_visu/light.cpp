@@ -55,11 +55,21 @@ float calculLambertCoef(light light, Point3D a, Point3D b, Point3D c)//abc le tr
     return lambert *luminosity;
 }
 //ajouter        
-Color3f finalColor(light light, Point3D a, Point3D b, Point3D  c)
-{
-    Color3f pointColor= createColor(1.,0.,0.);//trouver la couleur d'un point avec une texture
-    int lambert_factor= calculLambertCoef(light, a, b, c);
-    Color3f final_color = multColor(pointColor , multColorParA(light.color , lambert_factor ));//point color avec les texture a trouver pour le moment
-}
+// Color3f finalColor(light light, Point3D a, Point3D b, Point3D  c)
+// {
+//     Color3f pointColor= createColor(1.,0.,0.);//trouver la couleur d'un point avec une texture
+//     int lambert_factor= calculLambertCoef(light, a, b, c);
+//     Color3f final_color = multColor(pointColor , multColorParA(light.color , lambert_factor ));//point color avec les texture a trouver pour le moment
+// }
 
+void rotateSun(light *light, float x, float y, float z, int width)
+{
+    light->position.x = sin(angle2)*cos(angle1)*(width/2);
+    //light->position.y = y;
+    light->position.z = cos(angle2)*(width/2)+z;
+    light->position.y = sin(angle2)*sin(angle1)*(width/2)+y;
+    if(angle2==2*M_PI){angle2=0;}
+    else{angle2+=STEP_ANGLE;}
+    cout << "soleil position (x,y,z) : " << light->position.x << ", " << light->position.y << ", " << light->position.z << endl;
+}
 

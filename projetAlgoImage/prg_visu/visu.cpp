@@ -15,6 +15,7 @@
 #include "valDeGris.h"
 #include "quadtree.h"
 #include "geometry.h"
+#include "light.h"
 
 using namespace std;
 
@@ -49,6 +50,10 @@ int ptCount=0;
 Quadtree *quadtree= new Quadtree;
 
 float teta = 0;
+
+float angle1 = M_PI/2.0;
+float angle2 = 0;
+light *soleil = new light;
 
 //pour tester la fonction tracerTriangles
 //int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
@@ -368,6 +373,10 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
 			hauteurCam(xCam, yCam, heightMap, &zCam);
 			break;	
+		case 'K' : case 'k' :
+			glutIdleFunc(idleAngle);
+			//rotateSun(soleil,0.,0.,0., 2);
+			break;
 		default:
 			printf("Appui sur la touche %c\n",c);
 	}
@@ -516,7 +525,15 @@ static void init(HeightMap heightMap) {
 }
 
 void idle(void) {
-	obj_rot+=0.1;;
+	obj_rot+=0.1;
+	glutPostRedisplay();
+}
+
+// Loop rotation du soleil
+void idleAngle(void) {
+	//rotateSun(soleil,0.,0.,0., 2);
+	rotateSun(soleil,0.,0.,0., heightMap.w);
+	angle2-=STEP_ANGLE;
 	glutPostRedisplay();
 }
 
