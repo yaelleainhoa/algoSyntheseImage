@@ -52,7 +52,7 @@ float teta = 0;
 
 
 Point3D soleilpos = createPoint(0.,0.,4.,0.);
-Color3f soleilcolor = createColor(10,10,10);
+Color3f soleilcolor = createColor(100,100,100);
 Light soleil=createLight(soleilpos, soleilcolor);
 
 //pour tester la fonction tracerTriangles
@@ -267,8 +267,10 @@ static void drawFunc(void) {
 	//glRotatef(obj_rot,0.0,1.0,0.0);
 	glColor3f(1.0,1.,1.);
 
-	glDrawObject(texture[3]);
-	glDrawObject_1(texture[4]);
+	glDrawObject_eau(texture[3]);
+	glDrawObject_roche(texture[4]);
+	glDrawObject_sable(texture[3]);
+	glDrawObject_transition(texture[4]);
 
 	glDisable(GL_LIGHTING);
 	//glDisable(GL_BLEND);
