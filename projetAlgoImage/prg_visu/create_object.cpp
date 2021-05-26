@@ -37,7 +37,7 @@ unsigned int* triangle_index_roche;
 float* vertex_texture_roches;
 float* colour_roche;
 
-int zmin=-1;
+int zmin=-2;
 int zmax=3;
 
 float l;
@@ -45,7 +45,7 @@ float l;
 
 void createCoordinates(HeightMap heightMap) {
 
-	l=.5;
+	l=.3;
 	int w =heightMap.w;
 	int h=heightMap.h;
 	vertex_number =(w*h)*3; 
