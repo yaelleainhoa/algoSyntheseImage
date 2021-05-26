@@ -7,21 +7,27 @@
 
 
 extern unsigned int vertex_number;
-
 extern float* vertex_coord;
-extern float* normal_coord;
-extern float* textures_coord;
-extern unsigned int triangle_number;
-extern unsigned int* triangle_index;
-extern float* vertex_texture;
 
-//extern float* vertex_coord_1;
-//extern float* normal_coord_1;
-extern float* textures_coord_1;
-extern unsigned int triangle_number_1;
-extern unsigned int* triangle_index_1;
-extern float* vertex_texture_1;
+extern float* textures_coord_eau;
+extern unsigned int triangle_number_eau;
+extern unsigned int* triangle_index_eau;
+extern float* vertex_texture_eau;
 
+extern float* textures_coord_sable;
+extern unsigned int triangle_number_sable;
+extern unsigned int* triangle_index_sable;
+extern float* vertex_texture_sable;
+
+extern float* textures_coord_transition;
+extern unsigned int triangle_number_transition;
+extern unsigned int* triangle_index_transition;
+extern float* vertex_texture_transition;
+
+extern float* textures_coord_roche;
+extern unsigned int triangle_number_roche;
+extern unsigned int* triangle_index_roche;
+extern float* vertex_texture_roche;
 extern float l;
 
 extern int zmin;

@@ -7,7 +7,9 @@
 // Fonction de dessin d'un repere. L'axe x est rouge, l'axe y vert et l'axe z bleu.
 void glDrawRepere(float length);
 
-void glDrawObject(GLuint textureSol);
-void glDrawObject_1(GLuint textureSol);
+void glDrawObject_eau(GLuint textureSol);
+void glDrawObject_sable(GLuint textureSol);
+void glDrawObject_transition(GLuint textureSol);
+void glDrawObject_roche(GLuint textureSol);
 
 #endif
