@@ -21,6 +21,14 @@ $(BIN): $(OBJECTS)
 	@echo "**** PHASE DE LIEN ****"
 	$(GCC) $(OBJECTS) $(FLAGS) -o $(BIN) $(LIBDIR) $(LIBS) 
 
+geometry.o: geometry.cpp geometry.h
+	@echo "**** $@ ****"
+	$(GCC) $(INC) $(FLAGS) -c $< -o $@
+
+light.o: light.cpp light.h
+	@echo "**** $@ ****"
+	$(GCC) $(INC) $(FLAGS) -c $< -o $@
+
 
 visu.o: visu.cpp visu.h
 	@echo "**** td1_maze.c ****"
@@ -43,9 +51,6 @@ quadtree.o: quadtree.cpp quadtree.h
 	@echo "**** $@ ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 	
-geometry.o: geometry.cpp geometry.h
-	@echo "**** $@ ****"
-	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 
 light.o: light.cpp light.h
 	@echo "**** $@ ****"

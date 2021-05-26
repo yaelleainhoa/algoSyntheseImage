@@ -3,12 +3,14 @@
 
 #include "valDeGris.h"
 #include "quadtree.h"
+#include "light.h"
 
 
 
 extern unsigned int vertex_number;
 
 extern float* vertex_coord;
+extern float* colour;
 extern float* normal_coord;
 extern float* textures_coord;
 extern unsigned int triangle_number;
@@ -30,7 +32,7 @@ extern int zmax;
 void createCoordinates(HeightMap heightMap);
 void hauteurCam(float x, float y, HeightMap heightMap, float *zCam);
 int hauteur(float x, float y, HeightMap heightMap);
-void textureTriangle(unsigned int *triangle_index, float* texture_coord, float* vertex_texture, int* text, int* t, int* vertex, int* k, int NO, int NE, int SO, int SE);
-void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap);
+void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, int* text, int* t, int* vertex, int* k, int NO, int NE, int SO, int SE, Node* node, Light * light);
+void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap, Light * light);
 
 #endif

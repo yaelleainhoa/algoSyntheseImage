@@ -31,6 +31,7 @@ void glDrawObject(GLuint textureSol) {
 	glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,white);
 	glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,1.0);
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
 
 	// char * sources={"images/sol.jpg"};
 	// GLuint textureSol;
@@ -45,6 +46,7 @@ void glDrawObject(GLuint textureSol) {
 	glBindTexture(GL_TEXTURE_2D, textureSol);
 
 	glVertexPointer(3,GL_FLOAT,0,vertex_texture);
+	glColorPointer(3,GL_FLOAT,0,colour);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, textures_coord);
 	glDrawElements(GL_TRIANGLES,3*triangle_number,GL_UNSIGNED_INT,triangle_index);
