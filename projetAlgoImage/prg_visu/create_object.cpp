@@ -15,6 +15,7 @@ float* textures_coord_eau;
 unsigned int triangle_number_eau;
 unsigned int* triangle_index_eau;
 float* vertex_texture_eau;
+float* colour;
 
 float* textures_coord_sable;
 unsigned int triangle_number_sable;
@@ -394,16 +395,26 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 				}
 			}
 
+			textureTriangle(triangle_index_1, textures_coord_1, vertex_texture_1, &text_1, &t_1, &vertex_tex_1, &k_1, NO, NE, SO, SE);
+
+		
 		}
 	}
 }
+void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, int* text, int* t, int* vertex, int* nb_triangle, int NO, int NE, int SO, int SE, Node* node, Light * light)
+{
 
 
 void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, 
 														int* text, int* t, int* vertex, int* nb_triangle, int NO, int NE, int SO, int SE){
+		Color3f couleurtriangle = finalColor(*light, node->pointNO, node->pointNE, node->pointSO);
+		Color3f couleurtriangle2 = finalColor(*light, node->pointNE, node->pointSE, node->pointSO);
 		vertex_texture[*vertex]=vertex_coord[3*NO];
 		vertex_texture[*vertex+1]=vertex_coord[3*NO+1];
 		vertex_texture[*vertex+2]=vertex_coord[3*NO+2];
+		colour[*vertex]=couleurtriangle.r;
+		colour[*vertex+1]=couleurtriangle.v;
+		colour[*vertex+2]=couleurtriangle.b;
 		(*vertex)+=3;
 		textures[*text]=0.;
 		textures[*text+1]=0.;
@@ -413,6 +424,9 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 		vertex_texture[*vertex]=vertex_coord[3*NE];
 		vertex_texture[*vertex+1]=vertex_coord[3*NE+1];
 		vertex_texture[*vertex+2]=vertex_coord[3*NE+2];
+		colour[*vertex]=(couleurtriangle.r+couleurtriangle2.r)/2.0;
+		colour[*vertex+1]=(couleurtriangle.v+couleurtriangle2.v)/2.0;
+		colour[*vertex+2]=(couleurtriangle.b+couleurtriangle2.b)/2.0;
 		(*vertex)+=3;
 
 		textures[*text]=1.;
@@ -423,6 +437,9 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 		vertex_texture[*vertex]=vertex_coord[3*SO];
 		vertex_texture[*vertex+1]=vertex_coord[3*SO+1];
 		vertex_texture[*vertex+2]=vertex_coord[3*SO+2];
+		colour[*vertex]=(couleurtriangle.r+couleurtriangle2.r)/2.0;
+		colour[*vertex+1]=(couleurtriangle.v+couleurtriangle2.v)/2.0;
+		colour[*vertex+2]=(couleurtriangle.b+couleurtriangle2.b)/2.0;
 		(*vertex)+=3;
 
 		textures[*text]=0.;
@@ -432,6 +449,9 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 		vertex_texture[*vertex]=vertex_coord[3*SE];
 		vertex_texture[*vertex+1]=vertex_coord[3*SE+1];
 		vertex_texture[*vertex+2]=vertex_coord[3*SE+2];
+		colour[*vertex]=couleurtriangle2.r;
+		colour[*vertex+1]=couleurtriangle2.v;
+		colour[*vertex+2]=couleurtriangle2.b;
 		(*vertex)+=3;
 
 		textures[*text]=1.;

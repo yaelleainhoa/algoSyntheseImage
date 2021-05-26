@@ -26,7 +26,7 @@ float xLight1=1.;
 float yLight1=0.;
 int i=0;
 float largeur_plan=1.;
-int const NOMBRE_TEXTURE =5;
+int const NOMBRE_TEXTURE =6;
 int const NOMBRE_PALMIERS= 100;
 int const NOMBRE_PARASOLS =50;
 
@@ -50,6 +50,11 @@ Quadtree *quadtree= new Quadtree;
 
 float teta = 0;
 
+
+Point3D soleilpos = createPoint(0.,0.,4.,0.);
+Color3f soleilcolor = createColor(10,10,10);
+Light soleil=createLight(soleilpos, soleilcolor);
+
 //pour tester la fonction tracerTriangles
 //int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
 
@@ -64,7 +69,6 @@ void moveLight(void){
 void skyBoxZ(float x, float y, float z, GLuint texture){
 	glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture);
-        //glScalef(largeur_skybox,largeur_skybox,1.);
 		glScalef(1.,1.,1.);
         glBegin(GL_QUADS);
             glTexCoord2f(0.,0.);
@@ -86,13 +90,13 @@ void skyBoxX(float x, float y, float z, GLuint texture){
         glScalef(1.,1.,1.);
         glBegin(GL_QUADS);
             glTexCoord2f(0.,0.);
-            glVertex3f(x,y,z);
-            glTexCoord2f(1.,0.);
-            glVertex3f(x,y,z-largeur_skybox);
-            glTexCoord2f(1.,1.);
-            glVertex3f(x,y-largeur_skybox,z-largeur_skybox);
-            glTexCoord2f(0.,1.);
             glVertex3f(x,y-largeur_skybox,z);
+            glTexCoord2f(1.,0.);
+            glVertex3f(x,y,z);
+            glTexCoord2f(1.,1.);
+            glVertex3f(x,y,z-largeur_skybox);
+            glTexCoord2f(0.,1.);
+            glVertex3f(x,y-largeur_skybox,z-largeur_skybox);
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
@@ -104,13 +108,13 @@ void skyBoxY(float x, float y, float z, GLuint texture){
         glScalef(1.,1.,1.);
         glBegin(GL_QUADS);
             glTexCoord2f(0.,0.);
-            glVertex3f(x,y,z);
-            glTexCoord2f(1.,0.);
-            glVertex3f(x+largeur_skybox,y,z);
-            glTexCoord2f(1.,1.);
-            glVertex3f(x+largeur_skybox,y,z+largeur_skybox);
-            glTexCoord2f(0.,1.);
             glVertex3f(x,y,z+largeur_skybox);
+            glTexCoord2f(1.,0.);
+            glVertex3f(x+largeur_skybox,y,z+largeur_skybox);
+            glTexCoord2f(1.,1.);
+            glVertex3f(x+largeur_skybox,y,z);
+            glTexCoord2f(0.,1.);
+            glVertex3f(x,y,z);
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
@@ -168,8 +172,8 @@ static void drawFunc(void) {
 	glColor3f(1.0,1.0,1.0);
 	glDisable(GL_DEPTH_TEST); 
 	glDepthMask(GL_FALSE);
-	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam,texture[1]);
-	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1]);
+	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam,texture[5]);
+	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[5]);
 	skyBoxX(largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
 	skyBoxX(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
 	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1]);
@@ -180,7 +184,7 @@ static void drawFunc(void) {
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
 
-	//glScalef(0.1,0.1,0.1);
+	//glScalef(0.05,0.05,0.05);
 
 	//tracerTriangles(ptsVisibles, ptCount);
 // 	int h = heightMap.h;
@@ -354,7 +358,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount, heightMap);
+			tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 			hauteurCam(xCam, yCam, heightMap, &zCam);
 			break;
 		case 'S':case 's': //recule
@@ -365,7 +369,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount, heightMap);
+			tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 			hauteurCam(xCam, yCam, heightMap, &zCam);
 			break;
 		default:
@@ -384,12 +388,12 @@ static void kbdSpFunc(int c, int x, int y) {
 	/* sortie du programme si utilisation des touches ESC, */
 	switch(c) {
 		case GLUT_KEY_UP :
-			//if (latitude>STEP_ANGLE) 
+			if (latitude>STEP_ANGLE) 
 			latitude -= STEP_ANGLE;
 			break;
 		case GLUT_KEY_DOWN :
-			//if(latitude<M_PI-STEP_ANGLE) 
-			latitude += STEP_ANGLE;
+			if(latitude<2.6) {
+			latitude += STEP_ANGLE;}
 			break;
 		case GLUT_KEY_LEFT :
 			longitude -= STEP_ANGLE;
@@ -397,7 +401,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount, heightMap);
+			tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 
 			break;
 		case GLUT_KEY_RIGHT :
@@ -406,7 +410,8 @@ static void kbdSpFunc(int c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount, heightMap);
+			tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
+
 			break;
 		default:
 			printf("Appui sur une touche spéciale\n");
@@ -457,7 +462,7 @@ static void init(HeightMap heightMap) {
 	createCoordinates(heightMap);
 
 
-	char const * sources[NOMBRE_TEXTURE]={"images/palmier.png","images/sky.jpg", "images/parasol.png","images/sol_eau.png","images/sol_sable.png"};
+	char const * sources[NOMBRE_TEXTURE]={"images/palmier.png","images/sky.jpg", "images/parasol.png","images/sol_eau.png","images/sol_sable.png","images/sky_top.png"};
     for(int i=0; i<NOMBRE_TEXTURE; i++){
 		glEnable(GL_TEXTURE_2D);
         SDL_Surface* image=IMG_Load(sources[i]);
@@ -557,7 +562,7 @@ int main(int argc, char** argv) {
 // t=triangleAppartientQuadtree(SOq.ptsExt);
 // cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
 	travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-	tracerTriangles(ptsVisibles, ptCount, heightMap);
+	tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 
 	//Node tab_node[50];
 	//inorderTravel(&quadtree, tab_node,&count);

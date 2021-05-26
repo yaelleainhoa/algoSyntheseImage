@@ -3,7 +3,7 @@
 #include "visu.h"
 #include <stdio.h>
 #include "geometry.h"
-#include"create_object.h"
+//#include"create_object.h"
 
 #include <iostream>
 
@@ -18,6 +18,16 @@ Color3f createColor(float r, float v , float b)
 
     return *newcolor;
 }
+
+Light createLight(Point3D position, Color3f color)
+{
+    Light *light = new Light;
+    light->position=position;
+    light->color=color;
+
+    return *light;
+}
+
 
 Color3f multColorParA(Color3f *color, float a){
     Color3f newcolor=createColor(color->r*a,
@@ -40,9 +50,6 @@ Light createLight(Point3D position, Color3f color)
     newLight->color=color;
     newLight->position=position;
 
-    return *newLight;
-}
-
 //first step
 
 //calculer les coefficients de Lambert
@@ -59,10 +66,18 @@ float calculLambertCoef(Light light, Point3D a, Point3D b, Point3D c)//abc le tr
     float cosine = dot(normal,normalize(*light_vector));
     lambert= max(cosine, 0.);
 
-    float distance= distance2points(light.position, center);
+    float distance= sqrt(dot(light.position,center));//distance2points(light.position, center);
     float luminosity = 1 / (distance * distance); 
-    return lambert *luminosity;
+    //printf("lambert : %f",cosine *luminosity);
+    return cosine *luminosity;
 }
-
-  
+//ajouter        
+Color3f finalColor(Light light, Point3D a, Point3D b, Point3D  c)
+{
+    Color3f pointColor= createColor(0.6,0.6,0.6);//trouver la couleur d'un point avec une texture
+    float lambert_factor= calculLambertCoef(light, a, b, c);
+    Color3f final_color = multColor(pointColor , multColorParA(&light.color , lambert_factor ));//point color avec les texture a trouver pour le moment
+    //printf("couleur r = %f, v=%f, b=%f", final_color.r, final_color.v, final_color.b);
+    return final_color;
+}
 
