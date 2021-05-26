@@ -62,6 +62,19 @@ float calculLambertCoef(light light, Point3D a, Point3D b, Point3D c)//abc le tr
 //     Color3f final_color = multColor(pointColor , multColorParA(light.color , lambert_factor ));//point color avec les texture a trouver pour le moment
 // }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 void rotateSun(light *light, float x, float y, float z, int width)
 {
     light->position.x = sin(angle2)*cos(angle1)*(width/2);
