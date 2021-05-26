@@ -44,6 +44,15 @@ Color3f multColor(Color3f c1, Color3f c2)
     return color;
 }
 
+light createLight(Point3D position, Color3f color)
+{
+    light *newLight = new light;
+    newLight->color=color;
+    newLight->position=position;
+
+    return *newLight;
+}
+
 //first step
 
 //calculer les coefficients de Lambert
@@ -72,5 +81,5 @@ Color3f finalColor(Light light, Point3D a, Point3D b, Point3D  c)
     Color3f final_color = multColor(pointColor , multColorParA(&light.color , lambert_factor ));//point color avec les texture a trouver pour le moment
     return final_color;
 }
-
+*/
 

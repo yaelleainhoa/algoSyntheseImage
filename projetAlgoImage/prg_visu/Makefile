@@ -11,7 +11,7 @@ LIBDIR =
 # Compilateur
 GCC = gcc
 # $(OBJECTS) sont les objets qui seront générés après la compilation
-OBJECTS = geometry.o light.o gldrawing.o visu.o create_object.o valDeGris.o quadtree.o
+OBJECTS = gldrawing.o visu.o create_object.o valDeGris.o quadtree.o geometry.o light.o
 
 default: $(BIN)
 
@@ -51,6 +51,11 @@ quadtree.o: quadtree.cpp quadtree.h
 	@echo "**** $@ ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 	
+
+	
+light.o: light.cpp light.h
+	@echo "**** $@ ****"
+	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 
 
 clean:

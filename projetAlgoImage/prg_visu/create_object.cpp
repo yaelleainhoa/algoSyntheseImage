@@ -31,7 +31,7 @@ float l;
 
 void createCoordinates(HeightMap heightMap) {
 
-	l=.1;
+	l=.5;
 	int w =heightMap.w;
 	int h=heightMap.h;
 	vertex_number =(w*h)*3; 
@@ -337,7 +337,6 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 		// colour[*vertex+1]=couleurtriangle.v;
 		// colour[*vertex+2]=couleurtriangle.b;
 		(*vertex)+=3;
-		//(*t)++;
 		textures[*text]=0.;
 		textures[*text+1]=0.;
 		(*text)+=2;
@@ -350,8 +349,6 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 		// colour[*vertex+1]=couleurtriangle.v;
 		// colour[*vertex+2]=couleurtriangle.b;
 		(*vertex)+=3;
-		(*vertex)+=3;
-		//(*t)++;
 
 		textures[*text]=1.;
 		textures[*text+1]=0.;
@@ -365,8 +362,6 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 		// colour[*vertex+1]=couleurtriangle.v;
 		// colour[*vertex+2]=couleurtriangle.b;
 		(*vertex)+=3;
-		(*vertex)+=3;
-		//(*t)++;
 
 		textures[*text]=0.;
 		textures[*text+1]=1.;
@@ -376,19 +371,18 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 		vertex_texture[*vertex+1]=vertex_coord[3*SE+1];
 		vertex_texture[*vertex+2]=vertex_coord[3*SE+2];
 		(*vertex)+=3;
-		//(*t)++;
 
 		textures[*text]=1.;
 		textures[*text+1]=1.;
 		(*text)+=2;
 
-		triangle_index[*k]=*t;
-		triangle_index[*k+1]=*t+1;
-		triangle_index[*k+2]=*t+2;
-		triangle_index[*k+3]=*t+1;
-		triangle_index[*k+4]=*t+3;
-		triangle_index[*k+5]=*t+2;
-		(*k)+=6;
+		triangle_index[*nb_triangle]=*t;
+		triangle_index[*nb_triangle+1]=*t+1;
+		triangle_index[*nb_triangle+2]=*t+2;
+		triangle_index[*nb_triangle+3]=*t+1;
+		triangle_index[*nb_triangle+4]=*t+3;
+		triangle_index[*nb_triangle+5]=*t+2;
+		(*nb_triangle)+=6;
 		(*t)+=4;
 }
 /*
