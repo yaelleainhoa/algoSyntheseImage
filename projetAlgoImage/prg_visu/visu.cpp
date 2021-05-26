@@ -51,8 +51,8 @@ Quadtree *quadtree= new Quadtree;
 float teta = 0;
 
 
-Point3D soleilpos = createPoint(0.,0.,12.,0.);
-Color3f soleilcolor = createColor(1.,1.,0.9);
+Point3D soleilpos = createPoint(0.,0.,4.,0.);
+Color3f soleilcolor = createColor(10,10,10);
 Light soleil=createLight(soleilpos, soleilcolor);
 
 //pour tester la fonction tracerTriangles
@@ -185,7 +185,7 @@ static void drawFunc(void) {
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
 
-	//glScalef(0.1,0.1,0.1);
+	//glScalef(0.05,0.05,0.05);
 
 	//tracerTriangles(ptsVisibles, ptCount);
 // 	int h = heightMap.h;

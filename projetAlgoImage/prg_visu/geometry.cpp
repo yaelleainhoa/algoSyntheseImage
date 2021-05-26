@@ -94,7 +94,7 @@ Vector3D normalize(Vector3D v){
 
 Vector3D crossProduct(Vector3D a, Vector3D b)
 {
-    float x= a.x*b.z - a.z*b.x;
+    float x= a.y*b.z - a.z*b.y;
     float y= b.x*a.z - b.z*a.x;
     float z= a.x*b.y - a.y*b.x;
 
@@ -231,7 +231,7 @@ Vector3D normalTriangle(Point3D A, Point3D B, Point3D C)
 Point3D centreTriangle(Point3D a, Point3D b, Point3D c)
 {
     Point3D sum= addPoint(addPoint(a, b), c);
-    Point3D center = multVector(sum, 3.);
+    Point3D center = multVector(sum, 1/3.0);
     return center;
 }
 

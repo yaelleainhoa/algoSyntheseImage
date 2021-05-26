@@ -16,7 +16,6 @@ typedef struct
     Color3f color;
 }Light;
 
-light createLight(Point3D position, Color3f color);
 
 Color3f createColor(float r, float v , float b);
 Color3f multColorParA(Color3f color, float a);
