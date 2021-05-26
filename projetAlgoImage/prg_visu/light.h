@@ -1,6 +1,6 @@
 #ifndef LIGHT_H
 #define LIGHT_H
-
+#include "geometry.h"
 typedef struct 
 {
     float r;
@@ -14,6 +14,7 @@ typedef struct
     Color3f color;
 }light;
 
+light createLight(Point3D position, Color3f color);
 
 Color3f createColor(float r, float v , float b);
 Color3f multColorParA(Color3f color, float a);

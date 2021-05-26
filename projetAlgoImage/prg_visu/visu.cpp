@@ -232,16 +232,16 @@ static void drawFunc(void) {
 	// glLightfv(GL_LIGHT0,GL_DIFFUSE,intensite);
 	// glLightfv(GL_LIGHT0,GL_SPECULAR,black);
 
-	float position[4] = {0.,5.,0.,1.};
+	/*float position[4] = {0.,5.,0.,1.};
 	float black[4] = {0.9,0.9, 0.9, 1.0};
 	float intensite[4] = {0.9, 0.9, 0.9, 1.0};
-	GLfloat ambient[]={0.2, 0.2, 0.2, 1.0};
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glLightfv(GL_LIGHT0,GL_POSITION,position);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-	glLightfv(GL_LIGHT0,GL_DIFFUSE,intensite);
-	glLightfv(GL_LIGHT0,GL_SPECULAR,black);
+	GLfloat ambient[]={0.2, 0.2, 0.2, 1.0};*/
+	//glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHT0);
+	//glLightfv(GL_LIGHT0,GL_POSITION,position);
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+	//glLightfv(GL_LIGHT0,GL_DIFFUSE,intensite);
+	//glLightfv(GL_LIGHT0,GL_SPECULAR,black);
 
 		//GL_LIGHT1 sera la lumière qui bouge, avec la fonction moveLight, là GL_LIGHT1 n'est pas initiée
 		// GLfloat light0Position[] = {xLight1, yLight1, 0.0, 1.0}; // Position
@@ -340,7 +340,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			break;
 		case 'A' : case 'a' : printf("xpos : %f, ypos : %f \n", xCam, yCam);
 			break;
-		case 'Z' : case 'z': 
+		case 'Z' : case 'z': //avance
 			profondeur += STEP_PROF;
 			xCam+=STEP_PROF*sin(longitude);
 			yCam+=STEP_PROF*cos(longitude);
@@ -351,7 +351,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
 			hauteurCam(xCam, yCam, heightMap, &zCam);
 			break;
-		case 'S':case 's':
+		case 'S':case 's': //recule
 			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
 			xCam-=STEP_PROF*sin(longitude);
 			yCam-=STEP_PROF*cos(longitude);
@@ -361,7 +361,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
 			hauteurCam(xCam, yCam, heightMap, &zCam);
-			break;	
+			break;
 		default:
 			printf("Appui sur la touche %c\n",c);
 	}
@@ -401,35 +401,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount, heightMap);
-
 			break;
-		/*case SDL_KEYDOWN
-
-		case GLUT_KEY_F2 :
-			profondeur += STEP_PROF;
-			xCam+=STEP_PROF*sin(longitude);
-			yCam+=STEP_PROF*cos(longitude);
-			xRegard2D=sin(longitude)+xCam;
-			yRegard2D=cos(longitude)+yCam;
-			ptCount=0;
-			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount, heightMap);
-			//hauteur(xCam, yCam, heightMap, &zCam);
-			break;*/
-/*		case GLUT_KEY_F1 :
-			if (profondeur>0.1+STEP_PROF) profondeur -= STEP_PROF;
-			xCam-=STEP_PROF*sin(longitude);
-			yCam-=STEP_PROF*cos(longitude);
-			xRegard2D=sin(longitude)+xCam;
-			yRegard2D=cos(longitude)+yCam;
-			ptCount=0;
-			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount, heightMap);
-			//hauteur(xCam, yCam, heightMap, &zCam);
-			break;*/
-		// case GLUT_KEY_F3 :
-		// 	moveLight();
-		// 	break;
 		default:
 			printf("Appui sur une touche spéciale\n");
 	}
