@@ -50,6 +50,11 @@ Quadtree *quadtree= new Quadtree;
 
 float teta = 0;
 
+
+Point3D soleilpos = createPoint(0.,0.,12.,0.);
+Color3f soleilcolor = createColor(1.,1.,0.9);
+Light soleil=createLight(soleilpos, soleilcolor);
+
 //pour tester la fonction tracerTriangles
 //int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
 
@@ -354,7 +359,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount, heightMap);
+			tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 			hauteurCam(xCam, yCam, heightMap, &zCam);
 			break;
 		case 'S':case 's':
@@ -365,7 +370,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount, heightMap);
+			tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 			hauteurCam(xCam, yCam, heightMap, &zCam);
 			break;	
 		default:
@@ -397,7 +402,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount, heightMap);
+			tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 
 			break;
 		case GLUT_KEY_RIGHT :
@@ -406,7 +411,7 @@ static void kbdSpFunc(int c, int x, int y) {
 			yRegard2D=cos(longitude)+yCam;
 			ptCount=0;
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-			tracerTriangles(ptsVisibles, ptCount, heightMap);
+			tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 
 			break;
 		/*case SDL_KEYDOWN
@@ -585,7 +590,7 @@ int main(int argc, char** argv) {
 // t=triangleAppartientQuadtree(SOq.ptsExt);
 // cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
 	travelQuadtree(ptsVisibles, *quadtree, &ptCount);
-	tracerTriangles(ptsVisibles, ptCount, heightMap);
+	tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 
 	//Node tab_node[50];
 	//inorderTravel(&quadtree, tab_node,&count);

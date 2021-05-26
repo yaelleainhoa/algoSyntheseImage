@@ -3,7 +3,7 @@
 #include "visu.h"
 #include <stdio.h>
 #include "geometry.h"
-#include"create_object.h"
+//#include"create_object.h"
 
 #include <iostream>
 
@@ -18,6 +18,16 @@ Color3f createColor(float r, float v , float b)
 
     return *newcolor;
 }
+
+Light createLight(Point3D position, Color3f color)
+{
+    Light *light = new Light;
+    light->position=position;
+    light->color=color;
+
+    return *light;
+}
+
 
 Color3f multColorParA(Color3f *color, float a){
     Color3f newcolor=createColor(color->r*a,
@@ -40,7 +50,7 @@ Color3f multColor(Color3f c1, Color3f c2)
 
 
 
-float calculLambertCoef(light light, Point3D a, Point3D b, Point3D c)//abc le triangle
+float calculLambertCoef(Light light, Point3D a, Point3D b, Point3D c)//abc le triangle
 {
     float lambert;
     Vector3D *light_vector=new Vector3D;
@@ -48,18 +58,19 @@ float calculLambertCoef(light light, Point3D a, Point3D b, Point3D c)//abc le tr
     *light_vector = createVectorFromPoints( light.position,center );
     Vector3D normal =normalTriangle(a, b, c);
     float cosine = dot(normal,normalize(*light_vector));
-    lambert= max(lambert, 0.);
+    lambert= max(cosine, 0.);
 
     float distance= distance2points(light.position, center);
     float luminosity = 1 / (distance * distance); 
     return lambert *luminosity;
 }
 //ajouter        
-Color3f finalColor(light light, Point3D a, Point3D b, Point3D  c)
+Color3f finalColor(Light light, Point3D a, Point3D b, Point3D  c)
 {
-    Color3f pointColor= createColor(1.,0.,0.);//trouver la couleur d'un point avec une texture
+    Color3f pointColor= createColor(0.,0.,0.);//trouver la couleur d'un point avec une texture
     int lambert_factor= calculLambertCoef(light, a, b, c);
-    Color3f final_color = multColor(pointColor , multColorParA(light.color , lambert_factor ));//point color avec les texture a trouver pour le moment
+    Color3f final_color = multColor(pointColor , multColorParA(&light.color , lambert_factor ));//point color avec les texture a trouver pour le moment
+    return final_color;
 }
 
 
