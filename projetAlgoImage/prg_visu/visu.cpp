@@ -40,7 +40,7 @@ float yRegard2D=cos(-180/M_PI*(-M_PI/2.));
 
 //-----variables textures------------------------------------
 
-int const NOMBRE_TEXTURE =9;
+int const NOMBRE_TEXTURE =10;
 GLuint texture[NOMBRE_TEXTURE];
 int NOMBRE_OBJET;
 
@@ -141,6 +141,10 @@ static void drawFunc(void) {
 					}
 				}
 			}	
+		//placement du locklass jackpot
+		int coord_l= rand()%(heightMap.h*heightMap.w);
+		arbre(vertex_coord[3*coord_l],vertex_coord[3*coord_l+1],vertex_coord[3*coord_l+2], texture[9]);//locklass
+			
 		glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
@@ -181,7 +185,7 @@ static void reshapeFunc(int width,int height) {
 /* - x,y : coordonnée du curseur dans la fenêtre         */
 static void kbdFunc(unsigned char c, int x, int y) {
 	switch(c) {
-		case 'Q' :case 'q':
+		case 'Q' :case 'q': case 27:
 			exit(0);
 			break;
 		case 'F' : case 'f' : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);//passe en mode filaire
@@ -282,7 +286,7 @@ static void init(HeightMap heightMap) {
 	createCoordinates(heightMap);
 
 	/*chargement des textures*/
-	char const * sources[NOMBRE_TEXTURE]={"images/sky.jpg","images/sky_top.png","images/sol_eau.png","images/sol_sable.png","images/sol_roche.png","images/sol_transition.png","images/palmier.png","images/parasol.png","images/bouee.png"};
+	char const * sources[NOMBRE_TEXTURE]={"images/sky.jpg","images/sky_top.png","images/sol_eau.png","images/sol_sable.png","images/sol_roche.png","images/sol_transition.png","images/palmier.png","images/parasol.png","images/bouee.png", "images/locklass.png"};
     for(int i=0; i<NOMBRE_TEXTURE; i++){
 		glEnable(GL_TEXTURE_2D);
         SDL_Surface* image=IMG_Load(sources[i]);
