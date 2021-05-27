@@ -52,7 +52,7 @@ float teta = 0;
 
 
 Point3D soleilpos = createPoint(0.,0.,4.,0.);
-Color3f soleilcolor = createColor(10,10,10);
+Color3f soleilcolor = createColor(100,100,100);
 Light soleil=createLight(soleilpos, soleilcolor);
 
 //pour tester la fonction tracerTriangles
@@ -268,9 +268,9 @@ static void drawFunc(void) {
 	glColor3f(1.0,1.,1.);
 
 	glDrawObject_eau(texture[2]);
+	glDrawObject_roche(texture[4]);
 	glDrawObject_sable(texture[3]);
-	glDrawObject_transition(texture[4]);
-	glDrawObject_roche(texture[5]);
+	glDrawObject_transition(texture[5]);
 
 	glDisable(GL_LIGHTING);
 	//glDisable(GL_BLEND);
@@ -285,7 +285,7 @@ static void drawFunc(void) {
 		while((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<zmin+230/(255.)*abs(zmax-zmin)){
 			coord= rand()%(heightMap.h*heightMap.w);
 		}
-		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[7]);
+		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);
 	}
 	for(int i =0; i<NOMBRE_PARASOLS; i++)
 	{
@@ -294,7 +294,7 @@ static void drawFunc(void) {
 		while((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<zmin+230/(255.)*abs(zmax-zmin)){
 			coord= rand()%(heightMap.h*heightMap.w);
 		}
-		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2],texture[8]);
+		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2],texture[7]);
 	}
 	glPopMatrix();
 	/* Fin du dessin */
@@ -464,7 +464,7 @@ static void init(HeightMap heightMap) {
 	createCoordinates(heightMap);
 
 
-	char const * sources[NOMBRE_TEXTURE]={"images/sky.jpg","images/sky_top.png", "images/sol_eau.png","images/sol_sable.png","images/sol_transition.png","images/sol_roche.png","images/bouee.png","images/palmier.png","images/parasol.png"};
+	char const * sources[NOMBRE_TEXTURE]={"images/sky.jpg","images/sky_top.png","images/sol_eau.png","images/sol_sable.png","images/sol_roche.png","images/sol_transition.png","images/palmier.png","images/parasol.png","images/bouee.png"};
     for(int i=0; i<NOMBRE_TEXTURE; i++){
 		glEnable(GL_TEXTURE_2D);
         SDL_Surface* image=IMG_Load(sources[i]);

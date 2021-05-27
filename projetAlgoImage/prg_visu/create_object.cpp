@@ -1,3 +1,5 @@
+
+
 #include "create_object.h"
 #include "light.h"
 #include <math.h>
@@ -15,32 +17,35 @@ float* textures_coord_eau;
 unsigned int triangle_number_eau;
 unsigned int* triangle_index_eau;
 float* vertex_texture_eau;
-float* colour;
+float* colour_eau;
 
 float* textures_coord_sable;
 unsigned int triangle_number_sable;
 unsigned int* triangle_index_sable;
 float* vertex_texture_sable;
+float* colour_sable;
 
 float* textures_coord_transition;
 unsigned int triangle_number_transition;
 unsigned int* triangle_index_transition;
 float* vertex_texture_transition;
+float* colour_transition;
 
 float* textures_coord_roche;
 unsigned int triangle_number_roche;
 unsigned int* triangle_index_roche;
 float* vertex_texture_roches;
+float* colour_roche;
 
-int zmin=0;
-int zmax=5;
+int zmin=-2;
+int zmax=3;
 
 float l;
 
 
 void createCoordinates(HeightMap heightMap) {
 
-	l=.1;
+	l=.3;
 	int w =heightMap.w;
 	int h=heightMap.h;
 	vertex_number =(w*h)*3; 
@@ -249,7 +254,7 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
  }
 }*/
 
-void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap){
+void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap, Light *light){
 	int k_eau=0;
 	int text_eau=0;
 	int vertex_tex_eau=0;
@@ -298,6 +303,12 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 	vertex_texture_sable=(float*)calloc(sizeof(float),3*3*triangle_number_sable);
 	vertex_texture_transition=(float*)calloc(sizeof(float),3*3*triangle_number_transition);
 	vertex_texture_roches=(float*)calloc(sizeof(float),3*3*triangle_number_roche);
+
+	colour_eau=(float*)calloc(sizeof(float),3*3*triangle_number_eau);
+	colour_sable=(float*)calloc(sizeof(float),3*3*triangle_number_sable);
+	colour_transition=(float*)calloc(sizeof(float),3*3*triangle_number_transition);
+	colour_roche=(float*)calloc(sizeof(float),3*3*triangle_number_roche);
+
 	for(int i=0; i<taille;i++){
 			int NO=coordonnees_quadtree[i].pointNO.coord;
 			int NE=coordonnees_quadtree[i].pointNE.coord;
@@ -315,18 +326,18 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 				if(longueur<largeur){
 					int midNO_NE=(int)((NO+NE)/2);
 					int midSO_SE=(int)((SO+SE)/2);
-					textureTriangle(triangle_index_eau, textures_coord_eau, vertex_texture_eau, &text_eau, &t_eau, &vertex_tex_eau, &k_eau, NO, midNO_NE, SO, midSO_SE);
-					textureTriangle(triangle_index_eau, textures_coord_eau, vertex_texture_eau, &text_eau, &t_eau, &vertex_tex_eau, &k_eau, midNO_NE, NE, midSO_SE, SE);
+					textureTriangle(triangle_index_eau, textures_coord_eau, vertex_texture_eau, &text_eau, &t_eau, &vertex_tex_eau, &k_eau, NO, midNO_NE, SO, midSO_SE, &coordonnees_quadtree[i], light, colour_eau);
+					textureTriangle(triangle_index_eau, textures_coord_eau, vertex_texture_eau, &text_eau, &t_eau, &vertex_tex_eau, &k_eau, midNO_NE, NE, midSO_SE, SE, &coordonnees_quadtree[i], light, colour_eau);
 				}
 				else{
 					int midNO_SO=(int)(((int)(NO/heightMap.w)+(int)(SO/heightMap.w))/2)*heightMap.w + (NO-(int)(NO/heightMap.w)*heightMap.w);
 					int midNE_SE=(int)(((int)(NE/heightMap.w)+(int)(SE/heightMap.w))/2)*heightMap.w + (NE-(int)(NE/heightMap.w)*heightMap.w);
-					textureTriangle(triangle_index_eau, textures_coord_eau, vertex_texture_eau, &text_eau, &t_eau, &vertex_tex_eau, &k_eau, NO, NE, midNO_SO, midNE_SE);
-					textureTriangle(triangle_index_eau, textures_coord_eau, vertex_texture_eau, &text_eau, &t_eau, &vertex_tex_eau, &k_eau, midNO_SO, midNE_SE, SO, SE);
+					textureTriangle(triangle_index_eau, textures_coord_eau, vertex_texture_eau, &text_eau, &t_eau, &vertex_tex_eau, &k_eau, NO, NE, midNO_SO, midNE_SE, &coordonnees_quadtree[i], light, colour_eau);
+					textureTriangle(triangle_index_eau, textures_coord_eau, vertex_texture_eau, &text_eau, &t_eau, &vertex_tex_eau, &k_eau, midNO_SO, midNE_SE, SO, SE, &coordonnees_quadtree[i], light, colour_eau);
 				}
 			}
 			else{
-				textureTriangle(triangle_index_eau, textures_coord_eau, vertex_texture_eau, &text_eau, &t_eau, &vertex_tex_eau, &k_eau, NO, NE, SO, SE);		
+				textureTriangle(triangle_index_eau, textures_coord_eau, vertex_texture_eau, &text_eau, &t_eau, &vertex_tex_eau, &k_eau, NO, NE, SO, SE, &coordonnees_quadtree[i], light, colour_eau);		
 			}
 		}
 
@@ -336,18 +347,18 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 					if(longueur<largeur){
 						int midNO_NE=(int)((NO+NE)/2);
 						int midSO_SE=(int)((SO+SE)/2);
-						textureTriangle(triangle_index_sable, textures_coord_sable, vertex_texture_sable, &text_sable, &t_sable, &vertex_tex_sable, &k_sable, NO, midNO_NE, SO, midSO_SE);
-						textureTriangle(triangle_index_sable, textures_coord_sable, vertex_texture_sable, &text_sable, &t_sable, &vertex_tex_sable, &k_sable, midNO_NE, NE, midSO_SE, SE);
+						textureTriangle(triangle_index_sable, textures_coord_sable, vertex_texture_sable, &text_sable, &t_sable, &vertex_tex_sable, &k_sable, NO, midNO_NE, SO, midSO_SE, &coordonnees_quadtree[i], light, colour_sable);
+						textureTriangle(triangle_index_sable, textures_coord_sable, vertex_texture_sable, &text_sable, &t_sable, &vertex_tex_sable, &k_sable, midNO_NE, NE, midSO_SE, SE, &coordonnees_quadtree[i], light, colour_sable);
 					}
 					else{
 						int midNO_SO=(int)(((int)(NO/heightMap.w)+(int)(SO/heightMap.w))/2)*heightMap.w + (NO-(int)(NO/heightMap.w)*heightMap.w);
 						int midNE_SE=(int)(((int)(NE/heightMap.w)+(int)(SE/heightMap.w))/2)*heightMap.w + (NE-(int)(NE/heightMap.w)*heightMap.w);
-						textureTriangle(triangle_index_sable, textures_coord_sable, vertex_texture_sable, &text_sable, &t_sable, &vertex_tex_sable, &k_sable, NO, NE, midNO_SO, midNE_SE);
-						textureTriangle(triangle_index_sable, textures_coord_sable, vertex_texture_sable, &text_sable, &t_sable, &vertex_tex_sable, &k_sable, midNO_SO, midNE_SE, SO, SE);
+						textureTriangle(triangle_index_sable, textures_coord_sable, vertex_texture_sable, &text_sable, &t_sable, &vertex_tex_sable, &k_sable, NO, NE, midNO_SO, midNE_SE, &coordonnees_quadtree[i], light, colour_sable);
+						textureTriangle(triangle_index_sable, textures_coord_sable, vertex_texture_sable, &text_sable, &t_sable, &vertex_tex_sable, &k_sable, midNO_SO, midNE_SE, SO, SE, &coordonnees_quadtree[i], light, colour_sable);
 					}
 				}
 				else{
-					textureTriangle(triangle_index_sable, textures_coord_sable, vertex_texture_sable, &text_sable, &t_sable, &vertex_tex_sable, &k_sable, NO, NE, SO, SE);
+					textureTriangle(triangle_index_sable, textures_coord_sable, vertex_texture_sable, &text_sable, &t_sable, &vertex_tex_sable, &k_sable, NO, NE, SO, SE, &coordonnees_quadtree[i], light, colour_sable);
 				}
 			}
 			else{
@@ -356,18 +367,18 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 						if(longueur<largeur){
 							int midNO_NE=(int)((NO+NE)/2);
 							int midSO_SE=(int)((SO+SE)/2);
-							textureTriangle(triangle_index_transition, textures_coord_transition, vertex_texture_transition, &text_transition, &t_transition, &vertex_tex_transition, &k_transition, NO, midNO_NE, SO, midSO_SE);
-							textureTriangle(triangle_index_transition, textures_coord_transition, vertex_texture_transition, &text_transition, &t_transition, &vertex_tex_transition, &k_transition, midNO_NE, NE, midSO_SE, SE);
+							textureTriangle(triangle_index_transition, textures_coord_transition, vertex_texture_transition, &text_transition, &t_transition, &vertex_tex_transition, &k_transition, NO, midNO_NE, SO, midSO_SE, &coordonnees_quadtree[i], light, colour_transition);
+							textureTriangle(triangle_index_transition, textures_coord_transition, vertex_texture_transition, &text_transition, &t_transition, &vertex_tex_transition, &k_transition, midNO_NE, NE, midSO_SE, SE, &coordonnees_quadtree[i], light, colour_transition);
 						}
 						else{
 							int midNO_SO=(int)(((int)(NO/heightMap.w)+(int)(SO/heightMap.w))/2)*heightMap.w + (NO-(int)(NO/heightMap.w)*heightMap.w);
 							int midNE_SE=(int)(((int)(NE/heightMap.w)+(int)(SE/heightMap.w))/2)*heightMap.w + (NE-(int)(NE/heightMap.w)*heightMap.w);
-							textureTriangle(triangle_index_transition, textures_coord_transition, vertex_texture_transition, &text_transition, &t_transition, &vertex_tex_transition, &k_transition,NO, NE, midNO_SO, midNE_SE);
-							textureTriangle(triangle_index_transition, textures_coord_transition, vertex_texture_transition, &text_transition, &t_transition, &vertex_tex_transition, &k_transition,midNO_SO, midNE_SE, SO, SE);
+							textureTriangle(triangle_index_transition, textures_coord_transition, vertex_texture_transition, &text_transition, &t_transition, &vertex_tex_transition, &k_transition,NO, NE, midNO_SO, midNE_SE, &coordonnees_quadtree[i], light, colour_transition);
+							textureTriangle(triangle_index_transition, textures_coord_transition, vertex_texture_transition, &text_transition, &t_transition, &vertex_tex_transition, &k_transition,midNO_SO, midNE_SE, SO, SE, &coordonnees_quadtree[i], light, colour_transition);
 						}
 					}
 					else{
-						textureTriangle(triangle_index_transition, textures_coord_transition, vertex_texture_transition, &text_transition, &t_transition, &vertex_tex_transition, &k_transition, NO, NE, SO, SE);
+						textureTriangle(triangle_index_transition, textures_coord_transition, vertex_texture_transition, &text_transition, &t_transition, &vertex_tex_transition, &k_transition, NO, NE, SO, SE, &coordonnees_quadtree[i], light, colour_transition);
 					}
 				}
 				else{
@@ -377,38 +388,38 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 							// Point3D midSO_SE=createPointFromCoord((int)((SO+SE)/2));
 							int midNO_NE=(int)((NO+NE)/2);
 							int midSO_SE=(int)((SO+SE)/2);
-							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, NO, midNO_NE, SO, midSO_SE);
-							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, midNO_NE, NE, midSO_SE, SE);
+							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, NO, midNO_NE, SO, midSO_SE, &coordonnees_quadtree[i], light, colour_roche);
+							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, midNO_NE, NE, midSO_SE, SE, &coordonnees_quadtree[i], light, colour_roche);
 						}
 						else{
 							//Point3D midNO_SO=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w));
 							//Point3D midNE_SE=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w)+(int)l);
 							int midNO_SO=(int)(((int)(NO/heightMap.w)+(int)(SO/heightMap.w))/2)*heightMap.w + (NO-(int)(NO/heightMap.w)*heightMap.w);
 							int midNE_SE=(int)(((int)(NE/heightMap.w)+(int)(SE/heightMap.w))/2)*heightMap.w + (NE-(int)(NE/heightMap.w)*heightMap.w);
-							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, NO, NE, midNO_SO, midNE_SE);
-							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, midNO_SO, midNE_SE, SO, SE);
+							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, NO, NE, midNO_SO, midNE_SE, &coordonnees_quadtree[i], light, colour_roche);
+							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, midNO_SO, midNE_SE, SO, SE, &coordonnees_quadtree[i], light, colour_roche);
 						}
 					}
 					else{
-						textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, NO, NE, SO, SE);
+						textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, NO, NE, SO, SE, &coordonnees_quadtree[i], light, colour_roche);
 					}
+					
 				}
-			}
+				
 
-			textureTriangle(triangle_index_1, textures_coord_1, vertex_texture_1, &text_1, &t_1, &vertex_tex_1, &k_1, NO, NE, SO, SE);
+			}
 
 		
 		}
 	}
 }
-void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, int* text, int* t, int* vertex, int* nb_triangle, int NO, int NE, int SO, int SE, Node* node, Light * light)
-{
 
 
-void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, 
-														int* text, int* t, int* vertex, int* nb_triangle, int NO, int NE, int SO, int SE){
+
+void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, int* text, int* t, int* vertex, int* nb_triangle, int NO, int NE, int SO, int SE, Node* node, Light * light, float* colour){
 		Color3f couleurtriangle = finalColor(*light, node->pointNO, node->pointNE, node->pointSO);
 		Color3f couleurtriangle2 = finalColor(*light, node->pointNE, node->pointSE, node->pointSO);
+		
 		vertex_texture[*vertex]=vertex_coord[3*NO];
 		vertex_texture[*vertex+1]=vertex_coord[3*NO+1];
 		vertex_texture[*vertex+2]=vertex_coord[3*NO+2];
@@ -416,6 +427,7 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 		colour[*vertex+1]=couleurtriangle.v;
 		colour[*vertex+2]=couleurtriangle.b;
 		(*vertex)+=3;
+		
 		textures[*text]=0.;
 		textures[*text+1]=0.;
 		(*text)+=2;
@@ -503,3 +515,18 @@ int hauteur(float x, float y, HeightMap heightMap){
 	int coord=3*(w*(int)(x/l+h/2)+(int)(y/l+w/2));
 	return vertex_coord[coord+2];
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

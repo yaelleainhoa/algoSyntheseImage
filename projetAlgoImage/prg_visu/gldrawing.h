@@ -8,8 +8,14 @@
 void glDrawRepere(float length);
 
 void glDrawObject_eau(GLuint textureSol);
+ 
 void glDrawObject_sable(GLuint textureSol);
-void glDrawObject_transition(GLuint textureSol);
+
+ 
+
+ void glDrawObject_transition(GLuint textureSol);
+
+
 void glDrawObject_roche(GLuint textureSol);
 
 #endif
