@@ -6,7 +6,7 @@
 
 
 extern int loop;
-
+//--------------------Structure------------------------
 typedef struct 
 {
     Point3D pointNO;
@@ -26,18 +26,27 @@ struct Quadtree
     struct Quadtree * enfantSE;
 };
 
+//----------------------------------------------------------
 
+//-------------Initialisations------------------------------
 
-Point3D createPointFromCoord(int coord);
 Node createNode(Point3D pointNO,Point3D pointNE, Point3D pointSO,Point3D pointSE);
 Quadtree createQuadtree(Node *ptsExt);
 void buildQuadtree(Quadtree * quadtree,float vertex_coord[],int const w, int l);
 void addChildQuadtree(Quadtree *quadtree, Quadtree * enfantNO,Quadtree * enfantNE,Quadtree * enfantSO,Quadtree * enfantSE);
-void inorderTravel(Quadtree * quadtree, Node nodes[], int *nodesCount);
-int quadAppartientTriangle(Node node);//, float xCam, float yCam, float xRegard, float yRegard, float zfar, float fov );
+
+//-----------------------------------------------------------
+
+//--------Fonctions pour le parcours du quadtree-------------
+int quadAppartientTriangle(Node node);
 int camIntersectQuad(Quadtree *quadtree);
-void travelQuadtree(Node ptsVisibles[], Quadtree quadtree, int* ptCount);
 int pointAppartientQuadtree(Node node, float Px, float Py);
 int triangleAppartientQuadtree(Node node);
+
+void travelQuadtree(Node ptsVisibles[], Quadtree quadtree, int* ptCount);
+
+//fonction pour tester
 void printNode(Node node);
+
+
 #endif

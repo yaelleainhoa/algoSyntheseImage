@@ -4,10 +4,6 @@
 #include <string>
 using namespace std;
 
-// #ifdef __cplusplus
-
-// extern "C"{
-
 void defineParam(float* xsize, float* zmin, float* zmax, float* zfar, int* fov, int* nb_obj) {
 	ifstream lireTexte("../prg_visu/parametre.timac");
     string inutile;
@@ -26,7 +22,5 @@ void defineParam(float* xsize, float* zmin, float* zmax, float* zfar, int* fov, 
 			lireTexte >> *nb_obj;
 			}
 		}
-
-// }
-
-// #endif
+//dans la string "inutile" comporte les noms des différents paramètre
+//elle ne servira pas mais rend le remplissage des parametres plus facile pour l'utilisateur

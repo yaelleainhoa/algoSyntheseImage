@@ -1,5 +1,3 @@
-
-
 #include "create_object.h"
 #include "light.h"
 #include <math.h>
@@ -37,11 +35,7 @@ unsigned int* triangle_index_roche;
 float* vertex_texture_roches;
 float* colour_roche;
 
-// int zmin=-2;
-// int zmax=3;
-
 float l;
-
 
 void createCoordinates(HeightMap heightMap) {
 
@@ -55,12 +49,6 @@ void createCoordinates(HeightMap heightMap) {
 	triangle_number_roche = (w-1)*(h-1)*2/2.;
 	
 	vertex_coord = (float*) calloc(sizeof(float),3*vertex_number);
-	//textures_coord = (float*) calloc(sizeof(float),3*triangle_number);
-	//triangle_index = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number);
-
-	//vertex_coord_1 = (float*) calloc(sizeof(float),3*vertex_number);
-	//textures_coord_1 = (float*) calloc(sizeof(float),3*triangle_number_1);
-	//triangle_index_1 = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number_1);
 	int p=0;
 	
 	for (int i=0;i<h;i++){
@@ -69,187 +57,9 @@ void createCoordinates(HeightMap heightMap) {
 			vertex_coord[2+p]=zmin+heightMap.valeursDeGris[i][j]/(255.)*abs(zmax-zmin);
 			vertex_coord[1+p]=(j-w/2)*l;
 			p+=3;
-
 		}
 	}
 }
-
-/*
-
-void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap){
-		int k=0;
-		int text=0;
-		int vertex_tex=0;
-		int t=0;
-		free(triangle_index);
-		free(textures_coord_1);
-;		triangle_index = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number);
-		textures_coord_1 = (float*) calloc(sizeof(float),3*triangle_number_1);
-		vertex_texture_1=(float*)calloc(sizeof(float),3*3*triangle_number);
-		for(int i=0; i<taille;i++){
-			    int NO=coordonnees_quadtree[i].pointNO.coord;
-				int NE=coordonnees_quadtree[i].pointNE.coord;
-				int SO=coordonnees_quadtree[i].pointSO.coord;
-				int SE=coordonnees_quadtree[i].pointSE.coord;
-			int largeur=heightMap.w*abs(NO-NE);
-			int longueur=abs(NO-SO);
-			float limite = zmin+0.1*abs(zmax-zmin);
-			float moyenneHauteur=(coordonnees_quadtree[i].pointNO.z+coordonnees_quadtree[i].pointNE.z+coordonnees_quadtree[i].pointSO.z+coordonnees_quadtree[i].pointSE.z)/4.;
-		 	if(moyenneHauteur<limite){
-		// 	if(longueur!=largeur){
-		// 		if(longueur<largeur){
-		// 			int midNO_NE=(int)((NO+NE)/2);
-		// 			int midSO_SE=(int)((SO+SE)/2);
-		// 			triangle_index[k]=NO;
-		// 			triangle_index[k+1]=midNO_NE;
-		// 			triangle_index[k+2]=SO;
-		// 			triangle_index[k+3]=midNO_NE;
-		// 			triangle_index[k+4]=midSO_SE;
-		// 			triangle_index[k+5]=SO;
-
-		// 			triangle_index[k+6]=midNO_NE;
-		// 			triangle_index[k+7]=NE;
-		// 			triangle_index[k+8]=midSO_SE;
-		// 			triangle_index[k+9]=NE;
-		// 			triangle_index[k+10]=SE;
-		// 			triangle_index[k+11]=midSO_SE;
-		// 			k+=12;
-		// 		}
-		// 		else{
-		// 			int midNO_SO=(int)(((int)(NO/heightMap.w)+(int)(SO/heightMap.w))/2)*heightMap.w + (NO-(int)(NO/heightMap.w)*heightMap.w);
-		// 			int midNE_SE=(int)(((int)(NE/heightMap.w)+(int)(SE/heightMap.w))/2)*heightMap.w + (NE-(int)(NE/heightMap.w)*heightMap.w);
-		// 			triangle_index_1[k]=NO;
-		// 			triangle_index_1[k+1]=NE;
-		// 			triangle_index_1[k+2]=midNO_SO;
-		// 			triangle_index_1[k+3]=NE;
-		// 			triangle_index_1[k+4]=midNE_SE;
-		// 			triangle_index_1[k+5]=midNO_SO;
-
-		// 			triangle_index_1[k+6]=midNO_SO;
-		// 			triangle_index_1[k+7]=midNE_SE;
-		// 			triangle_index_1[k+8]=SO;
-		// 			triangle_index[k+9]=midNE_SE;
-		// 			triangle_index[k+10]=SE;
-		// 			triangle_index[k+11]=SO;
-		// 			k+=12;
-		// 		}
-		// 	}
-		// 	else{
-		// 	triangle_index[k]=coordonnees_quadtree[i].pointNO.coord;
-		// 	triangle_index[k+1]=coordonnees_quadtree[i].pointNE.coord;
-		// 	triangle_index[k+2]=coordonnees_quadtree[i].pointSO.coord;
-		// 	triangle_index[k+3]=coordonnees_quadtree[i].pointNE.coord;
-		// 	triangle_index[k+4]=coordonnees_quadtree[i].pointSE.coord;
-		// 	triangle_index[k+5]=coordonnees_quadtree[i].pointSO.coord;
-		// 	k+=6;
-
-			
-		// }
-		 	}
-
-		 	else{
-		// 					if(longueur!=largeur){
-		// 		if(longueur<largeur){
-		// 			// Point3D midNO_NE=createPointFromCoord((int)((NO+NE)/2));
-		// 			// Point3D midSO_SE=createPointFromCoord((int)((SO+SE)/2));
-		// 			int midNO_NE=(int)((NO+NE)/2);
-		// 			int midSO_SE=(int)((SO+SE)/2);
-
-		// 			triangle_index_1[k]=NO;
-		// 			triangle_index_1[k+1]=midNO_NE;
-		// 			triangle_index_1[k+2]=SO;
-		// 			triangle_index_1[k+3]=midNO_NE;
-		// 			triangle_index_1[k+4]=midSO_SE;
-		// 			triangle_index_1[k+5]=SO;
-
-		// 			triangle_index_1[k+6]=midNO_NE;
-		// 			triangle_index_1[k+7]=NE;
-		// 			triangle_index_1[k+8]=midSO_SE;
-		// 			triangle_index_1[k+9]=NE;
-		// 			triangle_index_1[k+10]=SE;
-		// 			triangle_index_1[k+11]=midSO_SE;
-		// 			k+=12;
-		// 		}
-		// 		else{
-		// 			//Point3D midNO_SO=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w));
-		// 			//Point3D midNE_SE=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w)+(int)l);
-		// 			int midNO_SO=(int)(((int)(NO/heightMap.w)+(int)(SO/heightMap.w))/2)*heightMap.w + (NO-(int)(NO/heightMap.w)*heightMap.w);
-		// 			int midNE_SE=(int)(((int)(NE/heightMap.w)+(int)(SE/heightMap.w))/2)*heightMap.w + (NE-(int)(NE/heightMap.w)*heightMap.w);
-		// 			triangle_index_1[k]=NO;
-		// 			triangle_index_1[k+1]=NE;
-		// 			triangle_index_1[k+2]=midNO_SO;
-		// 			triangle_index_1[k+3]=NE;
-		// 			triangle_index_1[k+4]=midNE_SE;
-		// 			triangle_index_1[k+5]=midNO_SO;
-
-		// 			triangle_index_1[k+6]=midNO_SO;
-		// 			triangle_index_1[k+7]=midNE_SE;
-		// 			triangle_index_1[k+8]=SO;
-		// 			triangle_index[k+9]=midNE_SE;
-		// 			triangle_index[k+10]=SE;
-		// 			triangle_index[k+11]=SO;
-		// 			k+=12;
-		// 		}
-		// 	}
-		// 	else{
-
-			textureTriangle(triangle_index_1, textures_coord_1, vertex_texture_1, &text, &t, &vertex_tex, &k, NO, NE, SO, SE);
-
-			// vertex_texture_1[vertex_tex]=vertex_coord[3*coordonnees_quadtree[i].pointNO.coord];
-			// vertex_texture_1[vertex_tex+1]=vertex_coord[3*coordonnees_quadtree[i].pointNO.coord+1];
-			// vertex_texture_1[vertex_tex+2]=vertex_coord[3*coordonnees_quadtree[i].pointNO.coord+2];
-			// vertex_tex+=3;
-			// t++;
-
-			// textures_coord_1[text]=0.;
-			// textures_coord_1[text+1]=0.;
-			// text+=2;
-
-
-			// vertex_texture_1[vertex_tex]=vertex_coord[3*coordonnees_quadtree[i].pointNE.coord];
-			// vertex_texture_1[vertex_tex+1]=vertex_coord[3*coordonnees_quadtree[i].pointNE.coord+1];
-			// vertex_texture_1[vertex_tex+2]=vertex_coord[3*coordonnees_quadtree[i].pointNE.coord+2];
-			// vertex_tex+=3;
-			// t++;
-
-			// textures_coord_1[text]=1.;
-			// textures_coord_1[text+1]=0.;
-			// text+=2;
-
-
-			// vertex_texture_1[vertex_tex]=vertex_coord[3*coordonnees_quadtree[i].pointSO.coord];
-			// vertex_texture_1[vertex_tex+1]=vertex_coord[3*coordonnees_quadtree[i].pointSO.coord+1];
-			// vertex_texture_1[vertex_tex+2]=vertex_coord[3*coordonnees_quadtree[i].pointSO.coord+2];
-			// vertex_tex+=3;
-			// t++;
-
-			// textures_coord_1[text]=0.;
-			// textures_coord_1[text+1]=1.;
-			// text+=2;
-
-			// vertex_texture_1[vertex_tex]=vertex_coord[3*coordonnees_quadtree[i].pointSE.coord];
-			// vertex_texture_1[vertex_tex+1]=vertex_coord[3*coordonnees_quadtree[i].pointSE.coord+1];
-			// vertex_texture_1[vertex_tex+2]=vertex_coord[3*coordonnees_quadtree[i].pointSE.coord+2];
-			// vertex_tex+=3;
-			// t++;
-
-			// textures_coord_1[text]=1.;
-			// textures_coord_1[text+1]=1.;
-			// text+=2;
-
-			// triangle_index_1[k]=t;
-			// triangle_index_1[k+1]=t+1;
-			// triangle_index_1[k+2]=t+2;
-			// triangle_index_1[k+3]=t+1;
-			// triangle_index_1[k+4]=t+3;
-			// triangle_index_1[k+5]=t+2;
-			// k+=6;
-			
-
-		// }
-		 	}
- }
-}*/
 
 void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap, Light *light){
 	int k_eau=0;
@@ -271,6 +81,7 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 	int text_roche=0;
 	int vertex_tex_roche=0;
 	int t_roche=0;
+
 	free(triangle_index_eau);
 	free(triangle_index_sable);
 	free(triangle_index_transition);
@@ -316,9 +127,10 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 		float limiteEau = zmin+220/(255.)*abs(zmax-zmin);
 		float limiteSable= zmin+230/(255.)*abs(zmax-zmin);
 		float limiteRoche= zmin+240/(255.)*abs(zmax-zmin);
-		float moyenneHauteur=(coordonnees_quadtree[i].pointNO.z+coordonnees_quadtree[i].pointNE.z+coordonnees_quadtree[i].pointSO.z+coordonnees_quadtree[i].pointSE.z)/4.;
 
-		if(moyenneHauteur<=limiteEau){
+		//on applique une texture differente selon la hauteur max du quadtree
+		float maxHauteur=max(max(coordonnees_quadtree[i].pointNO.z,coordonnees_quadtree[i].pointNE.z),max(coordonnees_quadtree[i].pointSO.z,coordonnees_quadtree[i].pointSE.z));
+		if(maxHauteur<=limiteEau){
 			if(longueur!=largeur){
 				if(longueur<largeur){
 					int midNO_NE=(int)((NO+NE)/2);
@@ -339,7 +151,7 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 		}
 
 		else{
-			if(moyenneHauteur>limiteEau && moyenneHauteur<=limiteSable){
+			if(maxHauteur>limiteEau && maxHauteur<=limiteSable){
 				if(longueur!=largeur){
 					if(longueur<largeur){
 						int midNO_NE=(int)((NO+NE)/2);
@@ -359,7 +171,7 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 				}
 			}
 			else{
-				if(moyenneHauteur>limiteSable && moyenneHauteur<=limiteRoche){
+				if(maxHauteur>limiteSable && maxHauteur<=limiteRoche){
 					if(longueur!=largeur){
 						if(longueur<largeur){
 							int midNO_NE=(int)((NO+NE)/2);
@@ -381,8 +193,6 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 				else{
 					if(longueur!=largeur){
 						if(longueur<largeur){
-							// Point3D midNO_NE=createPointFromCoord((int)((NO+NE)/2));
-							// Point3D midSO_SE=createPointFromCoord((int)((SO+SE)/2));
 							int midNO_NE=(int)((NO+NE)/2);
 							int midSO_SE=(int)((SO+SE)/2);
 							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, NO, midNO_NE, SO, midSO_SE, &coordonnees_quadtree[i], light, colour_roche);

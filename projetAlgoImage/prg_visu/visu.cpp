@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <iostream>
 
+using namespace std;
+
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
@@ -20,25 +22,14 @@
 #include "parametre.h"
 
 
+/*-----variables globales pour la gestion de la caméra------*/
 
-using namespace std;
-
-/* variables globales pour la gestion de la caméra */
 float profondeur = 3;
 float latitude = M_PI/2.0;
 float longitude = -M_PI;
 float xLight1=1.;
 float yLight1=0.;
 int i=0;
-int const NOMBRE_TEXTURE =9;
-//int const NOMBRE_OBJET=500;
-//int const NOMBRE_PALMIERS= 100;
-//int const NOMBRE_PARASOLS =50;
-
-float obj_rot = 0.0;
-GLuint texture[NOMBRE_TEXTURE];
-float largeur_skybox=10.;
-
 const float hauteur_regard=0.5;
 float xCam=0;
 float yCam=0;
@@ -47,29 +38,34 @@ HeightMap heightMap;
 float xRegard2D=sin(-180/M_PI*(-M_PI/2.));
 float yRegard2D=cos(-180/M_PI*(-M_PI/2.));
 
+//-----variables textures------------------------------------
+
+int const NOMBRE_TEXTURE =9;
+GLuint texture[NOMBRE_TEXTURE];
+int NOMBRE_OBJET;
+
+float largeur_skybox=10.;
+
+//-------variables pour l'affichage de la map---------------
+//ces variables seront initiées plus tard par lecture de params.timac
 int fov;
 float zfar;
-
 float xsize;
 float zmin;
 float zmax;
-int NOMBRE_OBJET;
-
 
 Node ptsVisibles[3000];
 int ptCount=0;
 Quadtree *quadtree= new Quadtree;
 
-float teta = 0;
-
-
+//-----------Variables soleil-----------------------------
 Point3D soleilpos = createPoint(0.,0.,5.,0.);
 Color3f soleilcolor = createColor(100,100,100);
 Light soleil=createLight(soleilpos, soleilcolor);
 
+//--------------------------------------------------------
 
-/*********************************************************/
-/* fonction de dessin de la scène à l'écran              */
+//-------fonction de dessin de la scène à l'écran---------
 static void drawFunc(void) { 
 
 	/* reinitialisation des buffers : couleur et ZBuffer */
@@ -79,82 +75,73 @@ static void drawFunc(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-
 	/* Debut du dessin de la scène */
 	glPushMatrix();
-	
-	/* placement de la caméra */
-	gluLookAt(xCam, yCam, zCam+hauteur_regard,
-			sin(longitude)*sin(latitude)+xCam,cos(longitude)*sin(latitude)+yCam,cos(latitude)+zCam+hauteur_regard,
-            0.0,0.0,1.0);
+		/* placement de la caméra */
+		gluLookAt(xCam, yCam, zCam+hauteur_regard,
+				sin(longitude)*sin(latitude)+xCam,cos(longitude)*sin(latitude)+yCam,cos(latitude)+zCam+hauteur_regard,
+				0.0,0.0,1.0);	
+		
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	
-	
-	glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor3f(1.0,1.0,1.0);
+		glDisable(GL_DEPTH_TEST); 
+		glDepthMask(GL_FALSE);
 
-	//tracerTriangles(&coordonnees_quadtree, 12);
+		//------------dessin de la skybox--------------------
+		skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam,texture[1], largeur_skybox);
+		skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[4], largeur_skybox);
+		skyBoxX(largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0], largeur_skybox);
+		skyBoxX(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0], largeur_skybox);
+		skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0], largeur_skybox);
+		skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0], largeur_skybox);
+		glEnable(GL_DEPTH_TEST);
+		glDepthMask(GL_TRUE);
 
+		glColor3f(1.0,0.0,0.0);
+		glDrawRepere(2.0);
 
-	glColor3f(1.0,1.0,1.0);
-	glDisable(GL_DEPTH_TEST); 
-	glDepthMask(GL_FALSE);
-	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam,texture[1], largeur_skybox);
-	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[4], largeur_skybox);
-	skyBoxX(largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0], largeur_skybox);
-	skyBoxX(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0], largeur_skybox);
-	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0], largeur_skybox);
-	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0], largeur_skybox);
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
+		glPushMatrix();
+			glColor3f(1.0,1.,1.);
 
-	glColor3f(1.0,0.0,0.0);
-	glDrawRepere(2.0);
-	//pour tester le LOD
-	//glScalef(0.1,0.1,0.1);
+			//dessin des différentes textures
+			glDrawObject_eau(texture[2]);
+			glDrawObject_roche(texture[4]);
+			glDrawObject_sable(texture[3]);
+			glDrawObject_transition(texture[5]);
 
+			glDisable(GL_LIGHTING);
+		glPopMatrix();
+		glPushMatrix();
+			//place aléatoirement des objets sur la map
+			float limiteEau = zmin+220/(255.)*abs(zmax-zmin);
+			float limiteSable= zmin+230/(255.)*abs(zmax-zmin);
+			float limiteRoche= zmin+240/(255.)*abs(zmax-zmin);
 
-	glPushMatrix();
-	//glRotatef(obj_rot,0.0,1.0,0.0);
-	glColor3f(1.0,1.,1.);
-
-	glDrawObject_eau(texture[2]);
-	glDrawObject_roche(texture[4]);
-	glDrawObject_sable(texture[3]);
-	glDrawObject_transition(texture[5]);
-
-	glDisable(GL_LIGHTING);
-	//glDisable(GL_BLEND);
-
-	glPopMatrix();
-	glPushMatrix();
-	//place aléatoirement des objets sur la map
-		float limiteEau = zmin+220/(255.)*abs(zmax-zmin);
-		float limiteSable= zmin+230/(255.)*abs(zmax-zmin);
-		float limiteRoche= zmin+240/(255.)*abs(zmax-zmin);
-
-		for(int i =0; i<NOMBRE_OBJET; i++)
-	{
-		srand(i);
-		int coord= rand()%(heightMap.h*heightMap.w);
-		if(((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0)<limiteEau){
-			arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[8]);//bouee
-		}
-		else{if(((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0)>limiteEau
-				&& ((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0)<=limiteRoche)
+			for(int i =0; i<NOMBRE_OBJET; i++)
 			{
-				int random=rand()%1;
-				if(random==0){
-					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);//palmier
+				srand(i);
+				int coord= rand()%(heightMap.h*heightMap.w);
+				if(max(max(vertex_coord[3*coord+2],vertex_coord[3*(coord+1)+2]),max(vertex_coord[3*(coord+heightMap.w)+2],vertex_coord[3*(coord+heightMap.w+1)+2])) <= limiteEau)
+				{
+					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[8]);//bouee
 				}
 				else{
-					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[7]);//parasol
+					if((max(max(vertex_coord[3*coord+2],vertex_coord[3*(coord+1)+2]),max(vertex_coord[3*(coord+heightMap.w)+2],vertex_coord[3*(coord+heightMap.w+1)+2]))>limiteEau)
+						&&(max(max(vertex_coord[3*coord+2],vertex_coord[3*(coord+1)+2]),max(vertex_coord[3*(coord+heightMap.w)+2],vertex_coord[3*(coord+heightMap.w+1)+2]))<=limiteRoche))
+					{
+						int random=rand()%1;
+						if(random==0){
+							arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);//palmier
+						}
+						else{
+							arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[7]);//parasol
+						}
+					}
 				}
-			}
-		}
-	}
-	
-	glPopMatrix();
+			}	
+		glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
 
@@ -165,7 +152,7 @@ static void drawFunc(void) {
 	glutSwapBuffers();
 }
 
-/*********************************************************/
+//--------------------------------------------------------
 /* fonction de changement de dimension de la fenetre     */
 /* paramètres :                                          */
 /* - width : largeur (x) de la zone de visualisation     */
@@ -179,30 +166,27 @@ static void reshapeFunc(int width,int height) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	/* définition de la camera */
-	gluPerspective( 60.0, h, 0.01, 10.0 );			// Angle de vue, rapport largeur/hauteur, near, far
+	gluPerspective( 60.0, h, 0.01, 10.0 );// Angle de vue, rapport largeur/hauteur, near, far
 
-	/* Retour a la pile de matrice Modelview
-			et effacement de celle-ci */
+	/* Retour a la pile de matrice Modelview et effacement de celle-ci */
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
 
-/*********************************************************/
+//--------------------------------------------------------
 /* fonction associée aux interruptions clavier           */
 /* paramètres :                                          */
 /* - c : caractère saisi                                 */
 /* - x,y : coordonnée du curseur dans la fenêtre         */
 static void kbdFunc(unsigned char c, int x, int y) {
-	/* sortie du programme si utilisation des touches ESC, */
-	/* 'q' ou 'Q'*/
 	switch(c) {
-		case 27 :
+		case 'Q' :case 'q':
 			exit(0);
 			break;
-		case 'F' : case 'f' : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+		case 'F' : case 'f' : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);//passe en mode filaire
 			break;
-		case 'P' : case 'p' : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+		case 'P' : case 'p' : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);//passe en mode plan
 			break;
 		case 'R' : case 'r' : glutIdleFunc(idle);
 			break;
@@ -238,7 +222,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 	glutPostRedisplay();
 }
 
-/*********************************************************/
+//--------------------------------------------------------
 /* fonction associée aux interruptions clavier pour les  */
 /*          touches spéciales                            */
 /* paramètres :                                          */
@@ -279,34 +263,10 @@ static void kbdSpFunc(int c, int x, int y) {
 	glutPostRedisplay();
 }
 
-
-/*********************************************************/
-/* fonction associée au clique de la souris              */
-/* paramètres :                                          */
-/* - button : nom du bouton pressé GLUT_LEFT_BUTTON,     */
-/*   GLUT_MIDDLE_BUTTON ou GLUT_RIGHT_BUTTON             */
-/* - state : état du bouton button GLUT_DOWN ou GLUT_UP  */
-/* - x,y : coordonnées du curseur dans la fenêtre        */
-static void mouseFunc(int button, int state, int x, int y) { 
-}
-
-/*********************************************************/
-/* fonction associée au déplacement de la souris bouton  */
-/* enfoncé.                                              */
-/* paramètres :                                          */
-/* - x,y : coordonnées du curseur dans la fenêtre        */
-static void motionFunc(int x, int y) { 
-}
-
-/*********************************************************/
+/*-------------------------------------------------------*/
 /* fonction d'initialisation des paramètres de rendu et  */
 /* des objets de la scènes.                              */
 static void init(HeightMap heightMap) {
-	//latitude = M_PI/2.;
-	//longitude = -M_PI;
-
-	obj_rot = 0.0;
-
 	/* INITIALISATION DES PARAMETRES GL */
 	/* couleur du fond (gris sombre) */
 	glClearColor(0.3,0.3,0.3,0.0);
@@ -318,10 +278,10 @@ static void init(HeightMap heightMap) {
 	/* lissage des couleurs sur les facettes */
 	glShadeModel(GL_SMOOTH);
 
-	/* INITIALISATION DE LA SCENE */
+	/*initialisation de  */
 	createCoordinates(heightMap);
 
-
+	/*chargement des textures*/
 	char const * sources[NOMBRE_TEXTURE]={"images/sky.jpg","images/sky_top.png","images/sol_eau.png","images/sol_sable.png","images/sol_roche.png","images/sol_transition.png","images/palmier.png","images/parasol.png","images/bouee.png"};
     for(int i=0; i<NOMBRE_TEXTURE; i++){
 		glEnable(GL_TEXTURE_2D);
@@ -353,14 +313,12 @@ static void init(HeightMap heightMap) {
 }
 
 void idle(void) {
-	obj_rot+=0.1;;
 	glutPostRedisplay();
 }
 
 int main(int argc, char** argv) {
 
 	defineParam(&xsize, &zmin, &zmax, &zfar, &fov, &NOMBRE_OBJET);
-	printf("&xsize : %f,  &zmin : %f,  &zmax : %f,  &zfar : %f,  &fov : %d,  &NOMBRE_OBJET : %d", xsize, zmin, zmax, zfar, fov, NOMBRE_OBJET);
 	defineHeight(&heightMap);
 	/* traitement des paramètres du programme propres à GL */
 	glutInit(&argc, argv);
@@ -375,68 +333,16 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-
-	//printf("Les segments AB et CD se croisent ? : %d\n",intersectionDeuxSegments(-4, 2,-2, -2.1, -2,-2.1, -1.6, 2.5));
-	//printf("tan(45) = %f\n", tan((M_PI/180)*45));
-	//printf("B(%f,%f)\n", cos(-19.4+13.3)*2.4/cos(19.4)+2.1,sin(-19.4+13.3)*2.4/cos(19.4)-3.1);
-	//printf(" le point apparitent ou pas : %d \n",pointAppartientTriangle(2.93, -0.7, 2.1, -3.1, 2.84, -2.43, 13.3, 2.4, 2*19.4));
-	//int pointAppartientTriangle(float x, float y, float xCam, float yCam, float xRegard, float yRegard, float teta, float zFar, float fov);
 	init(heightMap);
-	//test 
-
-	// Point3D NO=createPointFromCoord(0);
-	// Point3D NE=createPointFromCoord(1000);
-	// Point3D SO=createPointFromCoord(1000*heightMap.w);
-	// Point3D SE=createPointFromCoord(1000*heightMap.w+1000);
 	Point3D NO=createPointFromCoord(0);
 	Point3D NE=createPointFromCoord(heightMap.w-1);
 	Point3D SO=createPointFromCoord((heightMap.h-1)*heightMap.w);
 	Point3D SE=createPointFromCoord((heightMap.h-1)*heightMap.w+heightMap.w-1);
 	Node node=createNode(NO,NE,SO,SE);
-	// Quadtree *quadtree= new Quadtree;
 	*quadtree=createQuadtree(&node);
 	buildQuadtree(quadtree, vertex_coord,heightMap.w,heightMap.w-1);
-
-// 	int t=camIntersectQuad(&SEq);
-// 	cout << "quadAppartientTriangle(quadtree->enfantSE) : \n"<<t<<endl;
-// 	t=camIntersectQuad(&NOq);
-// 	cout << "quadAppartientTriangle(quadtree->enfantNO) : \n"<<t<<endl;
-// 	t=camIntersectQuad(&NEq);
-// 	cout << "quadAppartientTriangle(quadtree->enfantNE) : \n"<<t<<endl;
-// 	t=camIntersectQuad(&SOq);
-// 	cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
-
-// 	t=quadAppartientTriangle(SEq.ptsExt);
-//     cout << "quadAppartientTriangle(quadtree->enfantSE) : \n"<<t<<endl;
-// 	t=quadAppartientTriangle(NOq.ptsExt);
-//     cout << "quadAppartientTriangle(quadtree->enfantNO) : \n"<<t<<endl;
-// 	t=quadAppartientTriangle(NEq.ptsExt);
-//     cout << "quadAppartientTriangle(quadtree->enfantNE) : \n"<<t<<endl;
-// 	t=quadAppartientTriangle(SOq.ptsExt);
-//     cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
-
-// t=triangleAppartientQuadtree(SEq.ptsExt);
-// cout << "quadAppartientTriangle(quadtree->enfantSE) : \n"<<t<<endl;
-// t=triangleAppartientQuadtree(NOq.ptsExt);
-// cout << "quadAppartientTriangle(quadtree->enfantNO) : \n"<<t<<endl;
-// t=triangleAppartientQuadtree(NEq.ptsExt);
-// cout << "quadAppartientTriangle(quadtree->enfantNE) : \n"<<t<<endl;
-// t=triangleAppartientQuadtree(SOq.ptsExt);
-// cout << "quadAppartientTriangle(quadtree->enfantSO) : \n"<<t<<endl;
 	travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 	tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
-
-	//Node tab_node[50];
-	//inorderTravel(&quadtree, tab_node,&count);
-	// for(int i=0; i<10 ; i++)
-	// {
-	// 	printf("NO: %d ,NE:%d, SO:%d,SE:%d, \n" ,
-	// 	tab_node[i]->pointNO,
-	// 	tab_node[i]->pointNE,
-	// 	tab_node[i]->pointSO,
-	// 	tab_node[i]->pointSE);
-	// }
-
 
 	/* association de la fonction callback de redimensionnement */
 	glutReshapeFunc(reshapeFunc);
@@ -447,9 +353,6 @@ int main(int argc, char** argv) {
 	/* association de la fonction callback d'événement du clavier (touches spéciales) */
 	glutSpecialFunc(kbdSpFunc);
 	/* association de la fonction callback d'événement souris */
-	glutMouseFunc(mouseFunc);
-	/* association de la fonction callback de DRAG de la souris */
-	glutMotionFunc(motionFunc);
 
 	glutIdleFunc(idle);
 

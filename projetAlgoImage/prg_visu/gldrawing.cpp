@@ -9,6 +9,8 @@
 
 #include <stdio.h>
 
+//----------différentes fonctions de Draw--------------------
+
 void glDrawRepere(float length) {
 	// dessin du repère
 	glBegin(GL_LINES);
@@ -27,6 +29,7 @@ void glDrawRepere(float length) {
 	glEnd();
 }
 
+//on crée un fonction draw par texture qui utilisent les parametres correspondant à la texture
 void glDrawObject_eau(GLuint textureSol) {//eau 
 	float white[3] = {1.0,1.0,1.0}; 
 	glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,white); 

@@ -7,7 +7,4 @@ void skyBoxX(float x, float y, float z, GLuint texture, float largeur_skybox);
 
 void skyBoxY(float x, float y, float z, GLuint texture, float largeur_skybox);
 
-
-
-
 #endif

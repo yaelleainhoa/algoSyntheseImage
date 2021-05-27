@@ -14,7 +14,7 @@ typedef struct Vec3f{
 Point3D createPoint(float x, float y, float z, int coord);
 
 // Construit le point qui correspond à la coordonnées coord dans le tableau de vertex
-Point3D createPointFromCoord(int coord, float coord_vert[]);
+Point3D createPointFromCoord(int coord);
 
 // ajoute des points
 Point3D addPoint(Point3D p1, Point3D p2);
@@ -52,15 +52,26 @@ Vector3D normalize(Vector3D v);
 void printPoint3D(Point3D p);
 void printVector3D(Vector3D v);
 
-int pointAppartientTriangle(float x, float y);//, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov);
+//---------fonctions pour le Quadtree--------------------
+
+int pointAppartientTriangle(float x, float y);
 int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, float yC, float xD, float yD);
+
+//-------------------------------------------------------
+
+
+//-----Pour Calculer Lambert----------------------------
+
+Vector3D normalTriangle(Point3D p1, Point3D p2, Point3D p3);
+Point3D centreTriangle(Point3D a, Point3D b, Point3D c);
+
+//------------------------------------------------------
+
+
+//-----Fonctions de maths -------------------------------
 float distanceCam(Point3D pt);
 float distance2points(Point3D p1, Point3D p2);
 float min(float d1, float d2);
 float max(float d1, float d2);
-
-int pointAppartientQuadtree(float Px, float Py);
-Vector3D normalTriangle(Point3D p1, Point3D p2, Point3D p3);
-Point3D centreTriangle(Point3D a, Point3D b, Point3D c);
 
 #endif
