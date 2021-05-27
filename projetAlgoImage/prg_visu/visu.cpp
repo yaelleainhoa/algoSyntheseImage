@@ -53,6 +53,7 @@ float zfar;
 float xsize;
 float zmin;
 float zmax;
+string map;
 
 Node ptsVisibles[3000];
 int ptCount=0;
@@ -318,8 +319,8 @@ void idle(void) {
 
 int main(int argc, char** argv) {
 
-	defineParam(&xsize, &zmin, &zmax, &zfar, &fov, &NOMBRE_OBJET);
-	defineHeight(&heightMap);
+	defineParam(&map,&xsize, &zmin, &zmax, &zfar, &fov, &NOMBRE_OBJET);
+	defineHeight(&heightMap, map);
 	/* traitement des paramètres du programme propres à GL */
 	glutInit(&argc, argv);
 	/* initialisation du mode d'affichage :                */
