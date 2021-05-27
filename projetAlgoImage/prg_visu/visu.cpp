@@ -376,8 +376,9 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			hauteurCam(xCam, yCam, heightMap, &zCam);
 			break;	
 		case 'K' : case 'k' :
+		cout << "soleil : " << soleil.position.x << ", " << soleil.position.y << ", " << soleil.position.z << endl;
 			glutIdleFunc(idleAngle);
-			//rotateSun(soleil,0.,0.,0., 2);
+			//rotateSun(&soleil, 8);
 			break;
 		default:
 			printf("Appui sur la touche %c\n",c);
@@ -507,8 +508,10 @@ void idle(void) {
 // Loop rotation du soleil
 void idleAngle(void) {
 	//rotateSun(soleil,0.,0.,0., 2);
-	rotateSun(soleil,0.,0.,0., heightMap.w);
-	angle2-=STEP_ANGLE;
+	// if(angle2==2*M_PI){angle2=0;}
+    // else{angle2-=STEP_ANGLE*0.1;}
+	rotateSun(&soleil, heightMap.w);
+	// angle2-=STEP_ANGLE;
 	glutPostRedisplay();
 }
 

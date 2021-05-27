@@ -51,12 +51,6 @@ quadtree.o: quadtree.cpp quadtree.h
 	@echo "**** $@ ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 	
-
-light.o: light.cpp light.h
-	@echo "**** $@ ****"
-	$(GCC) $(INC) $(FLAGS) -c $< -o $@
-
-
 clean:
 	rm -f *.o $(BIN)
 	find . -name "*~" -exec rm {} \;

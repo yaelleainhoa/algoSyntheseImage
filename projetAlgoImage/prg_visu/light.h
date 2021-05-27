@@ -29,6 +29,6 @@ Light createLight(Point3D position, Color3f color);
 float calculLambertCoef(Light light, Point3D p1, Point3D p2, Point3D p3);
 Color3f finalColor(Light light, Point3D a, Point3D b, Point3D  c);
 
-void rotateSun(light *light, float x, float y, float z, int width);
+void rotateSun(Light *light, int width);
 
 #endif
