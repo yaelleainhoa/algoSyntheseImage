@@ -11,7 +11,7 @@
 #include <string>
 #include <math.h>
 
-
+//trace un "arbre" associé à la texture en paramètre au point (x,y,z)
 void arbre(float x, float y, float z, GLuint texture){
 	glPushMatrix();
 	glEnable(GL_TEXTURE_2D);
