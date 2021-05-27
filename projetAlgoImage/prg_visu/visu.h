@@ -22,6 +22,7 @@ extern float zfar;
 
 extern Light soleil;
 
+
 /* variables globales pour la gestion de l'objet */
 extern float obj_rot;
 

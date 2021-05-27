@@ -15,6 +15,8 @@
 #include "valDeGris.h"
 #include "quadtree.h"
 #include "geometry.h"
+#include "skybox.h"
+
 
 using namespace std;
 
@@ -59,67 +61,6 @@ Light soleil=createLight(soleilpos, soleilcolor);
 //pour tester la fonction tracerTriangles
 //int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
 
-void moveLight(void){
-	i++;
-    xLight1=largeur_plan*cos(3.14/180*i);
-	yLight1=largeur_plan*sin(3.14/180*i);
-    GLfloat light0Position[] = {xLight1, yLight1, 0.0, 1.0};
-    glLightfv(GL_LIGHT1, GL_POSITION, light0Position);
-}
-
-void skyBoxZ(float x, float y, float z, GLuint texture){
-	glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texture);
-		glScalef(1.,1.,1.);
-        glBegin(GL_QUADS);
-            glTexCoord2f(0.,0.);
-            glVertex3f(x,y,z);
-            glTexCoord2f(1.,0.);
-            glVertex3f(x+largeur_skybox,y,z);
-            glTexCoord2f(1.,1.);
-            glVertex3f(x+largeur_skybox,y-largeur_skybox,z);
-            glTexCoord2f(0.,1.);
-            glVertex3f(x,y-largeur_skybox,z);
-        glEnd();
-        glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
-}
-
-void skyBoxX(float x, float y, float z, GLuint texture){
-	glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glScalef(1.,1.,1.);
-        glBegin(GL_QUADS);
-            glTexCoord2f(0.,0.);
-            glVertex3f(x,y-largeur_skybox,z);
-            glTexCoord2f(1.,0.);
-            glVertex3f(x,y,z);
-            glTexCoord2f(1.,1.);
-            glVertex3f(x,y,z-largeur_skybox);
-            glTexCoord2f(0.,1.);
-            glVertex3f(x,y-largeur_skybox,z-largeur_skybox);
-        glEnd();
-        glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
-}
-
-void skyBoxY(float x, float y, float z, GLuint texture){
-	glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glScalef(1.,1.,1.);
-        glBegin(GL_QUADS);
-            glTexCoord2f(0.,0.);
-            glVertex3f(x,y,z+largeur_skybox);
-            glTexCoord2f(1.,0.);
-            glVertex3f(x+largeur_skybox,y,z+largeur_skybox);
-            glTexCoord2f(1.,1.);
-            glVertex3f(x+largeur_skybox,y,z);
-            glTexCoord2f(0.,1.);
-            glVertex3f(x,y,z);
-        glEnd();
-        glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
-}
 
 void arbre(float x, float y, float z, GLuint texture){
 	//cout << "longitude "<< longitude <<endl; 
@@ -173,12 +114,12 @@ static void drawFunc(void) {
 	glColor3f(1.0,1.0,1.0);
 	glDisable(GL_DEPTH_TEST); 
 	glDepthMask(GL_FALSE);
-	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam,texture[1]);
-	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1]);
-	skyBoxX(largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0]);
-	skyBoxX(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0]);
-	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0]);
-	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0]);
+	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam,texture[1], largeur_skybox);
+	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1], largeur_skybox);
+	skyBoxX(largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0], largeur_skybox);
+	skyBoxX(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0], largeur_skybox);
+	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0], largeur_skybox);
+	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0], largeur_skybox);
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 
@@ -187,82 +128,6 @@ static void drawFunc(void) {
 
 	//glScalef(0.05,0.05,0.05);
 
-	//tracerTriangles(ptsVisibles, ptCount);
-// 	int h = heightMap.h;
-// 	int w=heightMap.w;
-// 	for (int i=0;i<h-1;i++){
-// 	for(int j=0;j<w-1;j++){
-// 		glEnable(GL_TEXTURE_2D);
-//         glBindTexture(GL_TEXTURE_2D, texture[0]);
-// 		glScalef(1.,1.,1.);
-//         glBegin(GL_QUADS);
-//             glTexCoord2f(0.,0.);
-//             glVertex3f(vertex_coord[3*(h*i+j)],vertex_coord[3*(h*i+j)+1],vertex_coord[3*(h*i+j)+2]);
-//             glTexCoord2f(1.,0.);
-//             glVertex3f(vertex_coord[3*(h*i+j+1)],vertex_coord[3*(h*i+j+1)+1],vertex_coord[3*(h*i+j+1)+2]);
-//             glTexCoord2f(1.,1.);
-//             glVertex3f(vertex_coord[3*(h*(i+1)+j)],vertex_coord[3*(h*(i+1)+j)+1],vertex_coord[3*(h*(i+1)+j)+2]);
-//             glTexCoord2f(0.,1.);
-//             glVertex3f(vertex_coord[3*(h*(i+1)+j)],vertex_coord[3*(h*(i+1)+j)+1],vertex_coord[3*(h*(i+1)+j)+2]);
-//         glEnd();
-//         glBindTexture(GL_TEXTURE_2D, 0);
-//     glDisable(GL_TEXTURE_2D);
-
-// 		glEnable(GL_TEXTURE_2D);
-//         glBindTexture(GL_TEXTURE_2D, texture[0]);
-// 		glScalef(1.,1.,1.);
-//         glBegin(GL_QUADS);
-//             glTexCoord2f(0.,0.);
-//             glVertex3f(vertex_coord[3*(h*i+j+1)],vertex_coord[3*(h*i+j+1)+1],vertex_coord[3*(h*i+j+1)+2]);
-//             glTexCoord2f(1.,0.);
-//             glVertex3f(vertex_coord[3*(h*(i+1)+j)],vertex_coord[3*(h*(i+1)+j)+1],vertex_coord[3*(h*(i+1)+j)+2]);
-//             glTexCoord2f(1.,1.);
-//             glVertex3f(vertex_coord[3*(h*(i+1)+j+1)],vertex_coord[3*(h*(i+1)+j+1)+1],vertex_coord[3*(h*(i+1)+j+1)+2]);
-//             glTexCoord2f(0.,1.);
-//             glVertex3f(vertex_coord[3*(h*(i+1)+j+1)],vertex_coord[3*(h*(i+1)+j+1)+1],vertex_coord[3*(h*(i+1)+j+1)+2]);
-//         glEnd();
-//         glBindTexture(GL_TEXTURE_2D, 0);
-//     glDisable(GL_TEXTURE_2D);
-
-// 	}
-// }
-
-	//trucs du prof/2.
-	// float position[4] = {5.,5.,5.,0.};
-	// float black[3] = {0.0,0.0,0.0};
-	// float intensite[3] = {1000.0,1000.0,1000.0};
-	// glEnable(GL_LIGHTING);
-	// glEnable(GL_LIGHT0);
-	// glLightfv(GL_LIGHT0,GL_POSITION,position);
-	// glLightfv(GL_LIGHT0,GL_DIFFUSE,intensite);
-	// glLightfv(GL_LIGHT0,GL_SPECULAR,black);
-
-	/*float position[4] = {0.,5.,0.,1.};
-	float black[4] = {0.9,0.9, 0.9, 1.0};
-	float intensite[4] = {0.9, 0.9, 0.9, 1.0};
-	GLfloat ambient[]={0.2, 0.2, 0.2, 1.0};*/
-	//glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
-	//glLightfv(GL_LIGHT0,GL_POSITION,position);
-	//glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-	//glLightfv(GL_LIGHT0,GL_DIFFUSE,intensite);
-	//glLightfv(GL_LIGHT0,GL_SPECULAR,black);
-
-		//GL_LIGHT1 sera la lumière qui bouge, avec la fonction moveLight, là GL_LIGHT1 n'est pas initiée
-		// GLfloat light0Position[] = {xLight1, yLight1, 0.0, 1.0}; // Position
-		// glLightfv(GL_LIGHT1, GL_POSITION, light0Position);
-		// GLfloat ambient0[]={0.2, 0.2, 0.2, 1.0}; // Farbdefinitionen
-		// GLfloat diffuse0[]={0.9, 0.9, 0.9, 1.0};
-		// GLfloat specular0[]={1.0,1.0, 1.0, 1.0};
-		// glLightfv(GL_LIGHT1, GL_AMBIENT, ambient0);
-		// glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse0);
-		// glLightfv(GL_LIGHT1, GL_SPECULAR, specular0);
-		// glEnable(GL_LIGHTING);
-		// glEnable(GL_LIGHT1);
-
-
-	//glLightf(GL_LIGHT0,GL_,black);
-	//glLightf(GL_LIGHT0,GL_SPECULAR,black);
 
 	glPushMatrix();
 	//glRotatef(obj_rot,0.0,1.0,0.0);
