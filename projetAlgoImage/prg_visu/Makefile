@@ -11,7 +11,7 @@ LIBDIR =
 # Compilateur
 GCC = gcc
 # $(OBJECTS) sont les objets qui seront générés après la compilation
-OBJECTS = gldrawing.o visu.o create_object.o valDeGris.o quadtree.o geometry.o light.o skybox.o objet.o
+OBJECTS = gldrawing.o visu.o create_object.o valDeGris.o quadtree.o geometry.o light.o skybox.o objet.o parametre.o
 
 default: $(BIN)
 
@@ -56,6 +56,10 @@ skybox.o: skybox.cpp skybox.h
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 	
 objet.o: objet.cpp objet.h
+	@echo "**** $@ ****"
+	$(GCC) $(INC) $(FLAGS) -c $< -o $@
+
+parametre.o: parametre.cpp parametre.h
 	@echo "**** $@ ****"
 	$(GCC) $(INC) $(FLAGS) -c $< -o $@
 	

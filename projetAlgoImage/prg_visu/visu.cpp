@@ -17,6 +17,7 @@
 #include "geometry.h"
 #include "skybox.h"
 #include "objet.h"
+#include "parametre.h"
 
 
 
@@ -30,7 +31,7 @@ float xLight1=1.;
 float yLight1=0.;
 int i=0;
 int const NOMBRE_TEXTURE =9;
-int const NOMBRE_OBJET=500;
+//int const NOMBRE_OBJET=500;
 //int const NOMBRE_PALMIERS= 100;
 //int const NOMBRE_PARASOLS =50;
 
@@ -43,10 +44,19 @@ float xCam=0;
 float yCam=0;
 float zCam=0.;
 HeightMap heightMap;
-float zfar=15;
-const int fov=95;
+// float zfar=15;
+// const int fov=95;
 float xRegard2D=sin(-180/M_PI*(-M_PI/2.));
 float yRegard2D=cos(-180/M_PI*(-M_PI/2.));
+
+int fov;
+float zfar;
+
+float xsize;
+float zmin;
+float zmax;
+int NOMBRE_OBJET;
+
 
 Node ptsVisibles[3000];
 int ptCount=0;
@@ -353,6 +363,8 @@ void idle(void) {
 
 int main(int argc, char** argv) {
 
+	defineParam(&xsize, &zmin, &zmax, &zfar, &fov, &NOMBRE_OBJET);
+	printf("&xsize : %f,  &zmin : %f,  &zmax : %f,  &zfar : %f,  &fov : %d,  &NOMBRE_OBJET : %d", xsize, zmin, zmax, zfar, fov, NOMBRE_OBJET);
 	defineHeight(&heightMap);
 	/* traitement des paramètres du programme propres à GL */
 	glutInit(&argc, argv);

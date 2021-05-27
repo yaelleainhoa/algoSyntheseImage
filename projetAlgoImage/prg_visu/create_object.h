@@ -4,6 +4,7 @@
 #include "valDeGris.h"
 #include "quadtree.h"
 #include "light.h"
+#include "visu.h"
 
 
 
@@ -40,8 +41,8 @@ extern float* colour_roche;
 
 extern float l;
 
-extern int zmin;
-extern int zmax;
+//extern int zmin;
+//extern int zmax;
 
 void createCoordinates(HeightMap heightMap);
 void hauteurCam(float x, float y, HeightMap heightMap, float *zCam);

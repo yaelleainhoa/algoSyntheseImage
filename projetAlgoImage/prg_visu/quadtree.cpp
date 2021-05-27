@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "geometry.h"
-#include "visu.h"
 #include "create_object.h"
 #include <iostream>
 

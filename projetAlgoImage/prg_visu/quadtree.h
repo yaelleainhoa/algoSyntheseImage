@@ -4,6 +4,7 @@
 #include "geometry.h"
 #include "valDeGris.h"
 
+
 extern int loop;
 
 typedef struct 
