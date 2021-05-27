@@ -61,10 +61,10 @@ Quadtree *quadtree= new Quadtree;
 
 //-----------Variables soleil-----------------------------
 float angle1 = M_PI/2.0;
-float angle2 = 0;
+float angle2 = M_PI/3.0;
 
-Point3D soleilpos = createPoint(0.,0.,100.,0.);
-Color3f soleilcolor = createColor(200,200,200);
+Point3D soleilpos = createPoint(cos(angle2)* xsize/2,0.,sin(angle2)* xsize/2,0.);
+Color3f soleilcolor = createColor(500,500,500);
 Light soleil=createLight(soleilpos, soleilcolor);
 
 //--------------------------------------------------------
@@ -105,7 +105,7 @@ static void drawFunc(void) {
 
 		glColor3f(1.0,0.0,0.0);
 		glDrawRepere(2.0);
-
+		//glScalef(1.,1.,1.);
 		glPushMatrix();
 			glColor3f(1.0,1.,1.);
 
@@ -186,14 +186,14 @@ static void reshapeFunc(int width,int height) {
 /* - x,y : coordonnée du curseur dans la fenêtre         */
 static void kbdFunc(unsigned char c, int x, int y) {
 	switch(c) {
-		case 'Q' :case 'q':
+		case 'Q' :case 'q': case 27 : 
 			exit(0);
 			break;
 		case 'F' : case 'f' : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);//passe en mode filaire
 			break;
 		case 'P' : case 'p' : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);//passe en mode plan
 			break;
-		//case 'R' : case 'r' : glutIdleFunc(idle);
+		case 'R' : case 'r' : glutIdleFunc(idle);
 			break;
 		case 'M' : case 'm' : glutIdleFunc(NULL);
 			break;
@@ -274,7 +274,7 @@ static void kbdSpFunc(int c, int x, int y) {
 /* fonction d'initialisation des paramètres de rendu et  */
 /* des objets de la scènes.                              */
 static void init(HeightMap heightMap) {
-	angle2 = 0.0;
+	angle2 = 0.;
 	angle1 = M_PI/2.;
 
 	/* INITIALISATION DES PARAMETRES GL */
@@ -329,28 +329,15 @@ static void init(HeightMap heightMap) {
 
 // Loop rotation du soleil
 void idle(void) {
-	cout << "k" << endl;
-	//obj_rot+=0.1;
 
-    
-	if(soleil.position.z < 0){
-		angle2 += STEP_ANGLE*2;
+	if(soleil.position.z < -2){
+		angle2 += STEP_ANGLE;
 	}else{
 		angle2+=STEP_ANGLE*0.1;
 	}
-	//cout << "angle : " << angle2 << endl;
-	//rotateSun(&soleil, heightMap.w, angle2);
-	//soleil.position.z = sin(angle2)*(heightMap.h);
-	soleil.position.z = sin(angle2)*(heightMap.w/2);
-    //soleil.position.x = sin(angle2)*(heightMap.h);
-    //soleil.position.y = soleilpos.y + cos(angle2)*(heightMap.h/2);
-	soleil.position.x = cos(angle2)*(heightMap.w/2);
-	cout << " soleil.position.z : " <<  soleil.position.z << endl;
-	if(soleil.position.z < 1 && soleil.position.z > -2 ){
-		cout << " soleil.position.x : " <<  soleil.position.x << endl;
-		cout << "heightMap.w : " << heightMap.w/2 << endl;
-	}
-	
+	soleil.position.z = sin(angle2)* xsize/2;
+	soleil.position.x = cos(angle2)*xsize/2;
+	//cout << " soleil.position.z : " <<  soleil.position.z << endl;
 	tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 	glutPostRedisplay();
 }
