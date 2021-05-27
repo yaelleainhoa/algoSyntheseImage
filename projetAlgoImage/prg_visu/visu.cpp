@@ -16,6 +16,8 @@
 #include "quadtree.h"
 #include "geometry.h"
 #include "skybox.h"
+#include "objet.h"
+
 
 
 using namespace std;
@@ -58,30 +60,6 @@ Point3D soleilpos = createPoint(0.,0.,5.,0.);
 Color3f soleilcolor = createColor(100,100,100);
 Light soleil=createLight(soleilpos, soleilcolor);
 
-//pour tester la fonction tracerTriangles
-//int coordonnees_quadtree[]={0,1,7,8,1,2,8,9,4,5,11,12};
-
-
-void arbre(float x, float y, float z, GLuint texture){
-	//cout << "longitude "<< longitude <<endl; 
-	glPushMatrix();
-	glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texture);
-		glTranslatef(x,y,z);
-		glRotatef(90-longitude*180/M_PI, 0. ,0. ,1. );
-		glColor4f(1,1,1,1);
-        glScalef(1.,1.,1.);
-		glPushMatrix();
-			glBegin(GL_POLYGON);
-				glTexCoord2f(0.,0.); glVertex3f(0., -0.5, 1.);
-				glTexCoord2f(1.,0.); glVertex3f(0., 0.5, 1.);
-				glTexCoord2f(1.,1.); glVertex3f(0., 0.5, 0.);
-				glTexCoord2f(0.,1.); glVertex3f(0., -0.5, 0.);				
-        	glEnd();
-		glPopMatrix();
-	glPopMatrix();
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
 
 /*********************************************************/
 /* fonction de dessin de la scène à l'écran              */
