@@ -29,7 +29,6 @@ float longitude = -M_PI;
 float xLight1=1.;
 float yLight1=0.;
 int i=0;
-float largeur_plan=1.;
 int const NOMBRE_TEXTURE =9;
 int const NOMBRE_OBJET=500;
 //int const NOMBRE_PALMIERS= 100;
@@ -122,27 +121,27 @@ static void drawFunc(void) {
 	glPopMatrix();
 	glPushMatrix();
 	//place aléatoirement des objets sur la map
-		float limiteEau = zmin+210/(255.)*abs(zmax-zmin);
-		float limiteSable= zmin+220/(255.)*abs(zmax-zmin);
+		float limiteEau = zmin+220/(255.)*abs(zmax-zmin);
+		float limiteSable= zmin+230/(255.)*abs(zmax-zmin);
 		float limiteRoche= zmin+240/(255.)*abs(zmax-zmin);
 
 		for(int i =0; i<NOMBRE_OBJET; i++)
 	{
 		srand(i);
 		int coord= rand()%(heightMap.h*heightMap.w);
-		if((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<=limiteEau){
+		if(((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0)<limiteEau){
 			coord= rand()%(heightMap.h*heightMap.w);
 			arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[8]);//bouee
 		}
-		else{if((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0>limiteEau
-				&& (vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<=limiteRoche)
+		else{if(((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0)>limiteEau
+				&& ((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0)<=limiteRoche)
 			{
 				int random=rand()%1;
 				if(random==0){
-					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);//palmier
+					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[7]);//palmier
 				}
 				else{
-					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[7]);//parasol
+					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);//parasol
 				}
 		
 			}
