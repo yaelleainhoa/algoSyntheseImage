@@ -44,8 +44,6 @@ float xCam=0;
 float yCam=0;
 float zCam=0.;
 HeightMap heightMap;
-// float zfar=15;
-// const int fov=95;
 float xRegard2D=sin(-180/M_PI*(-M_PI/2.));
 float yRegard2D=cos(-180/M_PI*(-M_PI/2.));
 
@@ -102,7 +100,7 @@ static void drawFunc(void) {
 	glDisable(GL_DEPTH_TEST); 
 	glDepthMask(GL_FALSE);
 	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam,texture[1], largeur_skybox);
-	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1], largeur_skybox);
+	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[4], largeur_skybox);
 	skyBoxX(largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0], largeur_skybox);
 	skyBoxX(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0], largeur_skybox);
 	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0], largeur_skybox);
@@ -113,7 +111,7 @@ static void drawFunc(void) {
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
 	//pour tester le LOD
-	//glScalef(0.05,0.05,0.05);
+	//glScalef(0.1,0.1,0.1);
 
 
 	glPushMatrix();
