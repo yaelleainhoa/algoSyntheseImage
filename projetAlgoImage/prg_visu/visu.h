@@ -20,10 +20,17 @@ extern float zCam;
 extern float xRegard2D;
 extern float yRegard2D;
 
-extern const int fov;
+extern int fov;
 extern float zfar;
 
+extern float xsize;
+extern float zmin;
+extern float zmax;
+extern int NOMBRE_OBJET;
+
+
 extern Light soleil;
+
 
 /* variables globales pour la gestion de l'objet */
 extern float obj_rot;

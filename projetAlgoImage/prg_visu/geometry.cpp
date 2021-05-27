@@ -2,13 +2,14 @@
 #include "geometry.h"
 #include "quadtree.h"
 #include "visu.h"
+#include "create_object.h"
 #include <stdio.h>
 
 #include <iostream>
 
 using namespace std;
 
-
+//--------------------------Point ----------------------------------------------------------------
 Point3D createPoint(float x, float y, float z, int coord){
     Point3D newPoint;
     newPoint.x=x;
@@ -18,9 +19,10 @@ Point3D createPoint(float x, float y, float z, int coord){
     return newPoint;
 }
 
-Point3D createPointFromCoord(int coord, float coord_vertex[])
+
+Point3D createPointFromCoord(int coord) 
 {
-    return createPoint(coord_vertex[coord], coord_vertex[coord+1],coord_vertex[coord+2] , coord);
+    return createPoint(vertex_coord[3*coord], vertex_coord[3*coord+1],vertex_coord[3*coord+2] , coord);
 }
 
 Point3D addPoint(Point3D p1, Point3D p2)
@@ -28,6 +30,9 @@ Point3D addPoint(Point3D p1, Point3D p2)
     Point3D sum = createPoint(p1.x+p2.x, p1.y+p2.y, p1.z+p2.z, 0);
     return sum;
 }
+//------------------------------------------------------------------------------------------------
+
+//--------------------------Vector----------------------------------------------------------------
 
 Vector3D createVector(float x, float y, float z, int coord){
     Vector3D newVect;
@@ -80,10 +85,6 @@ Vector3D divVector(Vector3D v, float a){
     return v;
 }
 
-float dot(Vector3D a, Vector3D b){
-    return a.x*b.x+a.y*b.y+a.z*b.z;
-}
-
 float norm(Vector3D v){
     return sqrt(dot(v,v));
 }
@@ -92,6 +93,14 @@ Vector3D normalize(Vector3D v){
     return divVector(v, norm(v));
 }
 
+//------------------------------------------------------------------
+
+//produit scalaire
+float dot(Vector3D a, Vector3D b){
+    return a.x*b.x+a.y*b.y+a.z*b.z;
+}
+
+//produit vectoriel
 Vector3D crossProduct(Vector3D a, Vector3D b)
 {
     float x= a.y*b.z - a.z*b.y;
@@ -102,6 +111,7 @@ Vector3D crossProduct(Vector3D a, Vector3D b)
     return prod;
 }
 
+//---------------fonctions d'affichages pour les tests-------------------------
 void printPoint3D(Point3D p){
     printf("Point : (%f,%f,%f)\n", p.x, p.y, p.z);
 }
@@ -109,19 +119,17 @@ void printPoint3D(Point3D p){
 void printVector3D(Vector3D p){
     printf("Vecteur : (%f,%f,%f)\n", p.x, p.y, p.z);
 }
+//------------------------------------------------------------------------------
 
-//regarde si un point est à l'interieur du triangle formé par la caméra
-int pointAppartientTriangle(float x, float y){//, float xCam, float yCam, float xRegard, float yRegard, float longitude, float zFar, float fov){
-//normalement zfar longitude et fov sont en variables globales on devrait pouvoir ne pas les mettre en parametres
-    //cout << "\n P(%f, %f) \n"<< x<<y<<endl;
-    
-    Point3D A=createPoint(xCam,yCam,0.,0);//j'ai mis des NULL pour les coordonnées dans vertex_coord à voir si ça marche ou si on doit revoir la struct
+//----------------fonctions pour les quadtree----------------------------------
+
+int pointAppartientTriangle(float x, float y){//regarde si un point est à l'interieur du triangle formé par la caméra    
+    Point3D A=createPoint(xCam,yCam,0.,0);
     Point3D P=createPoint(x,y,0.,0);
     Vector3D AP=createVectorFromPoints(A,P);
     Point3D direction_regard=createPoint(xRegard2D, yRegard2D,0.,0);
     Vector3D direction = createVectorFromPoints(A, direction_regard);
     direction = normalize(direction);
-    //Vector3D L=createVector(cos(longitude+M_PI/2), sin(longitude+M_PI/2),0.,0);
     Vector3D R=createVector(direction.y, -direction.x,0.,0);
 
     Vector3D AB=addVectors(multVector(direction, zfar), multVector(R, tan(180/M_PI*(fov/2.))*zfar));
@@ -134,23 +142,17 @@ int pointAppartientTriangle(float x, float y){//, float xCam, float yCam, float 
     Vector3D BP=createVectorFromPoints(B,P);
     Vector3D CP=createVectorFromPoints(C,P);
 
-   // cout << "les coord sont : A(%f,%f), B(%f,%f), C(%f,%f)\n"<<  A.x<<A.y<<B.x<<B.y<<C.x<<C.y<<endl;
-
     Vector3D vecteurs[3]={AB, BC, CA};
     Vector3D vecteursP[3]={AP,BP,CP};
     float determinant =0;
     for(int i=0; i<3; i++){
         determinant = vecteurs[i].x * vecteursP[i].y - vecteurs[i].y * vecteursP[i].x;
-        //cout << "vec.x : %f , vec.y :%f, AP.x:%f, AP.y:%f \n"<< vecteurs[i].x,vecteurs[i].y, vecteursP[i].x, vecteursP[i].y<<endl;
-        //cout << "det : %f \n"<<  determinant<<endl;
 
         if (determinant<0){
-            //cout << "det : %f \n"<<  determinant<<endl;
             return 0;
         }
     }
     return 1;
-
 }
 
 //regarde si deux segments se croisent : renvoie 1 si oui 0, si non
@@ -183,12 +185,12 @@ int intersectionDeuxSegments(float xA, float yA,float xB, float yB, float xC, fl
     if(det1*det2>0){
         return 0;
     }
-
     return 1;
-
 }
+//--------------------------------------------------------------
 
-float distanceCam(Point3D pt)
+//-------------fonctions générales------------------------------
+float distanceCam(Point3D pt) //distance d'un point à la caméra
 {
     float distance = sqrt((xCam-pt.x)*(xCam-pt.x) 
                         + (yCam-pt.y)*(yCam-pt.y) 
@@ -196,7 +198,7 @@ float distanceCam(Point3D pt)
     return distance;
 }
 
-float distance2points(Point3D p1, Point3D p2)
+float distance2points(Point3D p1, Point3D p2)//distance entre 2 points
 {
     float distance = sqrt((p2.x-p1.x)*(p2.x-p1.x) 
                         + (p2.y-p1.y)*(p2.y-p1.y) 
@@ -218,8 +220,10 @@ float max(float d1, float d2)
     else
         {return d1;}
 }
+//-----------------------------------------------------------------------------------------------
 
-Vector3D normalTriangle(Point3D A, Point3D B, Point3D C)
+//---------------------fonctions pour calculer Lambert--------------------------------------------
+Vector3D normalTriangle(Point3D A, Point3D B, Point3D C)//calcul le vecteur normal au triangle ABC
 {
     Vector3D AC = createVectorFromPoints(A, C);
     Vector3D AB = createVectorFromPoints(A, B);
@@ -228,10 +232,10 @@ Vector3D normalTriangle(Point3D A, Point3D B, Point3D C)
     return normal;
 }
 
-Point3D centreTriangle(Point3D a, Point3D b, Point3D c)
+Point3D centreTriangle(Point3D a, Point3D b, Point3D c)//calcul le point au centre du triangle ABC
 {
     Point3D sum= addPoint(addPoint(a, b), c);
     Point3D center = multVector(sum, 1/3.0);
     return center;
 }
-
+//-------------------------------------------------------------------------------------------------

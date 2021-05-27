@@ -15,10 +15,10 @@ void defineHeight(HeightMap * heightMap) {
 			for (int i = 0; i < heightMap->h; i++){
                 for(int j=0; j<heightMap->w; j++){
                     lireTexte >> heightMap->valeursDeGris[i][j];
-                    }
+                }
 			}
 		}
-}
+	}
 }
 
 #endif
