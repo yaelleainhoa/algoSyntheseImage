@@ -100,7 +100,7 @@ static void drawFunc(void) {
 
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
-
+	//pour tester le LOD
 	//glScalef(0.05,0.05,0.05);
 
 

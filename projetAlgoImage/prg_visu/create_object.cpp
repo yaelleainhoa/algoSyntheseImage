@@ -61,21 +61,18 @@ void createCoordinates(HeightMap heightMap) {
 	//vertex_coord_1 = (float*) calloc(sizeof(float),3*vertex_number);
 	//textures_coord_1 = (float*) calloc(sizeof(float),3*triangle_number_1);
 	//triangle_index_1 = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number_1);
+	int p=0;
 	
-int p=0;
-   
-for (int i=0;i<h;i++){
-	for(int j=0;j<w;j++){
-		vertex_coord[p]=(i-h/2)*l ;
-		vertex_coord[2+p]=zmin+heightMap.valeursDeGris[i][j]/(255.)*abs(zmax-zmin);
-		vertex_coord[1+p]=(j-w/2)*l;
-		p+=3;
+	for (int i=0;i<h;i++){
+		for(int j=0;j<w;j++){
+			vertex_coord[p]=(i-h/2)*l ;
+			vertex_coord[2+p]=zmin+heightMap.valeursDeGris[i][j]/(255.)*abs(zmax-zmin);
+			vertex_coord[1+p]=(j-w/2)*l;
+			p+=3;
 
+		}
 	}
 }
-
-}
-
 
 /*
 
@@ -392,8 +389,6 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, midNO_NE, NE, midSO_SE, SE, &coordonnees_quadtree[i], light, colour_roche);
 						}
 						else{
-							//Point3D midNO_SO=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w));
-							//Point3D midNE_SE=createPointFromCoord((int)(((int)(NO/w)+(int)(SO/w))/2)*w + (NO-(int)(NO/w)*w)+(int)l);
 							int midNO_SO=(int)(((int)(NO/heightMap.w)+(int)(SO/heightMap.w))/2)*heightMap.w + (NO-(int)(NO/heightMap.w)*heightMap.w);
 							int midNE_SE=(int)(((int)(NE/heightMap.w)+(int)(SE/heightMap.w))/2)*heightMap.w + (NE-(int)(NE/heightMap.w)*heightMap.w);
 							textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, NO, NE, midNO_SO, midNE_SE, &coordonnees_quadtree[i], light, colour_roche);
@@ -402,18 +397,12 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 					}
 					else{
 						textureTriangle(triangle_index_roche, textures_coord_roche, vertex_texture_roches, &text_roche, &t_roche, &vertex_tex_roche, &k_roche, NO, NE, SO, SE, &coordonnees_quadtree[i], light, colour_roche);
-					}
-					
+					}	
 				}
-				
-
 			}
-
-		
 		}
 	}
 }
-
 
 
 void textureTriangle(unsigned int *triangle_index, float* textures, float* vertex_texture, int* text, int* t, int* vertex, int* nb_triangle, int NO, int NE, int SO, int SE, Node* node, Light * light, float* colour){
@@ -479,28 +468,6 @@ void textureTriangle(unsigned int *triangle_index, float* textures, float* verte
 		(*nb_triangle)+=6;
 		(*t)+=4;
 }
-
-													
-
-// //Pas encore opti
-// void tracerTriangles(Node *coordonnees_quadtree, int taille,HeightMap heightMap){
-// 		int k=0;
-// 		int text=0;
-// 		free(triangle_index);
-// 		triangle_index = (unsigned int*) calloc(sizeof(unsigned int),3*triangle_number);
-// 		//triangle_index = (unsigned int*) realloc(triangle_index, sizeof(int)*3*2*taille);
-// 		//textures_coord = (float*) realloc(textures_coord,sizeof(float)*2*taille);
-// 		for(int i=0; i<taille;i++){
-// 			triangle_index[k]=coordonnees_quadtree[i].pointNO.coord;
-// 			triangle_index[k+1]=coordonnees_quadtree[i].pointNE.coord;
-// 			triangle_index[k+2]=coordonnees_quadtree[i].pointSO.coord;
-// 			triangle_index[k+3]=coordonnees_quadtree[i].pointNE.coord;
-// 			triangle_index[k+4]=coordonnees_quadtree[i].pointSE.coord;
-// 			triangle_index[k+5]=coordonnees_quadtree[i].pointSO.coord;
-// 			k+=6;
-// 		}
-// }
-
 
 void hauteurCam(float x, float y, HeightMap heightMap, float *zCam){
 	int h=heightMap.h;
