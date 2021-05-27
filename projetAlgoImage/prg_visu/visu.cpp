@@ -51,7 +51,7 @@ Quadtree *quadtree= new Quadtree;
 float teta = 0;
 
 
-Point3D soleilpos = createPoint(0.,0.,4.,0.);
+Point3D soleilpos = createPoint(0.,0.,5.,0.);
 Color3f soleilcolor = createColor(100,100,100);
 Light soleil=createLight(soleilpos, soleilcolor);
 

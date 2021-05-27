@@ -57,20 +57,17 @@ float calculLambertCoef(Light light, Point3D a, Point3D b, Point3D c)//abc le tr
     *light_vector = createVectorFromPoints( light.position,center );
     Vector3D normal =normalTriangle(a, b, c);
     float cosine = dot(normal,normalize(*light_vector));
-    lambert= max(cosine, 0.);
+    lambert= max(cosine, 0.05);
 
-    float distance= sqrt(dot(light.position,center));//distance2points(light.position, center);
+    float distance= distance2points(light.position, center);
     float luminosity = 1 / (distance * distance); 
-    //printf("lambert : %f",cosine *luminosity);
     return lambert *luminosity;
 }
 //ajouter        
 Color3f finalColor(Light light, Point3D a, Point3D b, Point3D  c)
 {
-    Color3f pointColor= createColor(0.6,0.6,0.6);//trouver la couleur d'un point avec une texture
     float lambert_factor= calculLambertCoef(light, a, b, c);
-    Color3f final_color = multColor(pointColor , multColorParA(&light.color , lambert_factor ));//point color avec les texture a trouver pour le moment
-    //printf("couleur r = %f, v=%f, b=%f", final_color.r, final_color.v, final_color.b);
+    Color3f final_color = multColorParA(&light.color , lambert_factor );
     return final_color;
 }
 
