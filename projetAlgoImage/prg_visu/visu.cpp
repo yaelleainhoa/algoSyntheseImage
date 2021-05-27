@@ -27,7 +27,7 @@ float xLight1=1.;
 float yLight1=0.;
 int i=0;
 float largeur_plan=1.;
-int const NOMBRE_TEXTURE =6;
+int const NOMBRE_TEXTURE =9;
 int const NOMBRE_PALMIERS= 100;
 int const NOMBRE_PARASOLS =50;
 
@@ -55,7 +55,7 @@ float angle1 = M_PI/2.0;
 float angle2 = 0;
 
 Point3D soleilpos = createPoint(0.,0.,4.,0.);
-Color3f soleilcolor = createColor(10,10,10);
+Color3f soleilcolor = createColor(100,100,100);
 Light soleil=createLight(soleilpos, soleilcolor);
 
 //pour tester la fonction tracerTriangles
@@ -175,12 +175,12 @@ static void drawFunc(void) {
 	glColor3f(1.0,1.0,1.0);
 	glDisable(GL_DEPTH_TEST); 
 	glDepthMask(GL_FALSE);
-	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam,texture[5]);
-	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[5]);
-	skyBoxX(largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
-	skyBoxX(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[1]);
-	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1]);
-	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1]);
+	skyBoxZ(-largeur_skybox/2.+xCam, largeur_skybox/2.+yCam, largeur_skybox/2.+zCam,texture[1]);
+	skyBoxZ(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[1]);
+	skyBoxX(largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0]);
+	skyBoxX(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,largeur_skybox/2.+zCam,texture[0]);
+	skyBoxY(-largeur_skybox/2.+xCam,-largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0]);
+	skyBoxY(-largeur_skybox/2.+xCam,largeur_skybox/2.+yCam,-largeur_skybox/2.+zCam,texture[0]);
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 
@@ -270,8 +270,10 @@ static void drawFunc(void) {
 	//glRotatef(obj_rot,0.0,1.0,0.0);
 	glColor3f(1.0,1.,1.);
 
-	glDrawObject(texture[3]);
-	glDrawObject_1(texture[4]);
+	glDrawObject_eau(texture[2]);
+	glDrawObject_roche(texture[4]);
+	glDrawObject_sable(texture[3]);
+	glDrawObject_transition(texture[5]);
 
 	glDisable(GL_LIGHTING);
 	//glDisable(GL_BLEND);
@@ -286,16 +288,16 @@ static void drawFunc(void) {
 		while((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<zmin+230/(255.)*abs(zmax-zmin)){
 			coord= rand()%(heightMap.h*heightMap.w);
 		}
-		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[0]);
+		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);
 	}
-	for(int i =0; i<NOMBRE_PALMIERS; i++)
+	for(int i =0; i<NOMBRE_PARASOLS; i++)
 	{
 		srand(i*i);
 		int coord= rand()%((heightMap.h*heightMap.w));
 		while((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<zmin+230/(255.)*abs(zmax-zmin)){
 			coord= rand()%(heightMap.h*heightMap.w);
 		}
-		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2],texture[2]);
+		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2],texture[7]);
 	}
 	glPopMatrix();
 	/* Fin du dessin */
@@ -470,7 +472,7 @@ static void init(HeightMap heightMap) {
 	createCoordinates(heightMap);
 
 
-	char const * sources[NOMBRE_TEXTURE]={"images/palmier.png","images/sky.jpg", "images/parasol.png","images/sol_eau.png","images/sol_sable.png","images/sky_top.png"};
+	char const * sources[NOMBRE_TEXTURE]={"images/sky.jpg","images/sky_top.png","images/sol_eau.png","images/sol_sable.png","images/sol_roche.png","images/sol_transition.png","images/palmier.png","images/parasol.png","images/bouee.png"};
     for(int i=0; i<NOMBRE_TEXTURE; i++){
 		glEnable(GL_TEXTURE_2D);
         SDL_Surface* image=IMG_Load(sources[i]);

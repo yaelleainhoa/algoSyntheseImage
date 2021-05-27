@@ -43,8 +43,6 @@ Color3f multColor(Color3f c1, Color3f c2)
                             c2.b*c1.b);
     return color;
 }
-
-
 //first step
 
 //calculer les coefficients de Lambert
@@ -64,7 +62,7 @@ float calculLambertCoef(Light light, Point3D a, Point3D b, Point3D c)//abc le tr
     float distance= sqrt(dot(light.position,center));//distance2points(light.position, center);
     float luminosity = 1 / (distance * distance); 
     //printf("lambert : %f",cosine *luminosity);
-    return cosine *luminosity;
+    return lambert *luminosity;
 }
 //ajouter        
 Color3f finalColor(Light light, Point3D a, Point3D b, Point3D  c)
