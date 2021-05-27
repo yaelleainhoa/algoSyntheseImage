@@ -35,13 +35,13 @@ float obj_rot = 0.0;
 GLuint texture[NOMBRE_TEXTURE];
 float largeur_skybox=10.;
 
-const float hauteur_regard=0.5;
+const float hauteur_regard=2.5;
 float xCam=0;
 float yCam=0;
 float zCam=0.;
 HeightMap heightMap;
-float zfar=15;
-const int fov=95;
+float zfar=105;
+const int fov=255;
 float xRegard2D=sin(-180/M_PI*(-M_PI/2.));
 float yRegard2D=cos(-180/M_PI*(-M_PI/2.));
 
@@ -54,8 +54,8 @@ float teta = 0;
 float angle1 = M_PI/2.0;
 float angle2 = 0;
 
-Point3D soleilpos = createPoint(0.,0.,4.,0.);
-Color3f soleilcolor = createColor(100,100,100);
+Point3D soleilpos = createPoint(0.,0.,100.,0.);
+Color3f soleilcolor = createColor(200,200,200);
 Light soleil=createLight(soleilpos, soleilcolor);
 
 //pour tester la fonction tracerTriangles
@@ -158,7 +158,7 @@ static void drawFunc(void) {
 
 	/* Debut du dessin de la scène */
 	glPushMatrix();
-	
+	glRotatef(obj_rot, 0.,0.,1.0);
 	/* placement de la caméra */
 	gluLookAt(xCam, yCam, zCam+hauteur_regard,
 			sin(longitude)*sin(latitude)+xCam,cos(longitude)*sin(latitude)+yCam,cos(latitude)+zCam+hauteur_regard,
@@ -187,7 +187,7 @@ static void drawFunc(void) {
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
 
-	//glScalef(0.05,0.05,0.05);
+	glScalef(0.05,0.05,0.05);
 
 	//tracerTriangles(ptsVisibles, ptCount);
 // 	int h = heightMap.h;
@@ -277,7 +277,7 @@ static void drawFunc(void) {
 
 	glDisable(GL_LIGHTING);
 	//glDisable(GL_BLEND);
-
+	//rotateSun(&soleil, heightMap.w, angle2);
 	glPopMatrix();
 	glPushMatrix();
 	//place aléatoirement des objets sur la map
@@ -302,12 +302,12 @@ static void drawFunc(void) {
 	glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
-
 	/* fin de la définition de la scène */
 	glFinish();
 
 	/* changement de buffer d'affichage */
 	glutSwapBuffers();
+
 }
 
 /*********************************************************/
@@ -349,7 +349,7 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			break;
 		case 'P' : case 'p' : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 			break;
-		case 'R' : case 'r' : glutIdleFunc(idle);
+		//case 'R' : case 'r' : glutIdleFunc(idle);
 			break;
 		case 'M' : case 'm' : glutIdleFunc(NULL);
 			break;
@@ -377,11 +377,8 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 			hauteurCam(xCam, yCam, heightMap, &zCam);
 			break;	
-		case 'K' : case 'k' :
-		cout << "soleil : " << soleil.position.x << ", " << soleil.position.y << ", " << soleil.position.z << endl;
-			glutIdleFunc(idleAngle);
-			//rotateSun(&soleil, 8);
-			break;
+		// case 'K' : case 'k' : glutIdleFunc(idle);
+		// 	break;
 		default:
 			printf("Appui sur la touche %c\n",c);
 	}
@@ -456,6 +453,8 @@ static void init(HeightMap heightMap) {
 	//longitude = -M_PI;
 
 	obj_rot = 0.0;
+	angle2 = 0.0;
+	angle1 = M_PI/2.;
 
 	/* INITIALISATION DES PARAMETRES GL */
 	/* couleur du fond (gris sombre) */
@@ -502,18 +501,36 @@ static void init(HeightMap heightMap) {
     }
 }
 
-void idle(void) {
-	obj_rot+=0.1;
-	glutPostRedisplay();
-}
+// void idle(void) {
+// 	obj_rot+=0.1;
+// 	glutPostRedisplay();
+// }
 
 // Loop rotation du soleil
-void idleAngle(void) {
-	//rotateSun(soleil,0.,0.,0., 2);
-	// if(angle2==2*M_PI){angle2=0;}
-    // else{angle2-=STEP_ANGLE*0.1;}
-	rotateSun(&soleil, heightMap.w);
-	// angle2-=STEP_ANGLE;
+void idle(void) {
+	cout << "k" << endl;
+	//obj_rot+=0.1;
+
+    
+	if(soleil.position.z < 0){
+		angle2 += STEP_ANGLE*2;
+	}else{
+		angle2+=STEP_ANGLE*0.1;
+	}
+	//cout << "angle : " << angle2 << endl;
+	//rotateSun(&soleil, heightMap.w, angle2);
+	//soleil.position.z = sin(angle2)*(heightMap.h);
+	soleil.position.z = sin(angle2)*(heightMap.w/2);
+    //soleil.position.x = sin(angle2)*(heightMap.h);
+    //soleil.position.y = soleilpos.y + cos(angle2)*(heightMap.h/2);
+	soleil.position.x = cos(angle2)*(heightMap.w/2);
+	cout << " soleil.position.z : " <<  soleil.position.z << endl;
+	if(soleil.position.z < 1 && soleil.position.z > -2 ){
+		cout << " soleil.position.x : " <<  soleil.position.x << endl;
+		cout << "heightMap.w : " << heightMap.w/2 << endl;
+	}
+	
+	tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 	glutPostRedisplay();
 }
 
@@ -609,8 +626,8 @@ int main(int argc, char** argv) {
 	/* association de la fonction callback de DRAG de la souris */
 	glutMotionFunc(motionFunc);
 
-	glutIdleFunc(idle);
-
+	//glutIdleFunc(idle);
+	glutIdleFunc(NULL);
 	/* boucle principale de gestion des événements */
 	glutMainLoop();
 	/* Cette partie du code n'est jamais atteinte */
