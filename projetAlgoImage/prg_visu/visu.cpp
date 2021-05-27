@@ -27,8 +27,9 @@ float yLight1=0.;
 int i=0;
 float largeur_plan=1.;
 int const NOMBRE_TEXTURE =9;
-int const NOMBRE_PALMIERS= 100;
-int const NOMBRE_PARASOLS =50;
+int const NOMBRE_OBJET=500;
+//int const NOMBRE_PALMIERS= 100;
+//int const NOMBRE_PARASOLS =50;
 
 float obj_rot = 0.0;
 GLuint texture[NOMBRE_TEXTURE];
@@ -278,24 +279,33 @@ static void drawFunc(void) {
 	glPopMatrix();
 	glPushMatrix();
 	//place aléatoirement des objets sur la map
-		for(int i =0; i<NOMBRE_PALMIERS; i++)
+		float limiteEau = zmin+210/(255.)*abs(zmax-zmin);
+		float limiteSable= zmin+220/(255.)*abs(zmax-zmin);
+		float limiteRoche= zmin+240/(255.)*abs(zmax-zmin);
+
+		for(int i =0; i<NOMBRE_OBJET; i++)
 	{
 		srand(i);
 		int coord= rand()%(heightMap.h*heightMap.w);
-		while((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<zmin+230/(255.)*abs(zmax-zmin)){
+		if((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<=limiteEau){
 			coord= rand()%(heightMap.h*heightMap.w);
+			arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[8]);//bouee
 		}
-		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);
-	}
-	for(int i =0; i<NOMBRE_PARASOLS; i++)
-	{
-		srand(i*i);
-		int coord= rand()%((heightMap.h*heightMap.w));
-		while((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<zmin+230/(255.)*abs(zmax-zmin)){
-			coord= rand()%(heightMap.h*heightMap.w);
+		else{if((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0>limiteEau
+				&& (vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0<=limiteRoche)
+			{
+				int random=rand()%1;
+				if(random==0){
+					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);//palmier
+				}
+				else{
+					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[7]);//parasol
+				}
+		
+			}
 		}
-		arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2],texture[7]);
 	}
+	
 	glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
