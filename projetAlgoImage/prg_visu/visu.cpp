@@ -112,7 +112,7 @@ static void drawFunc(void) {
 
 	glColor3f(1.0,0.0,0.0);
 	glDrawRepere(2.0);
-
+	//pour tester le LOD
 	//glScalef(0.05,0.05,0.05);
 
 
@@ -140,7 +140,6 @@ static void drawFunc(void) {
 		srand(i);
 		int coord= rand()%(heightMap.h*heightMap.w);
 		if(((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0)<limiteEau){
-			coord= rand()%(heightMap.h*heightMap.w);
 			arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[8]);//bouee
 		}
 		else{if(((vertex_coord[3*coord+2]+vertex_coord[3*(coord+1)+2]+vertex_coord[3*(coord+heightMap.w)+2]+vertex_coord[3*(coord+heightMap.w+1)+2])/4.0)>limiteEau
@@ -148,12 +147,11 @@ static void drawFunc(void) {
 			{
 				int random=rand()%1;
 				if(random==0){
-					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[7]);//palmier
+					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);//palmier
 				}
 				else{
-					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);//parasol
+					arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[7]);//parasol
 				}
-		
 			}
 		}
 	}
