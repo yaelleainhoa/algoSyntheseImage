@@ -17,6 +17,7 @@ using namespace std;
 #include "valDeGris.h"
 #include "quadtree.h"
 #include "geometry.h"
+#include "light.h"
 #include "skybox.h"
 #include "objet.h"
 #include "parametre.h"
@@ -53,14 +54,18 @@ float zfar;
 float xsize;
 float zmin;
 float zmax;
+string map;
 
 Node ptsVisibles[3000];
 int ptCount=0;
 Quadtree *quadtree= new Quadtree;
 
 //-----------Variables soleil-----------------------------
-Point3D soleilpos = createPoint(0.,0.,5.,0.);
-Color3f soleilcolor = createColor(100,100,100);
+float angle1 = M_PI/2.0;
+float angle2 = M_PI/3.0;
+
+Point3D soleilpos = createPoint(cos(angle2)* xsize/2,0.,sin(angle2)* xsize/2,0.);
+Color3f soleilcolor = createColor(500,500,500);
 Light soleil=createLight(soleilpos, soleilcolor);
 
 //--------------------------------------------------------
@@ -101,7 +106,7 @@ static void drawFunc(void) {
 
 		glColor3f(1.0,0.0,0.0);
 		glDrawRepere(2.0);
-
+		//glScalef(1.,1.,1.);
 		glPushMatrix();
 			glColor3f(1.0,1.,1.);
 
@@ -111,6 +116,7 @@ static void drawFunc(void) {
 			glDrawObject_sable(texture[3]);
 			glDrawObject_transition(texture[5]);
 
+	glScalef(0.05,0.05,0.05);
 			glDisable(GL_LIGHTING);
 		glPopMatrix();
 		glPushMatrix();
@@ -148,12 +154,12 @@ static void drawFunc(void) {
 		glPopMatrix();
 	/* Fin du dessin */
 	glPopMatrix();
-
 	/* fin de la définition de la scène */
 	glFinish();
 
 	/* changement de buffer d'affichage */
 	glutSwapBuffers();
+
 }
 
 //--------------------------------------------------------
@@ -185,7 +191,11 @@ static void reshapeFunc(int width,int height) {
 /* - x,y : coordonnée du curseur dans la fenêtre         */
 static void kbdFunc(unsigned char c, int x, int y) {
 	switch(c) {
+<<<<<<< HEAD
 		case 'Q' :case 'q': case 27:
+=======
+		case 'Q' :case 'q': case 27 : 
+>>>>>>> main
 			exit(0);
 			break;
 		case 'F' : case 'f' : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);//passe en mode filaire
@@ -219,7 +229,9 @@ static void kbdFunc(unsigned char c, int x, int y) {
 			travelQuadtree(ptsVisibles, *quadtree, &ptCount);
 			tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 			hauteurCam(xCam, yCam, heightMap, &zCam);
-			break;
+			break;	
+		// case 'K' : case 'k' : glutIdleFunc(idle);
+		// 	break;
 		default:
 			printf("Appui sur la touche %c\n",c);
 	}
@@ -271,6 +283,9 @@ static void kbdSpFunc(int c, int x, int y) {
 /* fonction d'initialisation des paramètres de rendu et  */
 /* des objets de la scènes.                              */
 static void init(HeightMap heightMap) {
+	angle2 = 0.;
+	angle1 = M_PI/2.;
+
 	/* INITIALISATION DES PARAMETRES GL */
 	/* couleur du fond (gris sombre) */
 	glClearColor(0.3,0.3,0.3,0.0);
@@ -316,14 +331,30 @@ static void init(HeightMap heightMap) {
     }
 }
 
+// void idle(void) {
+// 	obj_rot+=0.1;
+// 	glutPostRedisplay();
+// }
+
+// Loop rotation du soleil
 void idle(void) {
+
+	if(soleil.position.z < -2){
+		angle2 += STEP_ANGLE;
+	}else{
+		angle2+=STEP_ANGLE*0.1;
+	}
+	soleil.position.z = sin(angle2)* xsize/2;
+	soleil.position.x = cos(angle2)*xsize/2;
+	//cout << " soleil.position.z : " <<  soleil.position.z << endl;
+	tracerTriangles(ptsVisibles, ptCount, heightMap, &soleil);
 	glutPostRedisplay();
 }
 
 int main(int argc, char** argv) {
 
-	defineParam(&xsize, &zmin, &zmax, &zfar, &fov, &NOMBRE_OBJET);
-	defineHeight(&heightMap);
+	defineParam(&map,&xsize, &zmin, &zmax, &zfar, &fov, &NOMBRE_OBJET);
+	defineHeight(&heightMap, map);
 	/* traitement des paramètres du programme propres à GL */
 	glutInit(&argc, argv);
 	/* initialisation du mode d'affichage :                */
@@ -358,8 +389,8 @@ int main(int argc, char** argv) {
 	glutSpecialFunc(kbdSpFunc);
 	/* association de la fonction callback d'événement souris */
 
-	glutIdleFunc(idle);
-
+	//glutIdleFunc(idle);
+	glutIdleFunc(NULL);
 	/* boucle principale de gestion des événements */
 	glutMainLoop();
 	/* Cette partie du code n'est jamais atteinte */

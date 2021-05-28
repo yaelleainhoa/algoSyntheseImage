@@ -2,6 +2,8 @@
 #define __LIGHT_H
 
 #include "geometry.h"
+#include "valDeGris.h"
+
 //----------------Struct----------------------------
 typedef struct 
 {
@@ -30,5 +32,7 @@ Light createLight(Point3D position, Color3f color);
 
 float calculLambertCoef(Light light, Point3D A, Point3D B, Point3D C);
 Color3f finalColor(Light light, Point3D A, Point3D B, Point3D  C);
+
+void rotateSun(Light *light, int width, int angle2);
 
 #endif

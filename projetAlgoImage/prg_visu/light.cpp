@@ -69,3 +69,18 @@ Color3f finalColor(Light light, Point3D A, Point3D B, Point3D  C)//renvoie la co
     return final_color;
 }
 
+void rotateSun(Light *light, int width, int angle2)
+{
+    light->position.x = sin(angle2)*cos(angle1)*(width/2);
+    //light->position.y = y;
+    light->position.z = cos(angle2)*(width/2);
+    light->position.y = sin(angle2)*sin(angle1)*(width/2);
+    // if(light->position.z < 0)
+    // {angle2-=STEP_ANGLE*2;
+    // }
+    // else{
+    //     angle2-=STEP_ANGLE*0.1;
+    // }
+
+    cout << "soleil position (x,y,z) : " << light->position.x << ", " << light->position.y << ", " << light->position.z << endl;
+}
