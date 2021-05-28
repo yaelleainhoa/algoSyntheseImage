@@ -67,6 +67,7 @@ float angle2 = M_PI/3.0;
 Point3D soleilpos = createPoint(cos(angle2)* xsize/2,0.,sin(angle2)* xsize/2,0.);
 Color3f soleilcolor = createColor(500,500,500);
 Light soleil=createLight(soleilpos, soleilcolor);
+int rot =1;
 
 //--------------------------------------------------------
 
@@ -137,7 +138,7 @@ static void drawFunc(void) {
 					if((max(max(vertex_coord[3*coord+2],vertex_coord[3*(coord+1)+2]),max(vertex_coord[3*(coord+heightMap.w)+2],vertex_coord[3*(coord+heightMap.w+1)+2]))>limiteEau)
 						&&(max(max(vertex_coord[3*coord+2],vertex_coord[3*(coord+1)+2]),max(vertex_coord[3*(coord+heightMap.w)+2],vertex_coord[3*(coord+heightMap.w+1)+2]))<=limiteRoche))
 					{
-						int random=rand()%1;
+						int random=rand()%2;
 						if(random==0){
 							arbre(vertex_coord[3*coord],vertex_coord[3*coord+1],vertex_coord[3*coord+2], texture[6]);//palmier
 						}
@@ -191,20 +192,22 @@ static void reshapeFunc(int width,int height) {
 /* - x,y : coordonnée du curseur dans la fenêtre         */
 static void kbdFunc(unsigned char c, int x, int y) {
 	switch(c) {
-<<<<<<< HEAD
 		case 'Q' :case 'q': case 27:
-=======
-		case 'Q' :case 'q': case 27 : 
->>>>>>> main
-			exit(0);
+		exit(0);
 			break;
 		case 'F' : case 'f' : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);//passe en mode filaire
 			break;
 		case 'P' : case 'p' : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);//passe en mode plan
 			break;
-		case 'R' : case 'r' : glutIdleFunc(idle);
-			break;
-		case 'M' : case 'm' : glutIdleFunc(NULL);
+		case 'R' : case 'r' : //appuie une fois -> mise en rotation
+			if(rot){
+				glutIdleFunc(idle);
+				rot=0;
+			}
+			else{//				appuie une deuxième fois -> arrêt de la rotation
+				glutIdleFunc(NULL);
+				rot=1;
+			}
 			break;
 		case 'A' : case 'a' : printf("xpos : %f, ypos : %f \n", xCam, yCam);
 			break;
