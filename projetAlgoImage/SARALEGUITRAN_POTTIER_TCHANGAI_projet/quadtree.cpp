@@ -279,7 +279,7 @@ void travelQuadtree(Node ptsVisibles[], Quadtree quadtree, int* ptCount)
     float distSE=distanceCam(quadtree.ptsExt.pointSE);
     float distNE=distanceCam(quadtree.ptsExt.pointNE);
     float distMin = min(min(distNO,distNE),min(distSO,distSE));
-    if(distMin > abs((quadtree.ptsExt.pointNO.y - quadtree.ptsExt.pointNE.y))*6)
+    if(distMin > abs((quadtree.ptsExt.pointNO.y - quadtree.ptsExt.pointNE.y))*7)
     {
         ptsVisibles[(*ptCount)]=quadtree.ptsExt;
         (*ptCount)++;

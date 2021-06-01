@@ -122,9 +122,9 @@ static void drawFunc(void) {
 		glPopMatrix();
 		glPushMatrix();
 			//place aléatoirement des objets sur la map
-			float limiteEau = zmin+220/(255.)*abs(zmax-zmin);
-			float limiteSable= zmin+230/(255.)*abs(zmax-zmin);
-			float limiteRoche= zmin+240/(255.)*abs(zmax-zmin);
+			float limiteEau = zmin+80/(255.)*abs(zmax-zmin);
+			float limiteSable= zmin+130/(255.)*abs(zmax-zmin);
+			float limiteRoche= zmin+160/(255.)*abs(zmax-zmin);
 
 			for(int i =0; i<NOMBRE_OBJET; i++)
 			{

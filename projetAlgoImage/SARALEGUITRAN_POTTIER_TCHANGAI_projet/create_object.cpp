@@ -124,9 +124,9 @@ void tracerTriangles(Node *coordonnees_quadtree, int taille, HeightMap heightMap
 			int SE=coordonnees_quadtree[i].pointSE.coord;
 		int largeur=heightMap.w*abs(NO-NE);
 		int longueur=abs(NO-SO);
-		float limiteEau = zmin+220/(255.)*abs(zmax-zmin);
-		float limiteSable= zmin+230/(255.)*abs(zmax-zmin);
-		float limiteRoche= zmin+240/(255.)*abs(zmax-zmin);
+		float limiteEau = zmin+80/(255.)*abs(zmax-zmin);
+		float limiteSable= zmin+130/(255.)*abs(zmax-zmin);
+		float limiteRoche= zmin+160/(255.)*abs(zmax-zmin);
 
 		//on applique une texture differente selon la hauteur max du quadtree
 		float maxHauteur=max(max(coordonnees_quadtree[i].pointNO.z,coordonnees_quadtree[i].pointNE.z),max(coordonnees_quadtree[i].pointSO.z,coordonnees_quadtree[i].pointSE.z));
