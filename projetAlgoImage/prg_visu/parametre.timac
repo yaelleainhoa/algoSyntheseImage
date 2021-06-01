@@ -1,0 +1,14 @@
+nom_de_la_map_a_charger
+./valDeGris2.txt
+xsize
+30
+zmin
+-2
+zmax
+2
+zfar
+10
+fov
+105
+nb_objet
+20
