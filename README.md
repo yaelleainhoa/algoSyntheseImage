@@ -10,6 +10,8 @@ excecution:
 Menu:
 
  z ou Z : avancer 
+ 
+ 
  s ou S : reculer 
  
  
@@ -23,6 +25,8 @@ Menu:
  
  
  f: passage au mode filaire
+ 
+ 
  p: passage en mode avec texture
  
  
