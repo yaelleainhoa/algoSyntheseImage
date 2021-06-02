@@ -149,6 +149,7 @@ static void drawFunc(void) {
 				}
 			}	
 		//placement du locklass jackpot
+		srand(NOMBRE_OBJET);
 		int coord_l= rand()%(heightMap.h*heightMap.w);
 		arbre(vertex_coord[3*coord_l],vertex_coord[3*coord_l+1],vertex_coord[3*coord_l+2], texture[9]);//locklass
 			
@@ -355,8 +356,8 @@ void idle(void) {
 }
 
 int main(int argc, char** argv) {
-
 	defineParam(&map,&xsize, &zmin, &zmax, &zfar, &fov, &NOMBRE_OBJET);
+	cout << xsize<<endl;
 	defineHeight(&heightMap, map);
 	/* traitement des paramètres du programme propres à GL */
 	glutInit(&argc, argv);
@@ -365,7 +366,7 @@ int main(int argc, char** argv) {
 	glutInitDisplayMode(GLUT_RGBA|GLUT_DEPTH|GLUT_DOUBLE);
 	/* placement et dimentions originales de la fenêtre */
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(2000, 800);
 	/* ouverture de la fenêtre */
 	if (glutCreateWindow("visuTerImac") == GL_FALSE) {
 		return 1;
